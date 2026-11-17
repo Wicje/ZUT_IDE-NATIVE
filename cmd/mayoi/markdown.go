@@ -526,7 +526,7 @@ func markdownFrontMatter(lines []string) bool {
 
 // markdownParser parses GitHub's Markdown: goldmark's parser with the
 // parts of its GFM and footnote extensions that parse, without their HTML
-// renderers, which the preview has no use for and would make Mayoi
+// renderers, which the preview has no use for and would make Zut
 // larger, with Obsidian's wiki links, and with its math when math is set.
 // Emphasis, strikethrough and ==highlight== use the CJK-friendly flanking
 // rule.
@@ -2134,7 +2134,7 @@ func (a *app) markdownMathBlock(c *ui.Context, b markdownBlock, size, width floa
 }
 
 // markdownLink is the element a link opens its destination from: a page
-// in the browser, a file in Mayoi, or a heading of the document, which
+// in the browser, a file in Zut, or a heading of the document, which
 // the preview scrolls to. Invalid for a destination that is none of them.
 func (a *app) markdownLink(c *ui.Context, m *markdownPreview, path, dest string, image bool) ui.Element {
 	u, err := url.Parse(dest)

@@ -422,7 +422,7 @@ func TestMarkdownPreview(t *testing.T) {
 	if !hs.tt.HasText("Preview") {
 		t.Fatal("missing preview status")
 	}
-	if !hs.tt.HasText("Mayoi") {
+	if !hs.tt.HasText("Zut") {
 		t.Fatal("heading not shown")
 	}
 	a.run("view.togglePreview")
@@ -459,7 +459,7 @@ func TestMarkdownPreviewOnOpen(t *testing.T) {
 	hs.until("Markdown preview", func() bool {
 		return a.activeEditor().preview != nil && a.activeEditor().preview.loaded
 	})
-	if !hs.tt.HasText("Mayoi") {
+	if !hs.tt.HasText("Zut") {
 		t.Fatal("heading not shown")
 	}
 	a.run("view.togglePreview")
@@ -1004,7 +1004,7 @@ func TestMarkdownLocalImagesAndLinks(t *testing.T) {
 	}
 	hs.settle()
 	if hs.a.activeEditor().path != hs.path("main.go") {
-		t.Fatal("relative link did not open in Mayoi")
+		t.Fatal("relative link did not open in Zut")
 	}
 
 }

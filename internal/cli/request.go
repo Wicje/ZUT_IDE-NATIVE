@@ -37,7 +37,7 @@ type Request struct {
 	// Settings is what `mayoi settings` asks of the preferences, which
 	// the command does itself rather than the app.
 	Settings *Settings `json:"settings,omitempty"`
-	// DisablePlugins turns off the plugins but those Mayoi comes with,
+	// DisablePlugins turns off the plugins but those Zut comes with,
 	// until the app starts again.
 	DisablePlugins bool `json:"disablePlugins,omitempty"`
 }
@@ -61,7 +61,7 @@ type Command struct {
 // them, read some, or change some.
 //
 // The mayoi command changes the settings' files itself, so that it works
-// while the app is not running, and a Mayoi running reads them again as
+// while the app is not running, and a Zut running reads them again as
 // it does the file a person saves.
 type Settings struct {
 	// Verb is what it does with the preferences: "" or "list" lists them
@@ -131,7 +131,7 @@ const Usage = `Usage: mayoi [options] [folder or file]...
        mayoi run <command>[=<argument>]...
        mayoi commands
 
-Opens folders and files in Mayoi, starting it if it isn't running.
+Opens folders and files in Zut, starting it if it isn't running.
 
 Options:
   -g, --goto <file:line[:column]>  Open a file at a line and column
@@ -141,7 +141,7 @@ Options:
   -f, --folder                     Act on the current folder's own settings
       --remote <host:/path>        Open a folder on an SSH host
       --window <folder>            Act on the window that has the folder open
-      --disable-plugins            Turn off the plugins until Mayoi starts again
+      --disable-plugins            Turn off the plugins until Zut starts again
   -h, --help                       Print this help
   -v, --version                    Print the version
 

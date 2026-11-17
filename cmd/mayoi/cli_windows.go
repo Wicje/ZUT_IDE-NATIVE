@@ -11,11 +11,11 @@ import (
 	"golang.org/x/sys/windows"
 )
 
-// commandLine reports whether the mayoi batch file started Mayoi, as the
+// commandLine reports whether the mayoi batch file started Zut, as the
 // command.
 func commandLine() bool { return os.Getenv(cliEnv) != "" }
 
-// startApp starts Mayoi apart from the command, opening paths. A Windows
+// startApp starts Zut apart from the command, opening paths. A Windows
 // GUI process has a window of its own and does not hold the console open.
 func startApp(paths []string) error {
 	exe, err := os.Executable()
@@ -54,9 +54,9 @@ func consoleFile(id uint32, current *os.File, name string) *os.File {
 	return current
 }
 
-// refreshCLI brings the mayoi command an older Mayoi installed up to
+// refreshCLI brings the mayoi command an older Zut installed up to
 // date, for the options it has now, and points Explorer's "Open with
-// Mayoi" at this Mayoi when another one added it.
+// Zut" at this Zut when another one added it.
 func refreshCLI() {
 	app := appLocation()
 	if app == "" || !mygo.App.IsPackaged() {

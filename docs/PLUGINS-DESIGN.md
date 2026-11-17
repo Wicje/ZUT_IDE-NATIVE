@@ -1,6 +1,6 @@
 # Plugins: design
 
-Status: built, all five phases, in one change. This is the design of Mayoi's plugin system: what plugins can do, how
+Status: built, all five phases, in one change. This is the design of Zut's plugin system: what plugins can do, how
 they run, the API they see, and the order it was planned in. The author's guide is [PLUGINS.md](PLUGINS.md), and
 [ARCHITECTURE.md](ARCHITECTURE.md#plugins) tours the code. Where the build differs from the plan below, this list says
 how:
@@ -18,23 +18,23 @@ how:
   editor.
 - **`mayoi plugin dev`** links the folder and reloads on save; the log is in **Plugins → Show Plugin Log**, not
   followed in the shell.
-- **`mayoi --disable-plugins`** is an option of the command, which a running Mayoi takes, rather than a flag the app
+- **`mayoi --disable-plugins`** is an option of the command, which a running Zut takes, rather than a flag the app
   starts with (macOS's `open` passes none).
 - **`mayoi.d.ts`** is written by hand, beside the prelude, not generated with `tsgen`.
 - **Bundled plugins** are Word Count and TODOs, and start off: their `plugin.json` says `"enabled": false`, which the
   settings' `enabled` overrides. Mermaid and math stayed in Go but run on moejs now, so goja is gone;
-  Mayoi's themes stayed in Go, and plugin themes join them.
+  Zut's themes stayed in Go, and plugin themes join them.
 - **The index** is read from `mayoi-editor/plugins`, whose `index.json` lists no plugins yet: the Plugins page and
   `mayoi plugin search` say so until it does.
 
 ## Goals
 
 - **A platform, not a macro system.** Plugins add commands, react to the editor, check and format code, draw UI,
-  contribute themes and languages, and later bring language servers. Mayoi's own features move onto the same API as
+  contribute themes and languages, and later bring language servers. Zut's own features move onto the same API as
   bundled plugins, which is how we know the API is enough.
 - **Stay small and fast.** No Node, no Electron, no webview unless a plugin asks for one. A plugin costs nothing until
   something it declared happens, and a slow or broken plugin never stalls a frame.
-- **Native by default.** Plugins describe UI and Mayoi draws it with MyGo widgets in the current theme. A webview is an
+- **Native by default.** Plugins describe UI and Zut draws it with MyGo widgets in the current theme. A webview is an
   escape hatch, not the norm.
 - **Works on SSH folders unchanged.** Plugins run on this machine and reach files and programs through `internal/vfs`,
   so a plugin written for local folders works on a remote one with nothing installed on the host.
@@ -63,7 +63,7 @@ how:
 | Built-in features    | Move gradually onto the API as bundled plugins                                                |
 | Language features    | Diagnostics and formatters first, an LSP client later                                         |
 
-Why moejs over goja, which Mayoi used for Mermaid and MathJax before: it starts a runtime in about 1.4 µs and calls
+Why moejs over goja, which Zut used for Mermaid and MathJax before: it starts a runtime in about 1.4 µs and calls
 in about half Sobek's time, supports modern ES and strips TypeScript, gives a runtime no host capability until the
 host adds it, and has a memory limit a script cannot catch. The risks are that it reached v0.1.0 on 2026-11-09 and
 has one maintainer, so we pin the version, keep every moejs call inside `internal/plugin`, and run a smoke test of the
@@ -112,7 +112,7 @@ gets the answer through `a.post` on a later frame, as background Git and search 
 ### Activation
 
 The manifest says when a plugin starts: `onCommand:<id>`, `onLanguage:<lang>`, `onView:<id>`,
-`workspaceContains:<glob>`, `onPreview:<glob>`, or `onStartup`. Until then Mayoi knows the plugin only from its
+`workspaceContains:<glob>`, `onPreview:<glob>`, or `onStartup`. Until then Zut knows the plugin only from its
 manifest: its commands are in the palette and its keybindings work, and the first run starts it. Startup stays as fast
 with fifty plugins as with none.
 
@@ -133,7 +133,7 @@ Interrupts come from a watchdog goroutine through `Loop.Interrupt`. A host funct
 call to the main thread) takes the call's context and returns when it ends, because an interrupt does not reach Go
 code that is blocked. Each plugin's CPU time, memory and activation time are kept for **Show Running Plugins**.
 
-`mayoi --disable-plugins` starts Mayoi with no plugins but the bundled ones, to get out of a bad plugin.
+`mayoi --disable-plugins` starts Zut with no plugins but the bundled ones, to get out of a bad plugin.
 
 ## A plugin
 
@@ -155,7 +155,7 @@ A folder with a manifest and an entry module:
   "displayName": "Word Count",
   "version": "0.1.0",
   "description": "Words and reading time in the status bar",
-  "mayoi": ">=0.20.0",                   // versions of Mayoi it works with
+  "mayoi": ">=0.20.0",                   // versions of Zut it works with
   "main": "main.ts",                     // .ts, .js or .mjs
   "activation": ["onLanguage:markdown"],
   "contributes": {
@@ -176,8 +176,8 @@ A folder with a manifest and an entry module:
 
 - Ids start with the plugin's name. Built-in prefixes (`file`, `edit`, `sel`, `go`, `view`, `git`, `review`,
   `remote`, `account`, `editor`, `image`, `mermaid`) are reserved.
-- Titles take a locale suffix, so a plugin can follow **View → Language** as Mayoi does.
-- Keybindings: a plugin may bind only keys that are free. A key Mayoi binds by default, or the user binds in
+- Titles take a locale suffix, so a plugin can follow **View → Language** as Zut does.
+- Keybindings: a plugin may bind only keys that are free. A key Zut binds by default, or the user binds in
   `keybindings.json`, stays theirs, so installing a plugin never changes what ⌘P does. A binding that would take
   one is skipped, logged, and shown in the shortcuts editor with **Use Plugin's Shortcut**, which writes it to
   `keybindings.json`. Between two plugins, the one installed first keeps the key, and the other is shown the same
@@ -217,12 +217,12 @@ Every call that touches the editor is async: it goes to the main thread and back
 
 | Namespace     | What it holds                                                                                          | Phase |
 | ------------- | ------------------------------------------------------------------------------------------------------ | ----- |
-| `commands`    | `register`, `run` (any command, Mayoi's too, with its `mayoi run` argument), `list`                     | 0     |
+| `commands`    | `register`, `run` (any command, Zut's too, with its `mayoi run` argument), `list`                     | 0     |
 | `editor`      | the active editor and the visible ones; `selections`, `setSelections`, `edit(version, edits)`, `reveal` | 0     |
 | `document`    | `text`, `lineAt`, `path`, `language`, `version`, `isDirty`, `save`                                      | 0     |
 | `workspace`   | `root`, `isRemote`, `open(path, {line})`, `findFiles(glob)`, `readFile`, `writeFile`, `stat`, all via vfs | 0   |
 | `window`      | `notify`, `fail`, `pick(items)` (quick open's box), `prompt` (the prompt box), `progress`              | 0     |
-| `settings`    | the plugin's settings, read and watched; `get` of Mayoi's own                                           | 0     |
+| `settings`    | the plugin's settings, read and watched; `get` of Zut's own                                           | 0     |
 | `storage`     | a JSON store per plugin, global and per folder, in `~/.mayoi/storage`                                   | 0     |
 | `log`         | to the plugin's log                                                                                     | 0     |
 | `events`      | `editor.open`, `editor.change`, `editor.focus`, `editor.willSave` (may return edits), `editor.didSave`, `workspace.changed`, `git.changed`, `theme.changed` | 1 |
@@ -240,7 +240,7 @@ dependency is bundled into the folder (see `mayoi plugin pack`). `eval` and `Fun
 
 ## Contribution points
 
-What a plugin declares, Mayoi shows without running it:
+What a plugin declares, Zut shows without running it:
 
 | Point           | Where it lands                                                                                    | Phase |
 | --------------- | ------------------------------------------------------------------------------------------------- | ----- |
@@ -258,13 +258,13 @@ What a plugin declares, Mayoi shows without running it:
 | `languages`     | file associations, comment tokens, brackets, indentation, the Chroma lexer                         | 3     |
 | `snippets`      | VS Code's snippet format, per language                                                              | 3     |
 | `languageServers` | the LSP client: a command to start and the languages it serves                                  | 5     |
-| `agents`        | `internal/agents`' table of agents, beside those Mayoi knows: the **Sessions** view and terminal tabs | 6 |
+| `agents`        | `internal/agents`' table of agents, beside those Zut knows: the **Sessions** view and terminal tabs | 6 |
 
 ## UI
 
 ### Declarative views
 
-A plugin returns a tree of nodes, and Mayoi draws it each frame with MyGo widgets, in the palette of the window's
+A plugin returns a tree of nodes, and Zut draws it each frame with MyGo widgets, in the palette of the window's
 theme. The tree is JSON-shaped:
 
 ```ts
@@ -282,20 +282,20 @@ views.render("todo.list", {
 ```
 
 Nodes: `stack`, `row`, `text`, `markdown`, `code`, `svg`, `image`, `list`, `tree` (children asked for as a node opens),
-`input`, `select`, `checkbox`, `button`, `progress`, `divider`, `empty`. Icons are Mayoi's own set. A handler is
+`input`, `select`, `checkbox`, `button`, `progress`, `divider`, `empty`. Icons are Zut's own set. A handler is
 kept as an id in the plugin's runtime and the click is sent back as a message. `render` replaces the tree; nodes are
 matched by `key`, so text fields keep their caret and lists their scroll.
 
-Because Mayoi draws it, a view follows every theme, the zoom and the language, works with the keyboard, and costs no
-process. The Markdown renderer and SVG viewer already in Mayoi draw `markdown` and `svg` nodes, and quick open's box
+Because Zut draws it, a view follows every theme, the zoom and the language, works with the keyboard, and costs no
+process. The Markdown renderer and SVG viewer already in Zut draw `markdown` and `svg` nodes, and quick open's box
 is `window.pick`.
 
 ### Previews
 
-A preview contribution names a glob and an output, `svg`, `markdown` or `view`. On each edit, after a pause, Mayoi
+A preview contribution names a glob and an output, `svg`, `markdown` or `view`. On each edit, after a pause, Zut
 calls the plugin's render function with the text and shows the result beside the source, keeping the last result that
 rendered, as the SVG preview does (`viewer.go`). PlantUML, D2, Graphviz, CSV tables and chart DSLs fit here, and so do
-Mayoi's own Mermaid and math previews in phase 3.
+Zut's own Mermaid and math previews in phase 3.
 
 ### Webview panels
 
@@ -307,7 +307,7 @@ shows a notice instead.
 
 ## Language features
 
-Mayoi has no diagnostics, completion or hover today.
+Zut has no diagnostics, completion or hover today.
 
 - **Phase 1, diagnostics:** `languages.setDiagnostics(path, items)` with a range, severity, message and source. The
   editor underlines them as part of its decorations (`decorations.go`), the gutter marks the line, the scrollbar shows
@@ -331,7 +331,7 @@ Calls on a remote folder take a round trip, which is why every API is async.
 | Folder                              | What                                                         |
 | ----------------------------------- | ------------------------------------------------------------ |
 | `~/.mayoi/plugins/<name>/`          | installed plugins, one folder each                           |
-| `~/.mayoi/plugins/plugins.json`     | written by Mayoi: each plugin's source URL, ref and commit   |
+| `~/.mayoi/plugins/plugins.json`     | written by Zut: each plugin's source URL, ref and commit   |
 | `~/.mayoi/scripts/`                 | user scripts                                                  |
 | `~/.mayoi/storage/<name>/`          | what `storage` keeps                                          |
 | bundled, in the app                 | plugins embedded with `go:embed`                              |
@@ -360,22 +360,22 @@ mayoi plugin list                  name, version, source, enabled, and the last 
 mayoi plugin pack <folder>         bundle npm imports into the folder (phase 4)
 ```
 
-These work on the folder, not through the running app, so they work with Mayoi closed; a running Mayoi sees the
+These work on the folder, not through the running app, so they work with Zut closed; a running Zut sees the
 folder change. `install` clones with the system's `git` into a temporary folder, checks the manifest, then moves it
 into place.
 
 ### Later: an index and a Plugins page (phase 4)
 
-- The [`mayoi-editor`](https://github.com/mayoi-editor) organisation on GitHub, where Mayoi itself will move too,
+- The [`mayoi-editor`](https://github.com/mayoi-editor) organisation on GitHub, where Zut itself will move too,
   holds the index repository, `mayoi-editor/plugins`, with an `index.json` of name, description, repository and
-  tags, added to by pull request, and the plugins the Mayoi project maintains itself, as `plugin-<name>`:
+  tags, added to by pull request, and the plugins the Zut project maintains itself, as `plugin-<name>`:
   `mayoi-editor/plugin-prettier`, `mayoi-editor/plugin-eslint`. `mayoi plugin install prettier` resolves a bare
   name through the index.
 - A **Plugins** page in the settings window: search the index, install, update, disable, remove, and see each
   plugin's commands, settings and last error.
-- `plugins.json` goes into settings sync. On another machine, Mayoi installs the plugins it brings at the same
+- `plugins.json` goes into settings sync. On another machine, Zut installs the plugins it brings at the same
   commits, in the background, and says so in a notification; removing or disabling one syncs the same way.
-- Updates are checked when Mayoi checks its own.
+- Updates are checked when Zut checks its own.
 
 ## Settings
 
@@ -394,12 +394,12 @@ declares. A folder's `.mayoi/settings.json` may set a plugin's settings but not 
 
 ## Agents
 
-- An agent already drives Mayoi with `mayoi run`, and plugin commands are commands, so a plugin is a tool an agent can
+- An agent already drives Zut with `mayoi run`, and plugin commands are commands, so a plugin is a tool an agent can
   call, with an argument.
 - With no build step and hot reload, an agent can write a plugin into `plugins/` and see it work at once.
   `mayoi plugin new` writes an `AGENTS.md` beside `mayoi.d.ts` that tells an agent how plugins work.
 - `ai.complete` lets a plugin use Mon's gateway when the user is signed in, as AI commit messages do.
-- A plugin adds a coding agent to the **Sessions** view with `contributes.agents`. The agents Mayoi knows and those of
+- A plugin adds a coding agent to the **Sessions** view with `contributes.agents`. The agents Zut knows and those of
   plugins are rows of one table in `internal/agents` (id, names, icon, tint, resume, and how to list): a reader of
   files, a declared glob with JSON field paths, or a `List` function, which for a plugin is a request to its
   `agents.register` function. The scanner runs a `List` on a goroutine of its own, waits `ListWait` (1.5 s) and gives
@@ -407,7 +407,7 @@ declares. A folder's `.mayoi/settings.json` may set a plugin's settings but not 
 
 ## Bundled plugins
 
-Mayoi's own features move onto the API, embedded in the app. Each is a test of the API:
+Zut's own features move onto the API, embedded in the app. Each is a test of the API:
 
 | Feature                     | Needs                                    | Phase |
 | --------------------------- | ---------------------------------------- | ----- |
@@ -498,7 +498,7 @@ plugins.
 - **moejs is young.** Pinned, wrapped in one file, smoke-tested on upgrade. If it stalls, the wrapper is where goja or
   a fork would go in.
 - **The API is a promise.** Once plugins exist, changing the `mayoi` module breaks them. Phase 0 marks the API
-  unstable in the docs, and the `mayoi` field of the manifest lets Mayoi refuse a plugin it would break.
+  unstable in the docs, and the `mayoi` field of the manifest lets Zut refuse a plugin it would break.
 - **Blocking host calls.** An interrupt does not stop Go code that waits, so every host function takes the call's
   context. A test checks each one.
 - **Frames.** Plugin views are drawn each frame from the last tree a plugin sent, never by calling the plugin during a

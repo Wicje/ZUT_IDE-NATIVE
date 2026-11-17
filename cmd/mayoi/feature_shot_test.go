@@ -47,14 +47,14 @@ unset HISTFILE
 	t.Setenv("SHELL", "/bin/zsh")
 }
 
-// featRepo clones Mayoi into a folder named mayoi.
+// featRepo clones Zut into a folder named mayoi.
 func featRepo(t *testing.T) string {
 	root := filepath.Join(t.TempDir(), "mayoi")
 	featClone(t, root)
 	return root
 }
 
-// featClone clones Mayoi into root, on main whichever branch the shots are
+// featClone clones Zut into root, on main whichever branch the shots are
 // taken from.
 func featClone(t *testing.T, root string) {
 	out, err := exec.Command("git", "clone", "-q", "--no-hardlinks", "--single-branch", "../..", root).CombinedOutput()
@@ -221,7 +221,7 @@ func featChanges(t *testing.T, root string) {
 	os.Remove(p("scripts/dev.sh"))
 	os.WriteFile(p("docs/ROADMAP.md"), []byte("# Roadmap\n\n- [ ] Multiple cursors\n- [ ] Language servers\n"), 0o644)
 	os.MkdirAll(p("build/darwin-arm64"), 0o755)
-	os.WriteFile(p("build/darwin-arm64/Mayoi.dmg"), []byte("x"), 0o644)
+	os.WriteFile(p("build/darwin-arm64/Zut.dmg"), []byte("x"), 0o644)
 }
 
 // 02: the explorer, with Git's colors and ignored files faint.
@@ -403,7 +403,7 @@ func featHistory(t *testing.T, root string) {
 	editFile(t, p("README.md"), func(s string) string {
 		return strings.Replace(s, "a small, fast code editor", "a small, fast and friendly code editor", 1)
 	})
-	gitIn(t, root, "commit", "-qam", "Call Mayoi friendly in the README")
+	gitIn(t, root, "commit", "-qam", "Call Zut friendly in the README")
 	gitIn(t, root, "merge", "-q", "--no-ff", "-m", "Merge branch 'feature/minimap'", "feature/minimap")
 	gitIn(t, root, "tag", "v1.1.0")
 	for _, b := range []string{"fix/scroll-jump", "feature/lsp", "release/1.1"} {
@@ -533,7 +533,7 @@ func TestFeatTerminal(t *testing.T) {
 		hs.fshot("13-terminal-tab", dark)
 		a.run("view.terminal")
 		hs.settle()
-		hs.termRun(a.panelTerm, "go version && echo 'Ghostty inside Mayoi \\e[1;35m♥\\e[0m'", "inside")
+		hs.termRun(a.panelTerm, "go version && echo 'Ghostty inside Zut \\e[1;35m♥\\e[0m'", "inside")
 		hs.fshot("13-terminal-panel", dark)
 		a.closeTerminals()
 	})
@@ -604,10 +604,10 @@ func TestFeatSearch(t *testing.T) {
 	})
 }
 
-const featMD = "# A tour of Mayoi\n\n" +
-	"Mayoi (**迷い**) is a *small*, **fast** code editor written in Go. It draws a native UI on the GPU with " +
+const featMD = "# A tour of Zut\n\n" +
+	"Zut (**迷い**) is a *small*, **fast** code editor written in Go. It draws a native UI on the GPU with " +
 	"[MyGo](https://github.com/egoist/mygo) — no webview, no Electron.\n\n" +
-	"![Mayoi](screenshot-dark.png)\n\n" +
+	"![Zut](screenshot-dark.png)\n\n" +
 	"## What's inside\n\n" +
 	"- An **editor** with tabs, sticky scroll and breadcrumbs\n" +
 	"- **Vim mode**, with motions, operators and text objects\n" +
@@ -621,7 +621,7 @@ const featMD = "# A tour of Mayoi\n\n" +
 	"| Shortcut | Action |\n|---|---|\n| ⌘P | Quick open |\n| ⇧⌘F | Find in files |\n| ⌘\\\\ | Split right |\n\n" +
 	"```go\nfunc main() {\n\tfmt.Println(\"hello, mayoi\")\n}\n```\n"
 
-// featProjects makes a few small folders beside a clone of Mayoi.
+// featProjects makes a few small folders beside a clone of Zut.
 func featProjects(t *testing.T) []string {
 	home := t.TempDir()
 	t.Setenv("HOME", home)
@@ -823,7 +823,7 @@ func TestFeatSettings(t *testing.T) {
 	featBoth(t, func(t *testing.T, dark bool) {
 		hs := featHarness(t, dark, featOpts{})
 		a := hs.a
-		dir := "/tmp/Mayoi"
+		dir := "/tmp/Zut"
 		os.RemoveAll(dir)
 		os.MkdirAll(dir, 0o755)
 		t.Cleanup(func() { os.RemoveAll(dir) })
@@ -847,7 +847,7 @@ func TestFeatSettings(t *testing.T) {
 }
 
 const featKeys = `// Keyboard shortcuts, in VS Code's format: "key" is a key or a chord as
-// "ctrl+. s", "command" is a command of Mayoi's or of VS Code's, and
+// "ctrl+. s", "command" is a command of Zut's or of VS Code's, and
 // "when" when it applies, as "editorTextFocus" or "terminalFocus".
 [
   { "key": "cmd+k cmd+t", "command": "workbench.action.selectTheme" },
@@ -862,7 +862,7 @@ const featKeys = `// Keyboard shortcuts, in VS Code's format: "key" is a key or 
 
 // featLiveMD is a note of every kind of Markdown Live Preview draws.
 const featLiveMD = "# Field notes\n\n" +
-	"Mayoi edits Markdown *as it reads*: the marks of **what the caret touches** show, faint, and the rest " +
+	"Zut edits Markdown *as it reads*: the marks of **what the caret touches** show, faint, and the rest " +
 	"hide away. Code like `go test ./...`, ==highlights== and ~~struck text~~ keep their look; " +
 	"[links](https://example.com) stay links, [[notes]] and [[a note to write]] too; tags read as #pills " +
 	"and footnotes stay small.[^1]\n\n" +

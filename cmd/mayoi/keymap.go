@@ -135,7 +135,7 @@ func (a *app) windowKeys(c *ui.Context) {
 	}
 }
 
-// keyBound reports whether the file binds s, which Mayoi's own shortcut
+// keyBound reports whether the file binds s, which Zut's own shortcut
 // of s gives way to.
 func (a *app) keyBound(mods ui.Modifiers, key ui.Key) bool {
 	return a.keys.Binds(keymap.Stroke{Mods: mods, Key: key})
@@ -179,7 +179,7 @@ func (a *app) whenContext(where keyPlace) func(string) bool {
 	}
 }
 
-// vscodeCommands are the commands of VS Code by their names, as Mayoi
+// vscodeCommands are the commands of VS Code by their names, as Zut
 // has them.
 var vscodeCommands = map[string]string{
 	"workbench.action.files.newUntitledFile":              "file.new",
@@ -289,7 +289,7 @@ var vscodeCommands = map[string]string{
 	"gitlens.toggleLineBlame":                    "git.blame",
 }
 
-// commandID is the Mayoi command a binding names, by Mayoi's name or by
+// commandID is the Zut command a binding names, by Zut's name or by
 // VS Code's, "" for none.
 func (a *app) commandID(name string) string {
 	if id, ok := vscodeCommands[name]; ok {
@@ -303,7 +303,7 @@ func (a *app) commandID(name string) string {
 	return ""
 }
 
-// commandNames are the names a binding may give a Mayoi command: its
+// commandNames are the names a binding may give a Zut command: its
 // own, and VS Code's.
 func commandNames(id string) []string {
 	names := []string{id}
@@ -490,7 +490,7 @@ func (a *app) explorerChoice() string {
 	return a.files.Item(a.fileRow)
 }
 
-// keysFailed says what of keybindings.json Mayoi could not read.
+// keysFailed says what of keybindings.json Zut could not read.
 func (a *app) keysFailed(km *keymap.Map, err error) {
 	switch {
 	case err != nil:

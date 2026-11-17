@@ -19,10 +19,10 @@ func TestScript(t *testing.T) {
 	}
 	dir := t.TempDir()
 	bin := filepath.Join(dir, "bin")
-	app := filepath.Join(dir, "My Mayoi.app")
+	app := filepath.Join(dir, "My Zut.app")
 	moved := filepath.Join(dir, "Moved.app")
 	for _, a := range []string{app, moved} {
-		exe := filepath.Join(a, "Contents", "MacOS", "Mayoi")
+		exe := filepath.Join(a, "Contents", "MacOS", "Zut")
 		os.MkdirAll(filepath.Dir(exe), 0o755)
 		os.WriteFile(exe, []byte("#!/bin/sh\necho \"$0\" \"$MAYOI_CLI\"\nfor a in \"$@\"; do echo \"$a\"; done\n"), 0o755)
 	}
@@ -41,7 +41,7 @@ func TestScript(t *testing.T) {
 		}
 		return strings.Split(strings.TrimSuffix(string(out), "\n"), "\n")
 	}
-	exe := filepath.Join(app, "Contents", "MacOS", "Mayoi")
+	exe := filepath.Join(app, "Contents", "MacOS", "Zut")
 	if got := run(); !slices.Equal(got, []string{exe + " 1"}) {
 		t.Errorf("no args: %v", got)
 	}
@@ -51,7 +51,7 @@ func TestScript(t *testing.T) {
 	}
 	os.RemoveAll(app)
 	got = run("x")
-	if want := []string{filepath.Join(moved, "Contents", "MacOS", "Mayoi") + " 1", "x"}; !slices.Equal(got, want) {
+	if want := []string{filepath.Join(moved, "Contents", "MacOS", "Zut") + " 1", "x"}; !slices.Equal(got, want) {
 		t.Errorf("moved: got %v, want %v", got, want)
 	}
 }
@@ -78,7 +78,7 @@ func TestWindowsScript(t *testing.T) {
 		t.Fatal(err)
 	}
 	dir := t.TempDir()
-	app := filepath.Join(dir, "My 100% Mayoi", "Mayoi.exe")
+	app := filepath.Join(dir, "My 100% Zut", "Zut.exe")
 	data, err := os.ReadFile(exe)
 	if err != nil {
 		t.Fatal(err)
@@ -91,7 +91,7 @@ func TestWindowsScript(t *testing.T) {
 	}
 	localData := filepath.Join(dir, "Local")
 	t.Setenv("LOCALAPPDATA", localData)
-	bin := filepath.Join(localData, "Mayoi", "bin")
+	bin := filepath.Join(localData, "Zut", "bin")
 	t.Setenv("PATH", t.TempDir())
 	t.Setenv("SHELL", filepath.Join(dir, "missing"))
 	p, err := Install(Dirs(dir, LoginPath()), app)
@@ -118,7 +118,7 @@ func TestWindowsScript(t *testing.T) {
 		t.Fatal(err)
 	}
 	out, err = exec.Command(comspec, "/d", "/c", p).CombinedOutput()
-	if exit, ok := err.(*exec.ExitError); !ok || exit.ExitCode() != 1 || !strings.Contains(string(out), "Mayoi.exe is not found") {
+	if exit, ok := err.(*exec.ExitError); !ok || exit.ExitCode() != 1 || !strings.Contains(string(out), "Zut.exe is not found") {
 		t.Fatalf("missing app exit: %v\n%s", err, out)
 	}
 	removed, err := Uninstall([]string{bin})
@@ -127,7 +127,7 @@ func TestWindowsScript(t *testing.T) {
 	}
 }
 
-// Refresh brings an older Mayoi's command up to date, and leaves another
+// Refresh brings an older Zut's command up to date, and leaves another
 // program's.
 func TestRefresh(t *testing.T) {
 	if runtime.GOOS == "windows" {
@@ -139,8 +139,8 @@ func TestRefresh(t *testing.T) {
 	os.MkdirAll(foreign, 0o755)
 	os.WriteFile(filepath.Join(old, "mayoi"), []byte("#!/bin/sh\n# "+scriptMark+"\nopen -b x \"$@\"\n"), 0o755)
 	os.WriteFile(filepath.Join(foreign, "mayoi"), []byte("#!/bin/sh\necho other\n"), 0o755)
-	Refresh([]string{old, foreign, filepath.Join(dir, "none")}, "/Apps/Mayoi.app")
-	if data, _ := os.ReadFile(filepath.Join(old, "mayoi")); string(data) != script("/Apps/Mayoi.app") {
+	Refresh([]string{old, foreign, filepath.Join(dir, "none")}, "/Apps/Zut.app")
+	if data, _ := os.ReadFile(filepath.Join(old, "mayoi")); string(data) != script("/Apps/Zut.app") {
 		t.Errorf("not refreshed: %s", data)
 	}
 	if data, _ := os.ReadFile(filepath.Join(foreign, "mayoi")); string(data) != "#!/bin/sh\necho other\n" {
@@ -192,7 +192,7 @@ func TestDirs(t *testing.T) {
 	if runtime.GOOS == "windows" {
 		localData := filepath.Join(home, "Local")
 		t.Setenv("LOCALAPPDATA", localData)
-		own := filepath.Join(localData, "Mayoi", "bin")
+		own := filepath.Join(localData, "Zut", "bin")
 		if got := Dirs(home, []string{custom}); !slices.Equal(got, []string{own}) {
 			t.Fatalf("Windows installation uses another tool's folder: %v", got)
 		}
@@ -239,12 +239,12 @@ func TestInstallReachableCommand(t *testing.T) {
 	if err := os.WriteFile(local, []byte("not a directory"), 0o600); err != nil {
 		t.Fatal(err)
 	}
-	p, err := Install(Dirs(home, []string{local, bin}), "/Applications/Mayoi.app")
+	p, err := Install(Dirs(home, []string{local, bin}), "/Applications/Zut.app")
 	if err != nil || p != filepath.Join(bin, "mayoi") {
 		t.Fatalf("user installation: %q, %v", p, err)
 	}
-	Refresh([]string{bin}, "/New/Mayoi.app")
-	if data, _ := os.ReadFile(p); string(data) != script("/New/Mayoi.app") {
+	Refresh([]string{bin}, "/New/Zut.app")
+	if data, _ := os.ReadFile(p); string(data) != script("/New/Zut.app") {
 		t.Fatalf("command was not refreshed: %s", data)
 	}
 	removed, err := Uninstall([]string{bin})
@@ -260,14 +260,14 @@ func TestInstallReusesExistingCommand(t *testing.T) {
 	home := t.TempDir()
 	local := filepath.Join(home, ".local", "bin")
 	bin := filepath.Join(home, "bin")
-	if err := write(bin, "/Old/Mayoi.app"); err != nil {
+	if err := write(bin, "/Old/Zut.app"); err != nil {
 		t.Fatal(err)
 	}
-	p, err := Install(Dirs(home, []string{local, bin}), "/New/Mayoi.app")
+	p, err := Install(Dirs(home, []string{local, bin}), "/New/Zut.app")
 	if err != nil || p != filepath.Join(bin, "mayoi") {
 		t.Fatalf("reinstalled at %q: %v", p, err)
 	}
-	if data, _ := os.ReadFile(p); string(data) != script("/New/Mayoi.app") {
+	if data, _ := os.ReadFile(p); string(data) != script("/New/Zut.app") {
 		t.Fatalf("existing command not updated: %s", data)
 	}
 	if _, err := os.Stat(local); !os.IsNotExist(err) {
@@ -318,7 +318,7 @@ func TestPreserveHomebrewCommand(t *testing.T) {
 	if _, err := os.Lstat(filepath.Join(empty, "mayoi")); !os.IsNotExist(err) {
 		t.Fatalf("shadowed Homebrew's command: %v", err)
 	}
-	Refresh([]string{dir}, "/Applications/Mayoi.app")
+	Refresh([]string{dir}, "/Applications/Zut.app")
 	if removed, err := Uninstall([]string{dir}); err != nil || len(removed) != 0 {
 		t.Fatalf("removed Homebrew command: %v, %v", removed, err)
 	}
@@ -474,7 +474,7 @@ func TestLoginPathFish(t *testing.T) {
 	if got := LoginPath(); !slices.Equal(got, []string{local, "/usr/bin", "/bin"}) {
 		t.Fatalf("fish PATH lost directory boundaries: %q", got)
 	}
-	p, err := Install(Dirs(home, LoginPath()), "/Applications/Mayoi.app")
+	p, err := Install(Dirs(home, LoginPath()), "/Applications/Zut.app")
 	if err != nil || p != filepath.Join(local, "mayoi") {
 		t.Fatalf("fish installation: %q, %v", p, err)
 	}

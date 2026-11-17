@@ -20,7 +20,7 @@ type themeChoice struct {
 }
 
 var builtinThemes = []themeChoice{
-	{"", func() string { return "Mayoi" }, locales.ThemeAboutMayoi},
+	{"", func() string { return "Zut" }, locales.ThemeAboutZut},
 	{themeMatrix, locales.CmdViewThemeMatrix, locales.ThemeAboutMatrix},
 	{themeClaude, func() string { return "Claude" }, locales.ThemeAboutClaude},
 	{themeQoder, func() string { return "Qoder" }, locales.ThemeAboutQoder},

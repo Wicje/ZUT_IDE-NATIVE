@@ -21,24 +21,24 @@ import (
 const bundleID = "dev.mayoi.editor"
 
 // scriptMark is text in the mayoi command, by which uninstalling knows it.
-const scriptMark = "Installed by Mayoi: File > Install 'mayoi' Command."
+const scriptMark = "Installed by Zut: File > Install 'mayoi' Command."
 
 // script is the mayoi command. It runs the app's own executable, which,
 // told so by MAYOI_CLI, asks the running app over its socket, or starts
 // it. On macOS, app is its .app, else the system finds it by identifier,
-// so it keeps working when the app moves; on Windows, app is Mayoi.exe.
+// so it keeps working when the app moves; on Windows, app is Zut.exe.
 func script(app string) string {
 	if runtime.GOOS == "windows" {
 		// A percent is doubled in a batch file, and delayed expansion would
 		// consume exclamation marks in the executable's path.
 		app = strings.ReplaceAll(app, "%", "%%")
 		return strings.ReplaceAll(`@echo off
-REM mayoi [options] [folder or file]... opens them in Mayoi: mayoi --help says more.
+REM mayoi [options] [folder or file]... opens them in Zut: mayoi --help says more.
 REM `+scriptMark+`
 setlocal DisableDelayedExpansion
 set "MAYOI_CLI=1"
 if not exist "`+app+`" (
-	echo mayoi: Mayoi.exe is not found. Run File ^> Install 'mayoi' Command again. 1>&2
+	echo mayoi: Zut.exe is not found. Run File ^> Install 'mayoi' Command again. 1>&2
 	exit /b 1
 )
 "`+app+`" %*
@@ -46,17 +46,17 @@ exit /b %ERRORLEVEL%
 `, "\n", "\r\n")
 	}
 	return `#!/bin/sh
-# mayoi [options] [folder or file]... opens them in Mayoi: mayoi --help says more.
+# mayoi [options] [folder or file]... opens them in Zut: mayoi --help says more.
 # ` + scriptMark + `
 app=` + shellQuote(app) + `
-if [ ! -x "$app/Contents/MacOS/Mayoi" ]; then
+if [ ! -x "$app/Contents/MacOS/Zut" ]; then
 	app=$(mdfind "kMDItemCFBundleIdentifier == '` + bundleID + `'" 2>/dev/null | head -n 1)
 fi
-if [ ! -x "$app/Contents/MacOS/Mayoi" ]; then
-	echo "mayoi: Mayoi.app is not found" >&2
+if [ ! -x "$app/Contents/MacOS/Zut" ]; then
+	echo "mayoi: Zut.app is not found" >&2
 	exit 1
 fi
-MAYOI_CLI=1 exec "$app/Contents/MacOS/Mayoi" "$@"
+MAYOI_CLI=1 exec "$app/Contents/MacOS/Zut" "$@"
 `
 }
 
@@ -69,16 +69,16 @@ func commandPath(dir string) string {
 	return filepath.Join(dir, "mayoi")
 }
 
-// installDir is Mayoi's own Windows command folder, not another tool's.
+// installDir is Zut's own Windows command folder, not another tool's.
 func installDir(home string) string {
 	if local := os.Getenv("LOCALAPPDATA"); local != "" {
-		return filepath.Join(local, "Mayoi", "bin")
+		return filepath.Join(local, "Zut", "bin")
 	}
-	return filepath.Join(home, "AppData", "Local", "Mayoi", "bin")
+	return filepath.Join(home, "AppData", "Local", "Zut", "bin")
 }
 
 // Dirs are installation folders the command interpreter searches. Windows
-// uses Mayoi's own folder, which AddToUserPath puts on the user's PATH;
+// uses Zut's own folder, which AddToUserPath puts on the user's PATH;
 // elsewhere the known user folders come first, then the system-wide one.
 func Dirs(home string, path []string) []string {
 	if runtime.GOOS == "windows" {
@@ -126,7 +126,7 @@ var ErrCanceled = errors.New("canceled")
 func Install(dirs []string, app string) (string, error) {
 	guidance := "add ~/.local/bin to your shell's PATH and try again"
 	if runtime.GOOS == "windows" {
-		guidance = `check that %LOCALAPPDATA%\Mayoi\bin is writable and try again`
+		guidance = `check that %LOCALAPPDATA%\Zut\bin is writable and try again`
 	}
 	var candidates, installed []string
 	// Check every candidate before writing, so another program's command
@@ -216,7 +216,7 @@ func writeAsAdmin(dir, app string) error {
 }
 
 // Refresh writes the command of the app at app over the copies of
-// Mayoi's in dirs that an older Mayoi wrote, where no password is needed.
+// Zut's in dirs that an older Zut wrote, where no password is needed.
 func Refresh(dirs []string, app string) {
 	for _, dir := range dirs {
 		p := commandPath(dir)
@@ -228,7 +228,7 @@ func Refresh(dirs []string, app string) {
 	}
 }
 
-// Uninstall removes the mayoi command from dirs, where it is Mayoi's,
+// Uninstall removes the mayoi command from dirs, where it is Zut's,
 // and returns where it was.
 func Uninstall(dirs []string) ([]string, error) {
 	var removed []string

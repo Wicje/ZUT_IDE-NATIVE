@@ -428,7 +428,7 @@ func (c *cloud) flush() {
 	}
 }
 
-// deviceName is how Mon lists Mayoi signed in on this computer: a Mac's name,
+// deviceName is how Mon lists Zut signed in on this computer: a Mac's name,
 // as in Sharing settings, or the host name. A development build signs in
 // apart from the release, and says so.
 func deviceName() string {

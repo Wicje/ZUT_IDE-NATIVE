@@ -25,7 +25,7 @@ import (
 
 // mathJS is MathJax, which typesets TeX and draws it as SVG, its glyphs
 // paths, bundled by scripts/mathjax.sh into one script that sets the
-// global MayoiMath.
+// global ZutMath.
 //
 //go:embed mathjax.js.gz
 var mathJS []byte
@@ -78,7 +78,7 @@ func mathStart() error {
 	if err != nil {
 		return err
 	}
-	fn, err := js.eval("mathjax-render.js", "MayoiMath.render")
+	fn, err := js.eval("mathjax-render.js", "ZutMath.render")
 	if err != nil {
 		return err
 	}

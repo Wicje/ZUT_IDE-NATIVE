@@ -14,7 +14,7 @@ import (
 )
 
 const prettierManifest = `{
-  "name": "prettier", "displayName": "Prettier", "version": "3.1.0", "author": "Mayoi Editor",
+  "name": "prettier", "displayName": "Prettier", "version": "3.1.0", "author": "Zut Editor",
   "description": "Formats JavaScript, TypeScript, CSS and Markdown with Prettier",
   "main": "main.ts",
   "contributes": {
@@ -32,7 +32,7 @@ const prettierManifest = `{
 
 // withPluginsPage opens the Plugins page of the settings window over
 // plugins of each kind: from Git with an update waiting, copied in,
-// broken, and those Mayoi comes with; and an index of three.
+// broken, and those Zut comes with; and an index of three.
 func withPluginsPage(t *testing.T) (*prefsHarness, *pluginHost) {
 	ph := newPrefsHarness(t)
 	h := withPlugins(ph.harness, map[string]map[string]string{
@@ -50,7 +50,7 @@ func withPluginsPage(t *testing.T) (*prefsHarness, *pluginHost) {
 	pg := &ph.w.plugins
 	pg.index = indexItems([]plugin.IndexEntry{
 		{Name: "prettier", DisplayName: "Prettier", Description: "Formats code with Prettier", Repository: "https://github.com/mayoi-editor/plugin-prettier", Tags: []string{"format"}},
-		{Name: "eslint", DisplayName: "ESLint", Description: "Finds problems in JavaScript and TypeScript", Author: "Mayoi Editor", Repository: "https://github.com/mayoi-editor/plugin-eslint", Tags: []string{"lint"}},
+		{Name: "eslint", DisplayName: "ESLint", Description: "Finds problems in JavaScript and TypeScript", Author: "Zut Editor", Repository: "https://github.com/mayoi-editor/plugin-eslint", Tags: []string{"lint"}},
 		{Name: "git-blame", Description: "Who changed the line at the caret, in the status bar", Repository: "https://github.com/ann/git-blame"},
 	})
 	pg.indexOK = true
@@ -72,7 +72,7 @@ func TestPluginsPage(t *testing.T) {
 		sources["word-count"] != locales.PluginsBundled() {
 		t.Errorf("sources %v", sources)
 	}
-	if !ph.pt.HasText(locales.PluginsBy("Mayoi Editor")) || !ph.pt.HasText(locales.PluginsUpdateWaits()) {
+	if !ph.pt.HasText(locales.PluginsBy("Zut Editor")) || !ph.pt.HasText(locales.PluginsUpdateWaits()) {
 		t.Errorf("no author or update shows: %q", ph.pt.Texts())
 	}
 	if !pg.installed["prettier"] || pg.installed["eslint"] {

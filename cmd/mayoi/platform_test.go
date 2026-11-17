@@ -63,7 +63,7 @@ func skipOnWindows(t *testing.T, why string) {
 	}
 }
 
-// onOS has the test run as Mayoi does on goos, its keys and its names.
+// onOS has the test run as Zut does on goos, its keys and its names.
 func onOS(t *testing.T, goos string) {
 	old := hostOS
 	hostOS = goos
@@ -141,7 +141,7 @@ func TestWindowsKeyHints(t *testing.T) {
 	}
 }
 
-// Off macOS Mayoi runs the menus' shortcuts itself, which a window of
+// Off macOS Zut runs the menus' shortcuts itself, which a window of
 // native UI's menu bar does not.
 func TestWindowsMenuKeys(t *testing.T) {
 	onOS(t, "windows")
@@ -177,7 +177,7 @@ func TestWindowsMenuKeys(t *testing.T) {
 	}
 }
 
-// A terminal off macOS leaves Mayoi the keys of the workbench and find,
+// A terminal off macOS leaves Zut the keys of the workbench and find,
 // and the shell the others with Control, which edit its line.
 func TestShellSkip(t *testing.T) {
 	onOS(t, "linux")
@@ -206,7 +206,7 @@ func TestShellSkip(t *testing.T) {
 	}
 	onOS(t, "darwin")
 	if _, ok := a.shellSkip(keymap.Stroke{Mods: ui.Ctrl, Key: ui.KeyP}); ok {
-		t.Error("a terminal on macOS left ⌃P to Mayoi")
+		t.Error("a terminal on macOS left ⌃P to Zut")
 	}
 }
 

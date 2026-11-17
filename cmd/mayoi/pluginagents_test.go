@@ -32,7 +32,7 @@ agents.register("pi.agent", async () => [
 }
 
 // The agents of plugins list their sessions in the Sessions view with
-// their icons, and resume as those Mayoi knows do; one that fails says so
+// their icons, and resume as those Zut knows do; one that fails says so
 // in its plugin's log, once, and the others still show. Turning a plugin
 // off takes its agents and their sessions, which leave as they look.
 func TestPluginAgentSessions(t *testing.T) {

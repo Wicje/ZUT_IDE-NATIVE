@@ -1,5 +1,5 @@
-// The types of the "mayoi" module, which Mayoi gives every plugin.
-// See docs/PLUGINS.md in Mayoi's repository. The API is not stable yet.
+// The types of the "mayoi" module, which Zut gives every plugin.
+// See docs/PLUGINS.md in Zut's repository. The API is not stable yet.
 declare module "mayoi" {
   export interface Disposable {
     dispose(): void;
@@ -29,7 +29,7 @@ declare module "mayoi" {
     /** The file's path, "" for an untitled document. On an SSH host, /ssh:host/path. */
     readonly path: string;
     readonly name: string;
-    /** The language, as Mayoi's highlighter names it: "go", "typescript", "markdown". */
+    /** The language, as Zut's highlighter names it: "go", "typescript", "markdown". */
     readonly language: string;
     /** The version of the text, which every edit changes. */
     readonly version: number;
@@ -70,7 +70,7 @@ declare module "mayoi" {
   export const commands: {
     /** Runs fn for a command: one of plugin.json's, or a new one titled opts.title. */
     register(id: string, fn: (arg?: string) => unknown, opts?: { title?: string }): Disposable;
-    /** Runs any command, Mayoi's too, with the argument `mayoi run id=arg` would give. */
+    /** Runs any command, Zut's too, with the argument `mayoi run id=arg` would give. */
     run(id: string, arg?: string): Promise<unknown>;
     list(): Promise<{ id: string; title: string }[]>;
   };
@@ -122,7 +122,7 @@ declare module "mayoi" {
     /** A setting of the plugin: settings.json's plugins.<name>.<key>, or its default. */
     get<T = unknown>(key: string): T;
     all(): Record<string, unknown>;
-    /** A setting of Mayoi's own, by its key in settings.json. */
+    /** A setting of Zut's own, by its key in settings.json. */
     mayoi<T = unknown>(key: string): T;
     onChange(fn: () => void): Disposable;
   };
@@ -204,7 +204,7 @@ declare module "mayoi" {
     hide(): Promise<void>;
   };
 
-  /** A node of a view, which Mayoi draws in its theme. */
+  /** A node of a view, which Zut draws in its theme. */
   export type ViewNode =
     | { type: "stack" | "row"; children: ViewNode[]; gap?: number; padding?: number }
     | { type: "text"; text: string; muted?: boolean; bold?: boolean; size?: number }
@@ -279,7 +279,7 @@ declare module "mayoi" {
 
   export const agents: {
     /**
-     * Lists the sessions of an agent plugin.json declares without `sessions`. Mayoi calls fn
+     * Lists the sessions of an agent plugin.json declares without `sessions`. Zut calls fn
      * off its main thread as the Sessions view reads, waits 1.5 s for it, and gives up after 10 s.
      */
     register(id: string, fn: () => Promise<AgentSession[]> | AgentSession[]): Disposable;

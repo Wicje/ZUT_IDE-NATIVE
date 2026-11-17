@@ -864,14 +864,14 @@ func (msgs Messages) ThemeAboutMatrix() string {
 	return Catalog.Format(msgs.locale, "themeAboutMatrix", nil)
 }
 
-// ThemeAboutMayoi says "Mayoi's own, in violet"
+// ThemeAboutZut says "Zut's own, in violet"
 // in the language the app shows.
-func ThemeAboutMayoi() string { return In(i18n.Locale()).ThemeAboutMayoi() }
+func ThemeAboutZut() string { return In(i18n.Locale()).ThemeAboutZut() }
 
-// ThemeAboutMayoi says "Mayoi's own, in violet"
+// ThemeAboutZut says "Zut's own, in violet"
 // in the language of msgs.
-func (msgs Messages) ThemeAboutMayoi() string {
-	return Catalog.Format(msgs.locale, "themeAboutMayoi", nil)
+func (msgs Messages) ThemeAboutZut() string {
+	return Catalog.Format(msgs.locale, "themeAboutZut", nil)
 }
 
 // ThemeAboutPurpleGold says "Tyrian purple and gold leaf, with Corona"
@@ -4082,11 +4082,11 @@ func (msgs Messages) CopyRelativePath() string {
 	return Catalog.Format(msgs.locale, "copyRelativePath", nil)
 }
 
-// CrashDetail says "The report says where in Mayoi's code it happened, with Mayoi's version and your system. It holds none of your files,…"
+// CrashDetail says "The report says where in Zut's code it happened, with Zut's version and your system. It holds none of your files,…"
 // in the language the app shows.
 func CrashDetail() string { return In(i18n.Locale()).CrashDetail() }
 
-// CrashDetail says "The report says where in Mayoi's code it happened, with Mayoi's version and your system. It holds none of your files,…"
+// CrashDetail says "The report says where in Zut's code it happened, with Zut's version and your system. It holds none of your files,…"
 // in the language of msgs.
 func (msgs Messages) CrashDetail() string {
 	return Catalog.Format(msgs.locale, "crashDetail", nil)
@@ -4102,21 +4102,21 @@ func (msgs Messages) CrashDontAsk() string {
 	return Catalog.Format(msgs.locale, "crashDontAsk", nil)
 }
 
-// CrashQuestion says "Mayoi quit unexpectedly. Send a crash report?"
+// CrashQuestion says "Zut quit unexpectedly. Send a crash report?"
 // in the language the app shows.
 func CrashQuestion() string { return In(i18n.Locale()).CrashQuestion() }
 
-// CrashQuestion says "Mayoi quit unexpectedly. Send a crash report?"
+// CrashQuestion says "Zut quit unexpectedly. Send a crash report?"
 // in the language of msgs.
 func (msgs Messages) CrashQuestion() string {
 	return Catalog.Format(msgs.locale, "crashQuestion", nil)
 }
 
-// CrashRecoveredQuestion says "Mayoi ran into an error. Send an error report?"
+// CrashRecoveredQuestion says "Zut ran into an error. Send an error report?"
 // in the language the app shows.
 func CrashRecoveredQuestion() string { return In(i18n.Locale()).CrashRecoveredQuestion() }
 
-// CrashRecoveredQuestion says "Mayoi ran into an error. Send an error report?"
+// CrashRecoveredQuestion says "Zut ran into an error. Send an error report?"
 // in the language of msgs.
 func (msgs Messages) CrashRecoveredQuestion() string {
 	return Catalog.Format(msgs.locale, "crashRecoveredQuestion", nil)
@@ -5710,11 +5710,11 @@ func (msgs Messages) FailSave(name string, err string) string {
 	return Catalog.Format(msgs.locale, "failSave", map[string]any{"name": name, "err": err})
 }
 
-// FailStartHC says "Could not start the terminal in herdr-core, so it runs in Mayoi: {err}"
+// FailStartHC says "Could not start the terminal in herdr-core, so it runs in Zut: {err}"
 // in the language the app shows.
 func FailStartHC(err string) string { return In(i18n.Locale()).FailStartHC(err) }
 
-// FailStartHC says "Could not start the terminal in herdr-core, so it runs in Mayoi: {err}"
+// FailStartHC says "Could not start the terminal in herdr-core, so it runs in Zut: {err}"
 // in the language of msgs.
 func (msgs Messages) FailStartHC(err string) string {
 	return Catalog.Format(msgs.locale, "failStartHC", map[string]any{"err": err})
@@ -6322,11 +6322,11 @@ func (msgs Messages) ItemsCount(count int) string {
 	return Catalog.Format(msgs.locale, "itemsCount", map[string]any{"count": count})
 }
 
-// KeymapNoCommand says "Mayoi has no command {name}"
+// KeymapNoCommand says "Zut has no command {name}"
 // in the language the app shows.
 func KeymapNoCommand(name string) string { return In(i18n.Locale()).KeymapNoCommand(name) }
 
-// KeymapNoCommand says "Mayoi has no command {name}"
+// KeymapNoCommand says "Zut has no command {name}"
 // in the language of msgs.
 func (msgs Messages) KeymapNoCommand(name string) string {
 	return Catalog.Format(msgs.locale, "keymapNoCommand", map[string]any{"name": name})
@@ -12526,11 +12526,11 @@ func (msgs Messages) HcAddTitle(host string) string {
 	return Catalog.Format(msgs.locale, "hcAddTitle", map[string]any{"host": host})
 }
 
-// HcAddDetail says "Mayoi adds {host} to hc as a machine, which may copy hc to it. Its shells then keep running after Mayoi quits. Until …"
+// HcAddDetail says "Zut adds {host} to hc as a machine, which may copy hc to it. Its shells then keep running after Zut quits. Until …"
 // in the language the app shows.
 func HcAddDetail(host string) string { return In(i18n.Locale()).HcAddDetail(host) }
 
-// HcAddDetail says "Mayoi adds {host} to hc as a machine, which may copy hc to it. Its shells then keep running after Mayoi quits. Until …"
+// HcAddDetail says "Zut adds {host} to hc as a machine, which may copy hc to it. Its shells then keep running after Zut quits. Until …"
 // in the language of msgs.
 func (msgs Messages) HcAddDetail(host string) string {
 	return Catalog.Format(msgs.locale, "hcAddDetail", map[string]any{"host": host})
@@ -12636,11 +12636,11 @@ func (msgs Messages) HcInstallTitle() string {
 	return Catalog.Format(msgs.locale, "hcInstallTitle", nil)
 }
 
-// HcInstallDetail says "terminalBackend is \"hc\", but hc isn't installed, so terminals run in Mayoi. herdr's installer puts hc in ~/.local/bin…"
+// HcInstallDetail says "terminalBackend is \"hc\", but hc isn't installed, so terminals run in Zut. herdr's installer puts hc in ~/.local/bin…"
 // in the language the app shows.
 func HcInstallDetail() string { return In(i18n.Locale()).HcInstallDetail() }
 
-// HcInstallDetail says "terminalBackend is \"hc\", but hc isn't installed, so terminals run in Mayoi. herdr's installer puts hc in ~/.local/bin…"
+// HcInstallDetail says "terminalBackend is \"hc\", but hc isn't installed, so terminals run in Zut. herdr's installer puts hc in ~/.local/bin…"
 // in the language of msgs.
 func (msgs Messages) HcInstallDetail() string {
 	return Catalog.Format(msgs.locale, "hcInstallDetail", nil)
@@ -13056,11 +13056,11 @@ func (msgs Messages) UntrackedGoTo(trash string) string {
 	return Catalog.Format(msgs.locale, "untrackedGoTo", map[string]any{"trash": trash})
 }
 
-// UpdateAvailable says "Mayoi {version} is available"
+// UpdateAvailable says "Zut {version} is available"
 // in the language the app shows.
 func UpdateAvailable(version string) string { return In(i18n.Locale()).UpdateAvailable(version) }
 
-// UpdateAvailable says "Mayoi {version} is available"
+// UpdateAvailable says "Zut {version} is available"
 // in the language of msgs.
 func (msgs Messages) UpdateAvailable(version string) string {
 	return Catalog.Format(msgs.locale, "updateAvailable", map[string]any{"version": version})
@@ -14746,11 +14746,11 @@ func (msgs Messages) PrefTitleTerminalBackend() string {
 	return Catalog.Format(msgs.locale, "prefTitleTerminalBackend", nil)
 }
 
-// PrefDescTerminalBackend says "What runs a terminal's shell: Mayoi, or herdr-core, whose shells outlive the window."
+// PrefDescTerminalBackend says "What runs a terminal's shell: Zut, or herdr-core, whose shells outlive the window."
 // in the language the app shows.
 func PrefDescTerminalBackend() string { return In(i18n.Locale()).PrefDescTerminalBackend() }
 
-// PrefDescTerminalBackend says "What runs a terminal's shell: Mayoi, or herdr-core, whose shells outlive the window."
+// PrefDescTerminalBackend says "What runs a terminal's shell: Zut, or herdr-core, whose shells outlive the window."
 // in the language of msgs.
 func (msgs Messages) PrefDescTerminalBackend() string {
 	return Catalog.Format(msgs.locale, "prefDescTerminalBackend", nil)
@@ -15072,11 +15072,11 @@ func (msgs Messages) PrefTitleAiSecretFiles() string {
 	return Catalog.Format(msgs.locale, "prefTitleAiSecretFiles", nil)
 }
 
-// PrefDescAiSecretFiles says "Files whose lines AI commit messages leave out, after Mayoi's own: a name, a path, \"dir/\" or \"**\"; \"!\" first sends one."
+// PrefDescAiSecretFiles says "Files whose lines AI commit messages leave out, after Zut's own: a name, a path, \"dir/\" or \"**\"; \"!\" first sends one."
 // in the language the app shows.
 func PrefDescAiSecretFiles() string { return In(i18n.Locale()).PrefDescAiSecretFiles() }
 
-// PrefDescAiSecretFiles says "Files whose lines AI commit messages leave out, after Mayoi's own: a name, a path, \"dir/\" or \"**\"; \"!\" first sends one."
+// PrefDescAiSecretFiles says "Files whose lines AI commit messages leave out, after Zut's own: a name, a path, \"dir/\" or \"**\"; \"!\" first sends one."
 // in the language of msgs.
 func (msgs Messages) PrefDescAiSecretFiles() string {
 	return Catalog.Format(msgs.locale, "prefDescAiSecretFiles", nil)
@@ -15132,11 +15132,11 @@ func (msgs Messages) PrefTitleLocale() string {
 	return Catalog.Format(msgs.locale, "prefTitleLocale", nil)
 }
 
-// PrefDescLocale says "The language Mayoi shows."
+// PrefDescLocale says "The language Zut shows."
 // in the language the app shows.
 func PrefDescLocale() string { return In(i18n.Locale()).PrefDescLocale() }
 
-// PrefDescLocale says "The language Mayoi shows."
+// PrefDescLocale says "The language Zut shows."
 // in the language of msgs.
 func (msgs Messages) PrefDescLocale() string {
 	return Catalog.Format(msgs.locale, "prefDescLocale", nil)
@@ -15152,11 +15152,11 @@ func (msgs Messages) PrefTitleCrashReports() string {
 	return Catalog.Format(msgs.locale, "prefTitleCrashReports", nil)
 }
 
-// PrefDescCrashReports says "What Mayoi does with the report of a crash at the next launch."
+// PrefDescCrashReports says "What Zut does with the report of a crash at the next launch."
 // in the language the app shows.
 func PrefDescCrashReports() string { return In(i18n.Locale()).PrefDescCrashReports() }
 
-// PrefDescCrashReports says "What Mayoi does with the report of a crash at the next launch."
+// PrefDescCrashReports says "What Zut does with the report of a crash at the next launch."
 // in the language of msgs.
 func (msgs Messages) PrefDescCrashReports() string {
 	return Catalog.Format(msgs.locale, "prefDescCrashReports", nil)
@@ -15202,11 +15202,11 @@ func (msgs Messages) PrefDescSyncIgnored() string {
 	return Catalog.Format(msgs.locale, "prefDescSyncIgnored", nil)
 }
 
-// PrefDefaultTheme says "Mayoi"
+// PrefDefaultTheme says "Zut"
 // in the language the app shows.
 func PrefDefaultTheme() string { return In(i18n.Locale()).PrefDefaultTheme() }
 
-// PrefDefaultTheme says "Mayoi"
+// PrefDefaultTheme says "Zut"
 // in the language of msgs.
 func (msgs Messages) PrefDefaultTheme() string {
 	return Catalog.Format(msgs.locale, "prefDefaultTheme", nil)
@@ -15242,11 +15242,11 @@ func (msgs Messages) PrefDefaultTerminalLocation() string {
 	return Catalog.Format(msgs.locale, "prefDefaultTerminalLocation", nil)
 }
 
-// PrefDefaultTerminalBackend says "Mayoi"
+// PrefDefaultTerminalBackend says "Zut"
 // in the language the app shows.
 func PrefDefaultTerminalBackend() string { return In(i18n.Locale()).PrefDefaultTerminalBackend() }
 
-// PrefDefaultTerminalBackend says "Mayoi"
+// PrefDefaultTerminalBackend says "Zut"
 // in the language of msgs.
 func (msgs Messages) PrefDefaultTerminalBackend() string {
 	return Catalog.Format(msgs.locale, "prefDefaultTerminalBackend", nil)
@@ -16196,11 +16196,11 @@ func (msgs Messages) PluginViewLoading() string {
 	return Catalog.Format(msgs.locale, "pluginViewLoading", nil)
 }
 
-// PluginViewUnknown says "Mayoi can't draw a node of type {type}."
+// PluginViewUnknown says "Zut can't draw a node of type {type}."
 // in the language the app shows.
 func PluginViewUnknown(type_ string) string { return In(i18n.Locale()).PluginViewUnknown(type_) }
 
-// PluginViewUnknown says "Mayoi can't draw a node of type {type}."
+// PluginViewUnknown says "Zut can't draw a node of type {type}."
 // in the language of msgs.
 func (msgs Messages) PluginViewUnknown(type_ string) string {
 	return Catalog.Format(msgs.locale, "pluginViewUnknown", map[string]any{"type": type_})
@@ -16246,11 +16246,11 @@ func (msgs Messages) ProblemsShow() string {
 	return Catalog.Format(msgs.locale, "problemsShow", nil)
 }
 
-// PluginsBundled says "Comes with Mayoi"
+// PluginsBundled says "Comes with Zut"
 // in the language the app shows.
 func PluginsBundled() string { return In(i18n.Locale()).PluginsBundled() }
 
-// PluginsBundled says "Comes with Mayoi"
+// PluginsBundled says "Comes with Zut"
 // in the language of msgs.
 func (msgs Messages) PluginsBundled() string {
 	return Catalog.Format(msgs.locale, "pluginsBundled", nil)
@@ -16436,14 +16436,14 @@ func (msgs Messages) PluginsLocal() string {
 	return Catalog.Format(msgs.locale, "pluginsLocal", nil)
 }
 
-// PluginsMayoiSettings says "Formatting"
+// PluginsZutSettings says "Formatting"
 // in the language the app shows.
-func PluginsMayoiSettings() string { return In(i18n.Locale()).PluginsMayoiSettings() }
+func PluginsZutSettings() string { return In(i18n.Locale()).PluginsZutSettings() }
 
-// PluginsMayoiSettings says "Formatting"
+// PluginsZutSettings says "Formatting"
 // in the language of msgs.
-func (msgs Messages) PluginsMayoiSettings() string {
-	return Catalog.Format(msgs.locale, "pluginsMayoiSettings", nil)
+func (msgs Messages) PluginsZutSettings() string {
+	return Catalog.Format(msgs.locale, "pluginsZutSettings", nil)
 }
 
 // PluginsNone says "No plugins yet. Install one above, or write one with mayoi plugin new."
@@ -16466,11 +16466,11 @@ func (msgs Messages) PluginsNotInIndex(name string) string {
 	return Catalog.Format(msgs.locale, "pluginsNotInIndex", map[string]any{"name": name})
 }
 
-// PluginsNotStarted says "The plugins start with Mayoi's first window."
+// PluginsNotStarted says "The plugins start with Zut's first window."
 // in the language the app shows.
 func PluginsNotStarted() string { return In(i18n.Locale()).PluginsNotStarted() }
 
-// PluginsNotStarted says "The plugins start with Mayoi's first window."
+// PluginsNotStarted says "The plugins start with Zut's first window."
 // in the language of msgs.
 func (msgs Messages) PluginsNotStarted() string {
 	return Catalog.Format(msgs.locale, "pluginsNotStarted", nil)
@@ -16536,11 +16536,11 @@ func (msgs Messages) PluginsRunning(time_ string) string {
 	return Catalog.Format(msgs.locale, "pluginsRunning", map[string]any{"time": time_})
 }
 
-// PluginsSafeMode says "Mayoi started with --disable-plugins: only the plugins it comes with run."
+// PluginsSafeMode says "Zut started with --disable-plugins: only the plugins it comes with run."
 // in the language the app shows.
 func PluginsSafeMode() string { return In(i18n.Locale()).PluginsSafeMode() }
 
-// PluginsSafeMode says "Mayoi started with --disable-plugins: only the plugins it comes with run."
+// PluginsSafeMode says "Zut started with --disable-plugins: only the plugins it comes with run."
 // in the language of msgs.
 func (msgs Messages) PluginsSafeMode() string {
 	return Catalog.Format(msgs.locale, "pluginsSafeMode", nil)
@@ -16696,21 +16696,21 @@ func (msgs Messages) PluginsCrashes() string {
 	return Catalog.Format(msgs.locale, "pluginsCrashes", nil)
 }
 
-// PluginsContributes says "Adds to Mayoi"
+// PluginsContributes says "Adds to Zut"
 // in the language the app shows.
 func PluginsContributes() string { return In(i18n.Locale()).PluginsContributes() }
 
-// PluginsContributes says "Adds to Mayoi"
+// PluginsContributes says "Adds to Zut"
 // in the language of msgs.
 func (msgs Messages) PluginsContributes() string {
 	return Catalog.Format(msgs.locale, "pluginsContributes", nil)
 }
 
-// PluginsContributesNone says "This plugin adds nothing Mayoi can list."
+// PluginsContributesNone says "This plugin adds nothing Zut can list."
 // in the language the app shows.
 func PluginsContributesNone() string { return In(i18n.Locale()).PluginsContributesNone() }
 
-// PluginsContributesNone says "This plugin adds nothing Mayoi can list."
+// PluginsContributesNone says "This plugin adds nothing Zut can list."
 // in the language of msgs.
 func (msgs Messages) PluginsContributesNone() string {
 	return Catalog.Format(msgs.locale, "pluginsContributesNone", nil)
@@ -18682,41 +18682,41 @@ func (msgs Messages) GhResolveFailed(error string) string {
 	return Catalog.Format(msgs.locale, "ghResolveFailed", map[string]any{"error": error})
 }
 
-// CmdFileAddContextMenu says "Add 'Open with Mayoi' to Explorer"
+// CmdFileAddContextMenu says "Add 'Open with Zut' to Explorer"
 // in the language the app shows.
 func CmdFileAddContextMenu() string { return In(i18n.Locale()).CmdFileAddContextMenu() }
 
-// CmdFileAddContextMenu says "Add 'Open with Mayoi' to Explorer"
+// CmdFileAddContextMenu says "Add 'Open with Zut' to Explorer"
 // in the language of msgs.
 func (msgs Messages) CmdFileAddContextMenu() string {
 	return Catalog.Format(msgs.locale, "cmdFileAddContextMenu", nil)
 }
 
-// CmdFileRemoveContextMenu says "Remove 'Open with Mayoi' from Explorer"
+// CmdFileRemoveContextMenu says "Remove 'Open with Zut' from Explorer"
 // in the language the app shows.
 func CmdFileRemoveContextMenu() string { return In(i18n.Locale()).CmdFileRemoveContextMenu() }
 
-// CmdFileRemoveContextMenu says "Remove 'Open with Mayoi' from Explorer"
+// CmdFileRemoveContextMenu says "Remove 'Open with Zut' from Explorer"
 // in the language of msgs.
 func (msgs Messages) CmdFileRemoveContextMenu() string {
 	return Catalog.Format(msgs.locale, "cmdFileRemoveContextMenu", nil)
 }
 
-// ContextMenuOpen says "Open with Mayoi"
+// ContextMenuOpen says "Open with Zut"
 // in the language the app shows.
 func ContextMenuOpen() string { return In(i18n.Locale()).ContextMenuOpen() }
 
-// ContextMenuOpen says "Open with Mayoi"
+// ContextMenuOpen says "Open with Zut"
 // in the language of msgs.
 func (msgs Messages) ContextMenuOpen() string {
 	return Catalog.Format(msgs.locale, "contextMenuOpen", nil)
 }
 
-// ContextMenuAdded says "'Open with Mayoi' is in Explorer's right-click menu."
+// ContextMenuAdded says "'Open with Zut' is in Explorer's right-click menu."
 // in the language the app shows.
 func ContextMenuAdded() string { return In(i18n.Locale()).ContextMenuAdded() }
 
-// ContextMenuAdded says "'Open with Mayoi' is in Explorer's right-click menu."
+// ContextMenuAdded says "'Open with Zut' is in Explorer's right-click menu."
 // in the language of msgs.
 func (msgs Messages) ContextMenuAdded() string {
 	return Catalog.Format(msgs.locale, "contextMenuAdded", nil)
@@ -18732,41 +18732,41 @@ func (msgs Messages) ContextMenuAddedDetail() string {
 	return Catalog.Format(msgs.locale, "contextMenuAddedDetail", nil)
 }
 
-// ContextMenuAddFailed says "'Open with Mayoi' could not be added to Explorer."
+// ContextMenuAddFailed says "'Open with Zut' could not be added to Explorer."
 // in the language the app shows.
 func ContextMenuAddFailed() string { return In(i18n.Locale()).ContextMenuAddFailed() }
 
-// ContextMenuAddFailed says "'Open with Mayoi' could not be added to Explorer."
+// ContextMenuAddFailed says "'Open with Zut' could not be added to Explorer."
 // in the language of msgs.
 func (msgs Messages) ContextMenuAddFailed() string {
 	return Catalog.Format(msgs.locale, "contextMenuAddFailed", nil)
 }
 
-// ContextMenuRemoved says "'Open with Mayoi' is removed from Explorer."
+// ContextMenuRemoved says "'Open with Zut' is removed from Explorer."
 // in the language the app shows.
 func ContextMenuRemoved() string { return In(i18n.Locale()).ContextMenuRemoved() }
 
-// ContextMenuRemoved says "'Open with Mayoi' is removed from Explorer."
+// ContextMenuRemoved says "'Open with Zut' is removed from Explorer."
 // in the language of msgs.
 func (msgs Messages) ContextMenuRemoved() string {
 	return Catalog.Format(msgs.locale, "contextMenuRemoved", nil)
 }
 
-// ContextMenuRemoveFailed says "'Open with Mayoi' could not be removed from Explorer."
+// ContextMenuRemoveFailed says "'Open with Zut' could not be removed from Explorer."
 // in the language the app shows.
 func ContextMenuRemoveFailed() string { return In(i18n.Locale()).ContextMenuRemoveFailed() }
 
-// ContextMenuRemoveFailed says "'Open with Mayoi' could not be removed from Explorer."
+// ContextMenuRemoveFailed says "'Open with Zut' could not be removed from Explorer."
 // in the language of msgs.
 func (msgs Messages) ContextMenuRemoveFailed() string {
 	return Catalog.Format(msgs.locale, "contextMenuRemoveFailed", nil)
 }
 
-// ContextMenuNotAdded says "'Open with Mayoi' is not in Explorer's right-click menu."
+// ContextMenuNotAdded says "'Open with Zut' is not in Explorer's right-click menu."
 // in the language the app shows.
 func ContextMenuNotAdded() string { return In(i18n.Locale()).ContextMenuNotAdded() }
 
-// ContextMenuNotAdded says "'Open with Mayoi' is not in Explorer's right-click menu."
+// ContextMenuNotAdded says "'Open with Zut' is not in Explorer's right-click menu."
 // in the language of msgs.
 func (msgs Messages) ContextMenuNotAdded() string {
 	return Catalog.Format(msgs.locale, "contextMenuNotAdded", nil)

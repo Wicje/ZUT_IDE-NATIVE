@@ -95,7 +95,7 @@ func TestSSHError(t *testing.T) {
 		t.Fatal("an untrusted host key would be tried again")
 	}
 	denied := sshError("Permission denied (publickey).", errors.New("exit"))
-	if denied.Error() != "Permission denied (publickey). Mayoi signs in with keys and the SSH agent, not passwords." {
+	if denied.Error() != "Permission denied (publickey). Zut signs in with keys and the SSH agent, not passwords." {
 		t.Fatalf("permission: %v", denied)
 	}
 	missing := sshStartError(exec.ErrNotFound)

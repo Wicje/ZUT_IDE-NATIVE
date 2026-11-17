@@ -16,7 +16,7 @@ import (
 	"mayoi/internal/settings"
 )
 
-// palette is Mayoi's look: the colors of its chrome, of the code and of
+// palette is Zut's look: the colors of its chrome, of the code and of
 // the terminal, for a light or a dark window, or for a theme of its own as
 // The Matrix. Widgets take theirs from the ui.Theme that applyTheme
 // derives from it.
@@ -1397,7 +1397,7 @@ var (
 	gtaVIPal = gtaVIPalette().derive()
 )
 
-// The Themes of the settings beside Mayoi's own, "": The Matrix, Purple
+// The Themes of the settings beside Zut's own, "": The Matrix, Purple
 // Gold, the Halloween themes Jack-o'-Lantern, Witch's Brew and Blood
 // Moon, and GTA VI, which are always dark, and Claude, Qoder, Grok Bot and Cursor,
 // light or dark as the Appearance is.

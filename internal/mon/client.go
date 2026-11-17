@@ -1,4 +1,4 @@
-// Package mon signs Mayoi in to Mon, the account behind sorrycc's apps at
+// Package mon signs Zut in to Mon, the account behind sorrycc's apps at
 // mon.sorrycc.dev, syncs its settings, asks Mon's AI gateway and sends
 // crash reports.
 //

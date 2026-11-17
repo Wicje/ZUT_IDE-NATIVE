@@ -15,14 +15,14 @@ import (
 	"mayoi/locales"
 )
 
-// The themes plugins contribute: a palette in JSON, over one of Mayoi's,
-// or a VS Code theme, whose colors and token colors map to Mayoi's.
+// The themes plugins contribute: a palette in JSON, over one of Zut's,
+// or a VS Code theme, whose colors and token colors map to Zut's.
 
-// themeFile is a theme of a plugin as its file says it, Mayoi's format and
+// themeFile is a theme of a plugin as its file says it, Zut's format and
 // VS Code's at once: a VS Code theme has "type" and colors with dots, as
 // "editor.background", and "tokenColors".
 type themeFile struct {
-	// Base is the palette the theme changes: "dark" or "light", Mayoi's
+	// Base is the palette the theme changes: "dark" or "light", Zut's
 	// own, or a theme's id, as "claude".
 	Base   string            `json:"base"`
 	Dark   *bool             `json:"dark"`
@@ -57,7 +57,7 @@ func pluginThemes() []pluginTheme {
 	return out
 }
 
-// allThemes are Mayoi's themes, then the plugins'.
+// allThemes are Zut's themes, then the plugins'.
 func allThemes() []themeChoice {
 	out := builtinThemes
 	for _, t := range pluginThemes() {
@@ -155,7 +155,7 @@ func (f *themeFile) isDark(window bool) bool {
 }
 
 // loadPluginTheme makes the palette of a plugin's theme; a file that does
-// not read is Mayoi's own palette, as the log says.
+// not read is Zut's own palette, as the log says.
 func loadPluginTheme(t pluginTheme, window bool) *palette {
 	f, err := readThemeFile(t)
 	if err != nil {
@@ -347,7 +347,7 @@ func themeField(p *palette, name string) *ui.Color {
 	return nil
 }
 
-// vscodeColors are the colors of a VS Code theme Mayoi takes, and the
+// vscodeColors are the colors of a VS Code theme Zut takes, and the
 // colors of its palette each sets.
 var vscodeColors = map[string][]string{
 	"editor.background":                       {"editor"},
@@ -465,7 +465,7 @@ func scopeKind(scope string) (highlight.Kind, bool) {
 	return 0, false
 }
 
-// ansiNames are the terminal colors of a VS Code theme, in Mayoi's order.
+// ansiNames are the terminal colors of a VS Code theme, in Zut's order.
 var ansiNames = []string{
 	"terminal.ansiBlack", "terminal.ansiRed", "terminal.ansiGreen", "terminal.ansiYellow",
 	"terminal.ansiBlue", "terminal.ansiMagenta", "terminal.ansiCyan", "terminal.ansiWhite",

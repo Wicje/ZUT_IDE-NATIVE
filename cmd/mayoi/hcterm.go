@@ -108,9 +108,9 @@ var hcLocalBin = func() string {
 	return filepath.Join(home, ".local", "bin")
 }
 
-// hcPath is the hc Mayoi runs: terminalBackendHcPath when the terminal
+// hcPath is the hc Zut runs: terminalBackendHcPath when the terminal
 // backend is "hc", else "hc" on the path, else the one herdr's
-// installer put in hcLocalBin, which the path of a Mayoi opened from the
+// installer put in hcLocalBin, which the path of a Zut opened from the
 // Finder may lack. That is herdr-core when another hc was on the path as
 // it installed. "" when there is none.
 func hcPath() string {
@@ -151,7 +151,7 @@ func hcPathAt(path string) string {
 		return ""
 	}
 	// A bare name is a program to find on the path, not a file of the
-	// process's working folder, which is "/" when the Finder starts Mayoi.
+	// process's working folder, which is "/" when the Finder starts Zut.
 	if !filepath.IsAbs(path) && path != "." && path != ".." && filepath.Base(path) == path {
 		if p, err := lookPath(path); err == nil {
 			return p
@@ -373,7 +373,7 @@ func hcKill(addr string) {
 }
 
 // hcDetachKey reports whether a key is the one hc attach detaches with,
-// Ctrl+\, which Mayoi takes so that a terminal can't come off its shell:
+// Ctrl+\, which Zut takes so that a terminal can't come off its shell:
 // the shell gets it from hc keys instead.
 func hcDetachKey(s *session, mods ui.Modifiers, key ui.Key) bool {
 	if s.hc == "" || mods != ui.Ctrl || key != ui.KeyBackslash {

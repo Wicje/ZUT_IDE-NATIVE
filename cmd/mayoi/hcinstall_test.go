@@ -98,7 +98,7 @@ func TestInstallHCFails(t *testing.T) {
 }
 
 // With terminalBackend "hc" and no hc, the first new terminal offers to
-// install it, once, and runs in Mayoi; without the setting, none does.
+// install it, once, and runs in Zut; without the setting, none does.
 func TestOfferHC(t *testing.T) {
 	skipOnWindows(t, "herdr has no hc for Windows")
 	hs := newHarness(t, true)

@@ -14,14 +14,14 @@ import (
 )
 
 // The agents plugins add, as plugin.json's contributes.agents declares
-// them, join those Mayoi knows in internal/agents: the Sessions view lists
+// them, join those Zut knows in internal/agents: the Sessions view lists
 // their sessions, marks them with their icons and resumes them alike. The
 // sessions of one are of the files a glob matches, or of what a function
 // of the plugin returns, which the scanner runs off the main thread and
 // waits for no longer than agents.ListWait. A plugin turned off takes its
 // agents with it, and its sessions go as a reading drops them.
 
-// syncAgents has the agents be those Mayoi knows and those of the plugins
+// syncAgents has the agents be those Zut knows and those of the plugins
 // on, once those change, and has the Sessions view read again; on the
 // main thread.
 func (h *pluginHost) syncAgents() {

@@ -31,7 +31,7 @@ func UserDirs() Dirs {
 // CLIUsage is what mayoi plugin --help prints.
 const CLIUsage = `Usage: mayoi plugin <command> [arguments]
 
-Manages the plugins in %s. A running Mayoi loads changes at once.
+Manages the plugins in %s. A running Zut loads changes at once.
 
 Commands:
   new <name> [folder]       Write a new plugin into folder, ./<name> by default
@@ -88,8 +88,8 @@ func RunCLI(args []string, dirs Dirs, stdout, stderr io.Writer) int {
 		if err != nil {
 			return fail("%v", err)
 		}
-		fmt.Fprintf(stdout, "Linked %s: Mayoi loads it from %s, and again on each save.\n", m.Name, dir)
-		fmt.Fprintf(stdout, "Its log is in Mayoi under Plugins: Show Log. Unlink it with mayoi plugin remove %s.\n", m.Name)
+		fmt.Fprintf(stdout, "Linked %s: Zut loads it from %s, and again on each save.\n", m.Name, dir)
+		fmt.Fprintf(stdout, "Its log is in Zut under Plugins: Show Log. Unlink it with mayoi plugin remove %s.\n", m.Name)
 	case "install":
 		if len(rest) != 1 {
 			return fail("install needs one source")

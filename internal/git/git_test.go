@@ -203,7 +203,7 @@ func TestStageUnstageDiscardCommit(t *testing.T) {
 	}
 }
 
-// A hook finds the commands of the user's shell, which Mayoi opened from
+// A hook finds the commands of the user's shell, which Zut opened from
 // the Finder takes as it starts (issue 82).
 func TestCommitHookFindsShellCommands(t *testing.T) {
 	if runtime.GOOS == "windows" {

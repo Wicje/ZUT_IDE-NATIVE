@@ -12,7 +12,7 @@ import (
 	"github.com/egoist/mygo"
 )
 
-// commandLine reports whether the mayoi script started Mayoi, as the
+// commandLine reports whether the mayoi script started Zut, as the
 // command.
 func commandLine() bool { return os.Getenv(cliEnv) != "" }
 
@@ -32,7 +32,7 @@ func startApp(paths []string) error {
 	return nil
 }
 
-// refreshCLI brings the mayoi command an older Mayoi installed up to
+// refreshCLI brings the mayoi command an older Zut installed up to
 // date, for the options it has now.
 func refreshCLI() {
 	app := appLocation()

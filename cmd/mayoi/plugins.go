@@ -209,7 +209,7 @@ func (h *pluginHost) syncPrefs() {
 }
 
 // toggled stops the plugins the settings turned off and starts those
-// they turned on, from old to now, as they would start had Mayoi started
+// they turned on, from old to now, as they would start had Zut started
 // with them on.
 func (h *pluginHost) toggled(old, now map[string]json.RawMessage) {
 	on := func(all map[string]json.RawMessage, p *plugin.Plugin) bool {
@@ -318,9 +318,9 @@ func (h *pluginHost) Settings(name string) json.RawMessage {
 	return p.Plugins[name]
 }
 
-// MayoiSetting implements plugin.Host: a preference by its key in
+// ZutSetting implements plugin.Host: a preference by its key in
 // settings.json.
-func (h *pluginHost) MayoiSetting(key string) any {
+func (h *pluginHost) ZutSetting(key string) any {
 	p := h.prefsSnap.Load()
 	if p == nil {
 		return nil
@@ -443,7 +443,7 @@ func (h *pluginHost) wait(start func(a *app, done func(any, error))) (any, error
 }
 
 // pluginCommands are the commands of the plugins, labelled in the
-// language of t, after Mayoi's own, with the keys of plugin.json those
+// language of t, after Zut's own, with the keys of plugin.json those
 // leave free.
 func (a *app) pluginCommands(t locales.Messages, own []command) []command {
 	if plugins == nil {
@@ -468,7 +468,7 @@ func (a *app) pluginCommands(t locales.Messages, own []command) []command {
 		command{"plugins.runSelection", t.CmdPluginsRunSelection(), "", a.runSelectionScript},
 		command{"plugins.manage", t.CmdPluginsManage(), "", func() { a.host.showSettings(prefsPlugins, "") }},
 	)
-	// The keys plugins bind, where Mayoi and keybindings.json leave them.
+	// The keys plugins bind, where Zut and keybindings.json leave them.
 	taken := map[keymap.Stroke]bool{}
 	for _, c := range own {
 		if st, ok := keymap.ParseAccel(platformAccel(c.id, c.accel)); ok {
@@ -506,7 +506,7 @@ func pluginStroke(k plugin.KeyContrib) (keymap.Stroke, bool) {
 	return strokes[0], true
 }
 
-// skippedKeys are the keybindings of plugins that keys Mayoi or the user
+// skippedKeys are the keybindings of plugins that keys Zut or the user
 // bind took, for the shortcuts editor to offer.
 func (a *app) skippedKeys() []plugin.KeyContrib {
 	if plugins == nil {

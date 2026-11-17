@@ -70,7 +70,7 @@ func keepCrashes(dir string) {
 // crashHeader is the line a crash log starts with: what crashed, on what,
 // and since when.
 func crashHeader(started time.Time) string {
-	return fmt.Sprintf("Mayoi %s %s/%s %s, started %s\n\n", appVersion(), runtime.GOOS, runtime.GOARCH,
+	return fmt.Sprintf("Zut %s %s/%s %s, started %s\n\n", appVersion(), runtime.GOOS, runtime.GOARCH,
 		runtime.Version(), started.UTC().Format(time.RFC3339))
 }
 
@@ -79,7 +79,7 @@ func appVersion() string { return cmp.Or(mygo.App.Version(), "dev") }
 // crashed reports whether a crash.log holds a crash, more than its
 // header.
 func crashed(b []byte) bool {
-	if bytes.HasPrefix(b, []byte("Mayoi ")) {
+	if bytes.HasPrefix(b, []byte("Zut ")) {
 		_, b, _ = bytes.Cut(b, []byte("\n\n"))
 	}
 	return len(bytes.TrimSpace(b)) > 0
@@ -104,7 +104,7 @@ func crashedStderr(path string, crash []byte) string {
 	if err != nil {
 		return ""
 	}
-	if bytes.HasPrefix(crash, []byte("Mayoi ")) {
+	if bytes.HasPrefix(crash, []byte("Zut ")) {
 		_, crash, _ = bytes.Cut(crash, []byte("\n\n"))
 	}
 	first, _, _ := bytes.Cut(bytes.TrimLeft(crash, "\x00\n"), []byte("\n"))
@@ -170,7 +170,7 @@ var recovered struct {
 }
 
 // recoverCrash, deferred first in a goroutine that only reads, as a git
-// status or a search, keeps a panic in it from ending Mayoi: the
+// status or a search, keeps a panic in it from ending Zut: the
 // goroutine ends, and the panic's log is kept in the crashes folder, for
 // the next launch to offer to send.
 func recoverCrash() {
@@ -219,7 +219,7 @@ func keepRecovered(r any, stack []byte) {
 	}
 }
 
-// startTime is when Mayoi started, for the logs of the panics it
+// startTime is when Zut started, for the logs of the panics it
 // recovers from.
 var startTime = time.Now()
 

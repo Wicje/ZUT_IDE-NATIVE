@@ -372,7 +372,7 @@ func TestUnknownPreferencesStay(t *testing.T) {
 	if _, err := e.Sync(ctx, Ask); err != nil {
 		t.Fatal(err)
 	}
-	// This Mayoi drops the key it does not know, as settings.json does.
+	// This Zut drops the key it does not know, as settings.json does.
 	delete(l.s.Settings, "future")
 	l.s.Settings["fontSize"] = json.RawMessage("14")
 	if _, err := e.Push(ctx); err != nil {

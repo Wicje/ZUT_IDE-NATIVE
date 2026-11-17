@@ -4,7 +4,7 @@ package main
 
 import "errors"
 
-// commandLine reports whether Mayoi was started as the mayoi command,
+// commandLine reports whether Zut was started as the mayoi command,
 // which there is none of here.
 func commandLine() bool { return false }
 

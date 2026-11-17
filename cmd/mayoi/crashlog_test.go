@@ -46,7 +46,7 @@ func TestKeepCrashes(t *testing.T) {
 	if logs := listCrashes(crashes); len(logs) != maxCrashes {
 		t.Errorf("%d crashes kept, want %d", len(logs), maxCrashes)
 	}
-	if b, err := os.ReadFile(path); err != nil || !strings.HasPrefix(string(b), "Mayoi ") || crashed(b) {
+	if b, err := os.ReadFile(path); err != nil || !strings.HasPrefix(string(b), "Zut ") || crashed(b) {
 		t.Errorf("crash.log after launch: %q, %v", b, err)
 	}
 
@@ -89,11 +89,11 @@ func TestRecoverCrash(t *testing.T) {
 
 func TestCrashReport(t *testing.T) {
 	at := time.Date(2026, 10, 14, 9, 30, 5, 0, time.Local)
-	c := crashReport(crashLog{kind: crashFatal, at: at}, "Mayoi 0.11.4 linux/amd64 go1.27.0, started 2026-10-14T09:00:00Z\n\npanic: boom")
+	c := crashReport(crashLog{kind: crashFatal, at: at}, "Zut 0.11.4 linux/amd64 go1.27.0, started 2026-10-14T09:00:00Z\n\npanic: boom")
 	if c.App != "mayoi" || c.Version != "0.11.4" || c.OS != "linux" || c.Arch != "amd64" || c.Runtime != "go1.27.0" || c.OccurredAt != at.Unix() {
 		t.Errorf("fatal = %+v", c)
 	}
-	c = crashReport(crashLog{kind: crashSystem}, `{"app_name":"Mayoi","app_version":"0.11.3"}`+"\n{}")
+	c = crashReport(crashLog{kind: crashSystem}, `{"app_name":"Zut","app_version":"0.11.3"}`+"\n{}")
 	if c.Version != "0.11.3" || c.OS != runtime.GOOS {
 		t.Errorf("ips = %+v", c)
 	}

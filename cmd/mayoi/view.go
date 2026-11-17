@@ -94,6 +94,7 @@ func (a *app) view(c *ui.Context) {
 			a.focus, a.col = paneEditor, i
 		case t.tool != nil && t.tool.pane.FocusWithin(c):
 			a.focus, a.col = paneEditor, i
+		case t.preview != nil && t.preview.pane.FocusWithin(c):
 		case t.issue != nil && t.issue.pane.FocusWithin(c):
 			a.focus, a.col = paneEditor, i
 		case t.ed != nil && t.ed.preview != nil && t.ed.preview.pane.FocusWithin(c):
@@ -493,7 +494,7 @@ func (a *app) commandCenter(c *ui.Context) {
 		case name != "" || folder != "":
 			ui.Text(c, name+folder).FontSize(12).FontWeight(500).TextColor(p.muted).SingleLine().Shrink(1)
 		default:
-			ui.Text(c, "Mayoi").FontSize(12).FontWeight(500).TextColor(p.muted).SingleLine()
+			ui.Text(c, "Zut").FontSize(12).FontWeight(500).TextColor(p.muted).SingleLine()
 		}
 	})
 	if b.Clicked() {
@@ -608,7 +609,7 @@ func (a *app) columnView(c *ui.Context, col *column) {
 	a.tabStrip(c, col)
 	shown := col.tab()
 	// A pull request's tab names it in its header.
-	if shown != nil && shown.term == nil && shown.tool == nil && shown.issue == nil && !shown.isPR() {
+	if shown != nil && shown.term == nil && shown.preview == nil && shown.tool == nil && shown.issue == nil && !shown.isPR() {
 		a.breadcrumbs(c, col, shown)
 	}
 	for _, t := range col.tabs {
@@ -640,6 +641,8 @@ func (a *app) columnView(c *ui.Context, col *column) {
 					}
 				case shown.merge != nil:
 					a.mergeViewUI(c, shown.merge)
+				case shown.preview != nil:
+					a.previewViewUI(c, shown.preview, shown.name())
 				case shown.tool != nil:
 					a.toolViewUI(c, shown.tool)
 				case shown.issue != nil:
@@ -1438,7 +1441,7 @@ func (a *app) statusBar(c *ui.Context) {
 		ui.Spacer(c)
 		a.pluginStatusItems(c, true, item, text)
 		// Settings sync is last, at the right, whatever shows before it,
-		// and a new version of Mayoi before it.
+		// and a new version of Zut before it.
 		defer a.syncStatus(c)
 		if v := a.host.update(); v != "" {
 			defer item("update", v, locales.UpdateAvailable(v), iconUpdate, a.host.installUpdate)
@@ -1554,7 +1557,7 @@ var iconArt []byte
 // icon crops, in pixels of the 1254 px art; as in tools/icongen.
 const iconFrame = 52
 
-// logo is Mayoi's mark: the app icon itself, its border cropped as on
+// logo is Zut's mark: the app icon itself, its border cropped as on
 // the Dock, decoded the first time the welcome page shows.
 var logo = sync.OnceValue(func() *ui.Bitmap {
 	art, err := png.Decode(bytes.NewReader(iconArt))
@@ -1596,7 +1599,7 @@ func (a *app) welcome(c *ui.Context) {
 						})
 					}
 					ui.Column(c).Gap(3).Children(func() {
-						ui.Text(c, "Mayoi").FontSize(26).FontWeight(600).LetterSpacing(-0.3).TextColor(p.text)
+						ui.Text(c, "Zut").FontSize(26).FontWeight(600).LetterSpacing(-0.3).TextColor(p.text)
 						ui.Text(c, locales.WelcomeTagline()).FontSize(13).TextColor(p.muted)
 					})
 				})
@@ -1667,34 +1670,13 @@ func (a *app) welcome(c *ui.Context) {
 						}
 					})
 				}
-				a.welcomeStar(c)
 			})
 		})
 	})
 }
 
-// repoURL is Mayoi's repository on GitHub.
-const repoURL = "https://github.com/sorrycc/Mayoi"
-
-// welcomeStar is the link at the foot of the welcome page that opens
-// Mayoi's repository, to star it: quieter than the rows above it.
-func (a *app) welcomeStar(c *ui.Context) {
-	p := a.pal
-	r := ui.ButtonBase(c.Key("welcome:star")).AlignSelf(ui.Start).Height(24).Padding(0, 10).Radius(6).Gap(6).
-		AlignItems(ui.Center).Label(locales.WelcomeStar()).Tooltip(repoURL)
-	col := p.faint
-	if r.Hovered() {
-		col = p.accent
-	}
-	col = r.AnimateColor("text", col, ui.Animation{Duration: hoverFade.Duration})
-	riseIn(r, 150*time.Millisecond).Children(func() {
-		ui.Icon(c, iconStar).FontSize(13).TextColor(col)
-		ui.Text(c, locales.WelcomeStar()).FontSize(12).TextColor(col).SingleLine()
-	})
-	if r.Clicked() {
-		a.services.OpenURL(repoURL)
-	}
-}
+// repoURL is Zut's repository on GitHub — change to your published repo.
+const repoURL = "https://github.com/chcwtz/zut"
 
 // welcomeRowH is the height of every row of the welcome page, with keys
 // or without, so that they keep one rhythm.

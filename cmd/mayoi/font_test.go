@@ -54,11 +54,11 @@ func TestMonoFallback(t *testing.T) {
 	hs := newHarness(t, false)
 	a := hs.a
 	p := a.settings.Prefs
-	p.FontFamily = "No Such Font Mayoi"
+	p.FontFamily = "No Such Font Zut"
 	a.settings.SetPrefs(p)
 	hs.settle()
 	mono := newCodeFont(settings.Prefs{FontFamily: "monospace", FontSize: p.FontSize, FontWeight: p.FontWeight, LineHeight: p.LineHeight})
-	if a.font.family != "No Such Font Mayoi, monospace" || a.font.charW != mono.charW {
+	if a.font.family != "No Such Font Zut, monospace" || a.font.charW != mono.charW {
 		t.Errorf("a missing font measures %v a cell, as %q; monospace %v", a.font.charW, a.font.family, mono.charW)
 	}
 	if !a.font.is(a.settings.Prefs) {

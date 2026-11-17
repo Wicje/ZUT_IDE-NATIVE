@@ -298,7 +298,7 @@ func TestQoderTheme(t *testing.T) {
 			}
 		}
 	}
-	for name, p := range map[string]*palette{"Mayoi": lightPal, "Matrix": matrixPal, "Claude": claudeDarkPal, "Cursor": cursorLightPal, "Purple Gold": purpleGoldPal} {
+	for name, p := range map[string]*palette{"Zut": lightPal, "Matrix": matrixPal, "Claude": claudeDarkPal, "Cursor": cursorLightPal, "Purple Gold": purpleGoldPal} {
 		if p.card != 0 || p.sentence || p.strip != p.chrome || p.hairline().A == 0 {
 			t.Errorf("%s is laid out as Qoder", name)
 		}
@@ -307,7 +307,7 @@ func TestQoderTheme(t *testing.T) {
 		t.Errorf("Qoder titles Source Control %q", got)
 	}
 	if got := lightPal.title("Terminal"); got != "TERMINAL" {
-		t.Errorf("Mayoi titles the panel %q", got)
+		t.Errorf("Zut titles the panel %q", got)
 	}
 
 	for _, theme := range []string{themeQoder, ""} {
@@ -586,7 +586,7 @@ func TestThemeMenu(t *testing.T) {
 	if l := find("Light"); !l.Disabled || !l.Checked {
 		t.Error("Light is not greyed out, and kept, under The Matrix")
 	}
-	if find("Mayoi").Checked || !find("The Matrix").Checked {
+	if find("Zut").Checked || !find("The Matrix").Checked {
 		t.Error("The Matrix is not the theme checked")
 	}
 	a.setTheme(themePurpleGold)

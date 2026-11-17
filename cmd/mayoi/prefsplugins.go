@@ -191,7 +191,7 @@ func (w *prefsWindow) pluginsPane(c *ui.Context) {
 			}
 			w.indexCard(c)
 			w.installCard(c)
-			w.sectionLabel(c, "plugins-settings-head", locales.PluginsMayoiSettings(), 0)
+			w.sectionLabel(c, "plugins-settings-head", locales.PluginsZutSettings(), 0)
 			w.card(c, "prefs-card-plugins", func() {
 				first := true
 				for _, f := range settings.Schema {
@@ -754,7 +754,7 @@ func withPluginSetting(all map[string]json.RawMessage, name, key string, v, defl
 	return data
 }
 
-// skippedPluginKeys are the shortcuts of plugins that keys Mayoi or the
+// skippedPluginKeys are the shortcuts of plugins that keys Zut or the
 // user bind took.
 func (w *prefsWindow) skippedPluginKeys() []plugin.KeyContrib {
 	if len(w.m.wins) == 0 {

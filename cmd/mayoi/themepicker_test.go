@@ -15,7 +15,7 @@ func TestThemePickerPreviewsAndKeeps(t *testing.T) {
 	a.run("view.selectTheme")
 	hs.settle()
 	if !a.themes.open || a.themes.sel != 0 {
-		t.Fatalf("the box is not open on Mayoi's theme: open %v, row %d", a.themes.open, a.themes.sel)
+		t.Fatalf("the box is not open on Zut's theme: open %v, row %d", a.themes.open, a.themes.sel)
 	}
 	hs.shot("theme-picker-mayoi")
 	for range 4 {

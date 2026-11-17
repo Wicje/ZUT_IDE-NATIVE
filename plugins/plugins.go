@@ -1,4 +1,4 @@
-// Package plugins holds the plugins Mayoi comes with, a folder each, which
+// Package plugins holds the plugins Zut comes with, a folder each, which
 // the app embeds and runs as it runs the plugins of ~/.mayoi/plugins.
 package plugins
 

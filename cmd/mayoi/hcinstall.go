@@ -19,7 +19,7 @@ import (
 const hcInstaller = "https://releases.herdr.dev/core/install.sh"
 
 // hcInstallable reports whether herdr has builds of hc for this system:
-// macOS and Linux, on the machines Mayoi is built for.
+// macOS and Linux, on the machines Zut is built for.
 func hcInstallable() bool { return hostOS == "darwin" || hostOS == "linux" }
 
 // hcInstall runs herdr's installer and returns what it printed. Tests
@@ -44,7 +44,7 @@ func hcInstallError(out []byte, err error) string {
 }
 
 // hcInstalling is set while hc installs; hcOffered once a terminal
-// offered to install it, which it does once as Mayoi runs. The main
+// offered to install it, which it does once as Zut runs. The main
 // thread's.
 var hcInstalling, hcOffered bool
 
@@ -71,8 +71,8 @@ func (a *app) installHC() {
 	})
 }
 
-// offerHC asks, once as Mayoi runs, whether to install hc, which
-// terminalBackend "hc" needs: the terminal runs in Mayoi meanwhile. It
+// offerHC asks, once as Zut runs, whether to install hc, which
+// terminalBackend "hc" needs: the terminal runs in Zut meanwhile. It
 // asks only without terminalBackendHcPath, as a path set is the person's
 // choice, not a missing install.
 func (a *app) offerHC() {

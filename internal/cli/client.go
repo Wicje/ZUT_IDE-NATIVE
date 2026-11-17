@@ -35,14 +35,14 @@ func (c Client) Run(args []string, cwd string, stdout, stderr io.Writer) (status
 		fmt.Fprint(stdout, Usage)
 		return 0, true
 	case errors.Is(err, ErrVersion):
-		fmt.Fprintln(stdout, "Mayoi", c.Version)
+		fmt.Fprintln(stdout, "Zut", c.Version)
 		return 0, true
 	case err != nil:
 		fmt.Fprintf(stderr, "mayoi: %v\nRun mayoi --help for the options.\n", err)
 		return 2, true
 	}
 	// The preferences are the command's own: it works with the app not
-	// running, which reads the file again as a Mayoi running does.
+	// running, which reads the file again as a Zut running does.
 	if req.Settings != nil {
 		return doSettings(c, req, stdout, stderr), true
 	}

@@ -1,6 +1,6 @@
 package main
 
-// The words Mayoi shows follow a few rules in every language, checked here
+// The words Zut shows follow a few rules in every language, checked here
 // over the catalogs rather than in review: the same placeholders in each
 // language, a count's noun that agrees with it, an ellipsis that is one
 // character, and no words that plead or pad.

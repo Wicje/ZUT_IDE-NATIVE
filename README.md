@@ -1,15 +1,10 @@
-<p align="center">
-  <img src="resources/icon.png" width="128" height="128" alt="Mayoi icon">
-</p>
+# Zut
 
-<h1 align="center">Mayoi</h1>
+Zut is a fork of [Mayoi](https://github.com/sorrycc/Mayoi) — a native editor written in Go. All of Mayoi's functionality remains; Zut's rebranding and artwork are the main deltas. Thanks to Mayoi's authors for the editor this builds on.
 
-<p align="center">迷い — a small, fast code editor written in Go. It draws a native UI on the GPU with
-<a href="https://github.com/egoist/mygo">MyGo</a>, with no webview and no Electron, and the packaged app is about 18 MB.</p>
+<img src="resources/icon.png" width="128" height="128" alt="Zut icon">
 
-<p align="center"><a href="https://usemayoi.com">usemayoi.com</a></p>
-
-https://github.com/user-attachments/assets/673e7907-2b2c-4ed6-9093-1ba9633cd61c
+**Zut** — a native editor written in Go, drawn with GPU (via [MyGo](https://github.com/egoist/mygo)), with no Electron and no webview. Forked from [Mayoi](https://github.com/sorrycc/Mayoi); the MIT license and upstream copyright notices are preserved in LICENSE and CONTRIBUTORS.
 
 ## Features
 
@@ -46,11 +41,11 @@ https://github.com/user-attachments/assets/673e7907-2b2c-4ed6-9093-1ba9633cd61c
   format, and a folder's own settings in `.mayoi/settings.json` (see [docs/SETTINGS.md](docs/SETTINGS.md))
 - **AI commit messages:** signed in, write the commit message from the changes with Mon's AI gateway
 - **Settings sync:** sign in with GitHub or Google, and your settings and keyboard shortcuts follow you between machines
-- **Plugins:** JavaScript or TypeScript with no build step, run in Mayoi's own engine: commands, views, previews,
+- **Plugins:** JavaScript or TypeScript with no build step, run in Zut's own engine: commands, views, previews,
   formatters, diagnostics, themes, snippets and language servers, on SSH folders too (see [docs/PLUGINS.md](docs/PLUGINS.md))
 
 See [docs/FEATURES.md](docs/FEATURES.md) for the details, [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for a tour of the
-source and how fast it runs, and [CONTRIBUTING.md](CONTRIBUTING.md) to build, test and release Mayoi.
+source and how fast it runs, and [CONTRIBUTING.md](CONTRIBUTING.md) to build, test and release Zut.
 
 ## Tour
 
@@ -100,7 +95,7 @@ source and how fast it runs, and [CONTRIBUTING.md](CONTRIBUTING.md) to build, te
 Requires macOS 13 or later. Install with [Homebrew](https://brew.sh) on Apple Silicon or Intel:
 
 ```sh
-brew tap --custom-remote sorrycc/mayoi https://github.com/sorrycc/Mayoi.git
+brew tap --custom-remote sorrycc/mayoi https://github.com/sorrycc/Zut.git
 brew trust sorrycc/mayoi
 brew install --cask mayoi
 ```
@@ -108,17 +103,17 @@ brew install --cask mayoi
 Recent Homebrew refuses to load casks from a tap you haven't trusted, which `brew trust` allows once. On an older
 Homebrew without that command, skip that line.
 
-Or download the DMG for your Mac from [Releases](https://github.com/sorrycc/Mayoi/releases/latest) and drag
-**Mayoi** to Applications. Both methods install the signed, notarized app.
+Or download the DMG for your Mac from [Releases](https://github.com/sorrycc/Zut/releases/latest) and drag
+**Zut** to Applications. Both methods install the signed, notarized app.
 
-Open **Mayoi** from Applications, or run `mayoi .` or `mayoi <file>` in a shell.
+Open **Zut** from Applications, or run `mayoi .` or `mayoi <file>` in a shell.
 Homebrew installs and removes the shell command with the app. For a DMG installation, choose
 **File → Install 'mayoi' Command** in the app instead.
 
-If you already installed the command through Mayoi, choose **File → Uninstall 'mayoi' Command** before
+If you already installed the command through Zut, choose **File → Uninstall 'mayoi' Command** before
 installing with Homebrew, so only one `mayoi` command is on your `PATH`.
 
-Mayoi checks for updates automatically. To upgrade with Homebrew, run `brew update && brew upgrade --cask mayoi`;
+Zut checks for updates automatically. To upgrade with Homebrew, run `brew update && brew upgrade --cask mayoi`;
 if it refuses to load the cask from an untrusted tap, run `brew trust sorrycc/mayoi` first.
 
 ### Linux
@@ -126,14 +121,14 @@ if it refuses to load the cask from an untrusted tap, run `brew trust sorrycc/ma
 Requires GTK 3, such as on Ubuntu 22.04 or later:
 
 ```sh
-curl -fsSL https://github.com/sorrycc/Mayoi/releases/latest/download/install.sh | sh
+curl -fsSL https://github.com/sorrycc/Zut/releases/latest/download/install.sh | sh
 ```
 
-The installer adds Mayoi to `~/.local`, with the `mayoi` command and an entry in the applications menu.
+The installer adds Zut to `~/.local`, with the `mayoi` command and an entry in the applications menu.
 
 ### Windows
 
-Download the installer for your architecture from [Releases](https://github.com/sorrycc/Mayoi/releases/latest).
+Download the installer for your architecture from [Releases](https://github.com/sorrycc/Zut/releases/latest).
 
 ### Build from source
 
@@ -141,7 +136,7 @@ Requires Go 1.27 or later; Linux also needs GTK 3. From the repository:
 
 ```sh
 go run ./cmd/mayoi ~/some/project    # open a folder or a file
-go tool mygo build                   # build build/darwin-arm64/Mayoi.app and a .dmg
+go tool mygo build                   # build build/darwin-arm64/Zut.app and a .dmg
 ```
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for development and testing.
@@ -171,7 +166,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for development and testing.
 
 ## Privacy
 
-Mayoi sends an anonymous count once a day and on each update, with only its version and system. Set `usageStats` to
+Zut sends an anonymous count once a day and on each update, with only its version and system. Set `usageStats` to
 `false` to turn it off. Crash reports are sent only when you say so. See [docs/PRIVACY.md](docs/PRIVACY.md).
 
 ## License

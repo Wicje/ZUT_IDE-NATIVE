@@ -25,7 +25,7 @@ func TestSplitPaths(t *testing.T) {
 	}
 }
 
-// A second Mayoi started before the first is ready, with no settings
+// A second Zut started before the first is ready, with no settings
 // or windows yet, leaves its folders and files for launch.
 func TestSecondInstanceBeforeReady(t *testing.T) {
 	root := workspaceFixture(t)

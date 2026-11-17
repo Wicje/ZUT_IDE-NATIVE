@@ -1,10 +1,10 @@
 # Plugins
 
 Plugins add commands, react to the editor, check and format code, draw views and previews, and bring themes, languages,
-snippets and language servers. They are folders of JavaScript or TypeScript that Mayoi runs in its own engine,
+snippets and language servers. They are folders of JavaScript or TypeScript that Zut runs in its own engine,
 [moejs](https://github.com/MoeForge/moejs): no Node, no build step, and no webview unless a plugin asks for one.
 
-The API is new and may still change before 1.0. A plugin says which versions of Mayoi it works with in `mayoi`.
+The API is new and may still change before 1.0. A plugin says which versions of Zut it works with in `mayoi`.
 
 ## Using plugins
 
@@ -22,7 +22,7 @@ mayoi plugin remove word-stats
 Or choose **Plugins → Manage Plugins…**, or the **Plugins** page of the settings window: install from a Git URL or
 the index, update, remove, turn each plugin on and off, and change its settings.
 
-The `mayoi plugin` command works on the plugins folder, so it works with Mayoi closed; a Mayoi that runs loads what
+The `mayoi plugin` command works on the plugins folder, so it works with Zut closed; a Zut that runs loads what
 changed at once.
 
 Plugins are trusted as settings are: installing one means trusting its code, which runs with your rights. Install
@@ -39,13 +39,13 @@ plugins you know.
 
 On Windows, `~` is `%USERPROFILE%`. With `MAYOI_DATA_DIR` set, these folders are in that folder instead.
 
-Mayoi comes with two plugins of its own, **Word Count** (the words and reading time of a Markdown or text file, in the
+Zut comes with two plugins of its own, **Word Count** (the words and reading time of a Markdown or text file, in the
 status bar) and **TODOs** (the folder's TODO, FIXME and HACK comments, in the sidebar). They start off; turn them on
 on the **Plugins** page of the settings window, or with `"enabled": true` in their settings.
 
 ### Settings sync
 
-Signed in, the plugins installed from Git follow you to your other machines: Mayoi installs them there at the same
+Signed in, the plugins installed from Git follow you to your other machines: Zut installs them there at the same
 commits, and a plugin removed on one machine is removed on the others. A plugin copied in by hand, or linked with
 `mayoi plugin dev`, stays on its machine.
 
@@ -60,7 +60,7 @@ commits, and a plugin removed on one machine is removed on the others. A plugin 
   show its log.
 - A command's JavaScript that runs for 10 seconds without a break is stopped, and so is a plugin that keeps more than
   256 MiB. A plugin that stops 3 times in a row is off until **Plugins → Reload Plugins**.
-- `mayoi --disable-plugins` starts Mayoi with only the plugins it comes with.
+- `mayoi --disable-plugins` starts Zut with only the plugins it comes with.
 
 ### Settings of plugins
 
@@ -107,7 +107,7 @@ word-stats/
   "version": "0.1.0",
   "description": "Words of the selection",
   "author": "Ann",                   // optional, shown on the Plugins page
-  "mayoi": ">=0.19.0",               // the versions of Mayoi it works with
+  "mayoi": ">=0.19.0",               // the versions of Zut it works with
   "main": "main.ts",                 // .ts, .js or .mjs
   "activation": ["onCommand:word-stats.count"],
   "enabled": true,                   // optional: false starts it off, until its settings turn it on
@@ -121,7 +121,7 @@ word-stats/
 ```
 
 Every id starts with the plugin's name and a dot. A title takes other languages as `title:<tag>`, for
-**View → Language**. Mayoi's own prefixes, as `file`, `edit`, `view` and `git`, are reserved.
+**View → Language**. Zut's own prefixes, as `file`, `edit`, `view` and `git`, are reserved.
 
 #### Activation
 
@@ -134,7 +134,7 @@ A plugin starts when something it names happens, and costs nothing before:
 | `workspaceContains:<glob>`  | The folder has a file the glob matches, as `go.mod`     |
 | `onView:<id>`               | One of its views shows                                  |
 | `onPreview:<id>`            | One of its previews shows                               |
-| `onStartup`                 | Mayoi starts                                            |
+| `onStartup`                 | Zut starts                                            |
 | `*`                         | Anything above                                          |
 
 Languages are the highlighter's names in lower case: `go`, `typescript`, `markdown`, `python`, `plaintext`, and the
@@ -153,7 +153,7 @@ languages plugins declare.
 | `previews`        | Previews beside the source of the files a `pattern` matches, `output` `svg`, `markdown` or `view` |
 | `formatters`      | Formatters of `languages`, for **Format Document** and `formatOnSave`                          |
 | `webviews`        | Panels of HTML from the plugin's folder, in the sidebar                                        |
-| `themes`          | Themes, in Mayoi's format or VS Code's                                                         |
+| `themes`          | Themes, in Zut's format or VS Code's                                                         |
 | `languages`       | File `extensions` and `filenames`, the Chroma `lexer` that highlights them, and `lineComment`  |
 | `snippets`        | Snippets in VS Code's format, for a `language` or `*`                                          |
 | `terminalLinks`   | A `pattern` of links clicked in a terminal (URLs and paths), which runs `command` with the match |
@@ -162,10 +162,10 @@ languages plugins declare.
 
 #### Keyboard shortcuts
 
-A plugin's shortcut takes a key only while no command of Mayoi's has it by default and keybindings.json does not bind
+A plugin's shortcut takes a key only while no command of Zut's has it by default and keybindings.json does not bind
 it, so installing a plugin never changes what a key you know does. A shortcut that is taken shows on the Plugins page
 of the settings window, where **Use Plugin's Shortcut** writes it to keybindings.json. keybindings.json can bind any
-plugin command to any key, as a Mayoi command.
+plugin command to any key, as a Zut command.
 
 ### main.ts
 
@@ -205,12 +205,12 @@ Every call that reaches the editor returns a promise.
 
 | Namespace                | Calls                                                                                     |
 | ------------------------ | ----------------------------------------------------------------------------------------- |
-| `commands`               | `register(id, fn, {title})`, `run(id, arg)` (Mayoi's commands too), `list()`              |
+| `commands`               | `register(id, fn, {title})`, `run(id, arg)` (Zut's commands too), `list()`              |
 | `editor`                 | `active()`, `visible()`; an editor's `document`, `selections`, `edit(edits, {version})`, `insert(text)`, `setSelections`, `reveal(line)` |
 | a document               | `path`, `name`, `language`, `version`, `isDirty`, `lineCount`, `text(range?)`, `lineAt(line)`, `save()` |
 | `workspace`              | `root()`, `isRemote()`, `open(path, {line})`, `readFile`, `writeFile`, `stat`, `findFiles(glob)`, `documents()` |
 | `window`                 | `notify(message, {action})`, `fail`, `pick(items)`, `prompt({title, value})`, `progress(title, fn)`, `openText(text)` |
-| `settings`               | `get(key)` of the plugin's settings, `all()`, `mayoi(key)` of Mayoi's own, `onChange(fn)` |
+| `settings`               | `get(key)` of the plugin's settings, `all()`, `mayoi(key)` of Zut's own, `onChange(fn)` |
 | `storage`                | `get(key)`, `set(key, value)` and `keys()`, global or with `{folder: true}` of the folder |
 | `events`                 | `on(name, fn)`; see below                                                                 |
 | `process`                | `run(command, args, {cwd, input, timeout})`, on the folder's machine                      |
@@ -284,7 +284,7 @@ first, for up to 1.5 seconds; past that, the file saves as it is. Auto save does
 
 ### Views
 
-A view is a tree of nodes that Mayoi draws in its theme, the zoom and the language, with no webview:
+A view is a tree of nodes that Zut draws in its theme, the zoom and the language, with no webview:
 
 ```ts
 views.onShow("todo.list", () =>
@@ -303,7 +303,7 @@ Nodes: `stack` and `row` with `children`, `text`, `markdown`, `code`, `svg`, `li
 `open` at first), `input` (`onChange`, `onSubmit`), `select`, `checkbox`, `button`, `progress` (a `value` from 0 to 1,
 or a spinner without one), `divider` and `empty` (its `text` under an `icon`). A function in the tree, as `onClick`, is
 called back in the plugin.
-Icons are Mayoi's: `check`, `x`, `plus`, `file`, `folder`, `search`, `star`, `info`, `warning`, `error`, `trash`,
+Icons are Zut's: `check`, `x`, `plus`, `file`, `folder`, `search`, `star`, `info`, `warning`, `error`, `trash`,
 `refresh`, `settings`, `terminal`, `branch`, `commit`, `tag`, `clock`, `lightbulb`, `sparkles`, `comment`, `copy`,
 `external`, `pencil`, `list`, `function`, `hash`, `lock`, `server`, `cloud`, `send`, `keyboard`, `box`, `braces`,
 `download` and `image`.
@@ -346,7 +346,7 @@ The page has `mayoi.post(message)` and `mayoi.onMessage(fn)`. On Linux, webviews
 "themes": [{ "id": "night.dark", "label": "Night", "path": "night.json" }]
 ```
 
-A theme file is Mayoi's format, the colors of one of Mayoi's palettes changed:
+A theme file is Zut's format, the colors of one of Zut's palettes changed:
 
 ```json
 {
@@ -357,7 +357,7 @@ A theme file is Mayoi's format, the colors of one of Mayoi's palettes changed:
 }
 ```
 
-or a VS Code color theme as it is, whose `colors` and `tokenColors` Mayoi maps to its own. `base` is `dark`, `light`
+or a VS Code color theme as it is, whose `colors` and `tokenColors` Zut maps to its own. `base` is `dark`, `light`
 or a theme's id, as `claude`. The theme shows in **View → Theme → Color Theme…**, the settings window, and the command
 palette.
 
@@ -377,8 +377,8 @@ placeholders, choices and variables as `TM_FILENAME` and `CURRENT_YEAR`; **Selec
 "languageServers": [{ "id": "gopls.server", "languages": ["go"], "command": "gopls" }]
 ```
 
-A plugin of a few lines brings a language: Mayoi starts the server as a document of its languages opens, on the
-folder's machine, so it runs on the SSH host of a remote folder. Mayoi shows the server's diagnostics, and asks it for
+A plugin of a few lines brings a language: Zut starts the server as a document of its languages opens, on the
+folder's machine, so it runs on the SSH host of a remote folder. Zut shows the server's diagnostics, and asks it for
 **Go → Go to Definition** (F12), **Go → Show Hover**, **Selection → Complete Word** (⌃Space in the editor), and
 **Format Document** when no plugin formats the language.
 
@@ -415,7 +415,7 @@ The resolver must print one JSON object and exit successfully:
 }
 ```
 
-Mayoi starts the returned command directly. `env` overrides inherited variables;
+Zut starts the returned command directly. `env` overrides inherited variables;
 `unsetEnv` removes them on the workspace host. `configuration` answers
 `workspace/configuration` requests by dotted section. `workspaceFolders` is used
 for initialization and folder requests; the first folder supplies `rootUri`.
@@ -463,7 +463,7 @@ agents.register("pi.agent", async () => {
 });
 ```
 
-Mayoi calls it off its main thread each time it reads the sessions, every few seconds while the view shows, and waits
+Zut calls it off its main thread each time it reads the sessions, every few seconds while the view shows, and waits
 1.5 seconds for it: what comes later shows a moment after, and a function that runs 10 seconds is given up. One that
 fails keeps the sessions it gave last, and its error goes to the plugin's log, once until it changes. A plugin turned
 off takes its agents and their sessions with it.

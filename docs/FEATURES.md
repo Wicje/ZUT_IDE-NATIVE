@@ -158,7 +158,7 @@ tree, with a count of them. Files are grouped as merge changes, staged changes, 
 - The buttons on a row open the file, discard its changes, and stage or unstage it. A group's header does the same for
   all its files. Discarding asks first, and moves untracked files to the Trash.
 - Write a message and press ⌘↵ or the commit button, which says what it will do: **Commit**, **Commit All** when nothing
-  is staged (Mayoi asks before staging everything), or **Amend Commit**. Changed files save first. Past 50 characters
+  is staged (Zut asks before staging everything), or **Amend Commit**. Changed files save first. Past 50 characters
   the summary line shows its length, in a warning color past 72.
 - Signed in to your [Mon](https://mon.sorrycc.dev) account, the ✨ button at the corner of the message box has AI write
   the message from the staged changes, or from every change when nothing is staged, in the style of the branch's last
@@ -270,7 +270,7 @@ click opens it. Each run of changes starts with an `@@` header naming the lines 
 it. **Show Full Files** in the breadcrumbs shows every line.
 
 Point at a run of changes, or choose a line of it, and its header offers to stage those changes alone, to unstage them
-when they are staged, or to discard them. Mayoi reads the index and the file again first, so it acts on them as they
+when they are staged, or to discard them. Zut reads the index and the file again first, so it acts on them as they
 are. Discarding edits an open file as a step of undo, and asks first for one that is not open. As you scroll through a
 file, its header stays at the top of the view with its buttons, and a click there folds the file.
 
@@ -399,9 +399,9 @@ pages, `⌥⌘1`–`⌥⌘4` (`Ctrl+Shift+1`–`4` elsewhere), the one shown kep
   assignees, labels, milestone and the issues it closes; its description, comments and reviews as GitHub renders them;
   and the box that comments (`⌘⏎`), or writes the review **Request Changes…** or **Comment…** started.
 - **Changes:** what GitHub shows, from where its head left its base to its head, inline or side by side like any diff,
-  under a line of its commits, how much changed, its review threads and the files viewed. Commits Mayoi does not have
+  under a line of its commits, how much changed, its review threads and the files viewed. Commits Zut does not have
   yet are fetched from the remote of the pull request's repository to `refs/mayoi/pull/<number>/head` and `…/base`,
-  which keeps them for the tab when Mayoi opens again; a pull request from a fork needs no remote of its own. Each
+  which keeps them for the tab when Zut opens again; a pull request from a fork needs no remote of its own. Each
   file's header has a **Viewed** box, which marks it viewed on GitHub and folds it. Each review thread not resolved
   shows under its lines, with **Reply** (`⌘⏎` sends), **Resolve** and **Add to Review Items**; the threads' menu shows
   those resolved too, with **Unresolve**. When the pull request has commits newer than the tab's, the line offers
@@ -471,7 +471,7 @@ list opens a name prompt. With matching branches, Enter switches to the first ma
 typed name. Choosing a remote's branch checks out a local branch that tracks it. Fetch, pull and push are also
 available in source control and the **Git** menu.
 
-Pull only fast-forwards. Push sets the upstream the first time. Git never prompts for a password inside Mayoi: it uses
+Pull only fast-forwards. Push sets the upstream the first time. Git never prompts for a password inside Zut: it uses
 your SSH agent and credential helper, and if those fail, the error says to run the command once in the terminal.
 
 ## Image viewer
@@ -508,7 +508,7 @@ Terminal**. Locks, widths and the last file column come back with each project's
 Files dragged from the Finder open where you drop them: in a column after the tab shown, on its tab strip where the
 marker shows, or on the edge of a column in a new column there. Dropped elsewhere, as on the explorer, they open in the
 file workspace, avoiding locked columns. A dropped folder opens as `mayoi <dir>` opens it.
-On macOS, files and folders dropped on Mayoi's Dock icon open the same way as `mayoi <path>`.
+On macOS, files and folders dropped on Zut's Dock icon open the same way as `mayoi <path>`.
 
 Files dragged from the explorer, from source control's changes or from the search results open in the same places. A
 search match opens with the match selected.
@@ -525,7 +525,7 @@ bar otherwise. You can run several terminals, move one between the panel and a c
 and maximize the panel. **View → New Terminals in Editor Area**, `terminalLocation` in `settings.json`, has New Terminal
 and the Explorer's **Open in Terminal** open a tab of the editor area rather than the panel; Toggle Terminal and the
 panel's **+** still use the panel. Terminal colors follow the theme. With `terminalBackend` set to `"hc"`, shells run in
-herdr-core and keep running after Mayoi quits, and the next start attaches to them again. A dot on such a terminal's
+herdr-core and keep running after Zut quits, and the next start attaches to them again. A dot on such a terminal's
 tab and chip says so, and pulses while its shell starts or its machine is away. **View → Attach to Terminal in
 herdr-core…** lists the terminals of herdr-core of the window's machine, those of the Herdr app and of an agent too, and
 shows the one chosen in a terminal of this window: it runs `hc attach` here, so closing it, or Ctrl+\, ends the attach
@@ -537,7 +537,7 @@ bracketed paste, as VS Code's terminal does, so that Claude Code pastes the scre
 in Ghostty and iTerm2: a drag, a double click for a word, a triple click for a line, Shift with a drag in a program
 that takes the mouse, or Select All. `terminalCopyOnSelect` turns it off.
 
-Command-click a file path in a local terminal (Control-click on Linux and Windows) to open it in Mayoi, including
+Command-click a file path in a local terminal (Control-click on Linux and Windows) to open it in Zut, including
 files Git ignores. Recognized paths use forward slashes: `/absolute/path`, `~/path`, `./path`, `../path`, or a
 relative path containing a slash. A filename with a `:line` or `:line:column` suffix works too; the suffix places
 the caret there. Relative paths use the directory the shell reports, or the terminal's starting directory when
@@ -634,7 +634,7 @@ Each folder gets its own window.
 
 - **Open Folder…** (⌘O) opens a folder in the current window.
 - **New Window** (⇧⌘N) opens a window showing nothing, which the welcome page fills.
-- **Star on GitHub**, at the foot of the welcome page, opens Mayoi's repository in the browser.
+- **Star on GitHub**, at the foot of the welcome page, opens Zut's repository in the browser.
 - **Open Folder in New Window…** (⌥⌘O), or ⌘-clicking a recent folder (or pressing ⌘↵ on it), opens it in a new window.
 - **File → Open Recent** lists the last ten folders, except the window's own and any no longer on disk, and has
   **Clear Recently Opened**. On macOS the Dock icon's menu lists them too, under **New Window**.
@@ -660,7 +660,7 @@ Each folder gets its own window.
   its initials or logo; empty brings them back. **Tab Color** tints the square in one of the terminal's colors.
 - Drop a picture on a square, from the Finder or the Explorer, or pick one with **Choose Icon…** in its context
   menu, and the square shows it in place of the project's logo: a PNG, JPEG, WebP, SVG, ICO or ICNS, a remote
-  project's too, even while its host is not connected. Mayoi keeps a copy in `project-icons` beside
+  project's too, even while its host is not connected. Zut keeps a copy in `project-icons` beside
   `settings.json`, so the picture may move or go. **Reset Icon** brings the logo back. An icon and a label of your
   own take each other's place.
 - Drag a square along the rail to reorder the projects, and drop a folder from the Finder on the rail to add it.
@@ -699,9 +699,9 @@ is the system `ssh`, `%USERPROFILE%\.ssh` and the Windows ssh-agent, not WSL's `
   path (`~` for the home folder), ↑↓ choose a folder, ↵ or Tab goes into it, `..` goes up, and ↵ on the first row opens
   the folder typed. The folder opens as **Open Folder** opens one: in the window if it shows nothing, else in a window,
   or a project tab, of its own.
-- Mayoi signs in with keys and the SSH agent, never a password, and honors `~/.ssh/config`: users, ports, keys,
+- Zut signs in with keys and the SSH agent, never a password, and honors `~/.ssh/config`: users, ports, keys,
   `ProxyJump` and the rest. A host whose key is not trusted yet needs one `ssh` from a terminal first. If `ssh` cannot
-  be run, Mayoi says so, and a local folder still opens. One connection goes to each host, shared by every window and
+  be run, Zut says so, and a local folder still opens. One connection goes to each host, shared by every window and
   command, and ends with the last window of the host. On macOS and Linux, ssh keeps it with a control socket. File and
   Git commands reuse that connection instead of signing in again.
 - The folder's path stays `/ssh:host/path` on Windows as well, as a complete path. A file under that folder stays in it
@@ -760,7 +760,7 @@ is the system `ssh`, `%USERPROFILE%\.ssh` and the Windows ssh-agent, not WSL's `
 
 On Windows, when `wsl` can be run, **File → Open WSL Folder…**, the welcome page and the command palette open a folder
 in an installed WSL distribution. macOS and Linux do not list that action. When `wsl` cannot be found, the action is
-absent, and a local folder and Remote SSH still open. When no distribution is installed, the action stays, Mayoi says
+absent, and a local folder and Remote SSH still open. When no distribution is installed, the action stays, Zut says
 `No WSL distribution is installed.`, and it does not open an empty folder.
 
 - The box lists the installed distributions. Choose one, then a folder inside it. The window records that folder as
@@ -771,23 +771,23 @@ absent, and a local folder and Remote SSH still open. When no distribution is in
   a language server for a document there run inside the distribution. The terminal is that distribution's shell, in
   the folder. A WSL folder does not forward ports, and it opens with `wsl` whether or not SSH is configured. The
   status bar shows `WSL: <distribution>`.
-- Opening a distribution that is stopped starts it. If it does not start, Mayoi says why and leaves the window
+- Opening a distribution that is stopped starts it. If it does not start, Zut says why and leaves the window
   unchanged. If the distribution stops after the folder is open, the window stays, the files are read-only, and the
   banner says the WSL distribution is not available. Reconnect starts it again.
 - Recent folders remember a WSL folder and open it in that distribution again.
 
 ## Explorer's right-click menu
 
-On Windows, the installer adds **Open with Mayoi** to Explorer's right-click menu of files, folders and a folder's
+On Windows, the installer adds **Open with Zut** to Explorer's right-click menu of files, folders and a folder's
 background, which opens the file, the folder, or the folder you are in. Windows 11 shows it under **Show more
-options**. **File → Add 'Open with Mayoi' to Explorer** adds it to a Mayoi installed before, and **File → Remove 'Open
-with Mayoi' from Explorer** takes it away; uninstalling Mayoi removes it too.
+options**. **File → Add 'Open with Zut' to Explorer** adds it to a Zut installed before, and **File → Remove 'Open
+with Zut' from Explorer** takes it away; uninstalling Zut removes it too.
 
 ## The `mayoi` command
 
 **File → Install 'mayoi' Command** installs the command into `~/.local/bin` when that directory is on your `PATH`, and
 otherwise into `/usr/local/bin`, which asks for your password. On Windows, it installs `mayoi.cmd` in
-`%LOCALAPPDATA%\Mayoi\bin`, and adds that folder to your user `PATH`; open a new terminal to use it. On Linux,
+`%LOCALAPPDATA%\Zut\bin`, and adds that folder to your user `PATH`; open a new terminal to use it. On Linux,
 `install.sh` puts it in `~/.local/bin`, and the Debian package in `/usr/bin`.
 
 - `mayoi .` opens the current folder, in a new window or the one that already has it, or with project tabs in a new
@@ -797,7 +797,7 @@ otherwise into `/usr/local/bin`, which asks for your password. On Windows, it in
 - `mayoi -d <file> <file>` compares two files, side by side or inline as the diffs are set to show.
 - `mayoi -n [folder or file]...` opens them in a new window, and with nothing, a new empty window.
 - `mayoi -w <file>...` returns once the files are closed, so that `git config core.editor "mayoi -w"` edits commit
-  messages in Mayoi.
+  messages in Zut.
 - `mayoi --remote <host:/path>` opens a folder on an SSH host.
 - `mayoi run <command>...` runs commands by the identifiers that `keybindings.json` names them by, in order, as
   `mayoi run view.terminal git.pull`. Some take an argument after `=` in place of what they would ask in the window:
@@ -824,38 +824,38 @@ otherwise into `/usr/local/bin`, which asks for your password. On Windows, it in
   can choose, which it lists, and changes, as `mayoi settings --folder set autoSave=false`. In a subfolder of a project
   it acts on the nearest file up from it, the one the project reads, and `get` prints `null` of a preference the file
   doesn't choose.
-- The `settings` commands change the files themselves, so they work while Mayoi isn't running; a Mayoi running reads
+- The `settings` commands change the files themselves, so they work while Zut isn't running; a Zut running reads
   the file again and applies the change at once. A preference it has none of, a value of the wrong type, a number
   out of its range or a choice that isn't one of its options says what it takes instead, changes nothing, and exits
   with status 1.
 - `mayoi plugin <command>` installs, updates, removes, writes and packs plugins; see [PLUGINS.md](PLUGINS.md).
-- `mayoi --disable-plugins` turns off every plugin but those Mayoi comes with, until Mayoi starts again.
+- `mayoi --disable-plugins` turns off every plugin but those Zut comes with, until Zut starts again.
 - `mayoi --help` lists the options, and `mayoi --version` prints the version.
 
 A command acts on the window whose folder contains the directory it runs in, else the one in front; `--window
-<folder>` picks the window that has the folder open. The command returns as soon as Mayoi has done what it asked, but
-with `-w`, and starts Mayoi if it isn't running. When something goes wrong, it says so and exits with status 1, or 2
-for options it doesn't know. A `mayoi` command an older Mayoi installed is brought up to date as Mayoi starts.
+<folder>` picks the window that has the folder open. The command returns as soon as Zut has done what it asked, but
+with `-w`, and starts Zut if it isn't running. When something goes wrong, it says so and exits with status 1, or 2
+for options it doesn't know. A `mayoi` command an older Zut installed is brought up to date as Zut starts.
 
 ## Deep links
 
-`mayoi://file/<path>:<line>:<column>` opens the file at a line and column, in the window whose folder holds it, else
-the one in front. `mayoi://open?file=<path>&line=<line>&column=<column>` opens the same file with the path in the query.
+`zut://file/<path>:<line>:<column>` opens the file at a line and column, in the window whose folder holds it, else
+the one in front. `zut://open?file=<path>&line=<line>&column=<column>` opens the same file with the path in the query.
 A path with spaces is percent-encoded by the browser, as `%20`; a `#`, `?` or `%` in a file's name may be left as it
 is. A file that isn't there says so in the window in front.
 
 LocatorJS's **Custom link** opens the first form:
 
 ```
-mayoi://file/${projectPath}${filePath}:${line}:${column}
+zut://file/${projectPath}${filePath}:${line}:${column}
 ```
 
-The scheme is registered when Mayoi is installed. On Windows and Linux a link starts Mayoi, or reaches the one
+The scheme is registered when Zut is installed. On Windows and Linux a link starts Zut, or reaches the one
 already running.
 
 ## Appearance and persistence
 
-**View → Theme** picks a theme, Mayoi, The Matrix, Claude, Qoder, Grok Bot, Cursor, Purple Gold, or one of the Halloween
+**View → Theme** picks a theme, Zut, The Matrix, Claude, Qoder, Grok Bot, Cursor, Purple Gold, or one of the Halloween
 themes, Jack-o'-Lantern, Witch's Brew and Blood Moon, and apart from it whether the window follows the system's light or
 dark mode or is always Light or Dark. Light and Dark are greyed out under The Matrix, Purple Gold and the Halloween
 themes, which are always dark.
@@ -887,7 +887,7 @@ and a dark kind, and its code in the warm colors of x.ai's terminal. Grok Bot's 
 eyes, takes the logo's place and the status bar's start as Clawd does, looks up as it hops, and now and then glances
 to one side and the other. Cursor is Cursor's own Cursor Light and Cursor Dark: near-white or near-black greys with
 Cursor's blue for the accent and the buttons, in a light and a dark kind, and its code in Cursor's own colors. It has
-no character, so the welcome page keeps Mayoi's logo. Purple Gold is Porphyry, the emperor's purple set in gold mosaic:
+no character, so the welcome page keeps Zut's logo. Purple Gold is Porphyry, the emperor's purple set in gold mosaic:
 Tyrian chrome around a deep purple editor, a Tyrian status bar lettered in gold, gold leaf for the accent, the buttons
 and the chosen rows, gold hairlines under the title bar and over the status bar, and a gilded line along the tab shown
 with a gem at its middle. Its code is in amethyst, gold, rose quartz and jade. Its character is Corona, a crown in gold
@@ -912,14 +912,14 @@ back to those the box opened on. From one theme or appearance to another, every 
 one's, at once when the system asks for reduced motion. **View → Sidebar on Right**
 moves the sidebar to the right of the editors. It remembers the sidebar's and the panel's sides, the sidebar and panel
 sizes, and every window with its folder, frame, columns and tabs, each tab with its caret, selection, scroll position
-and own word wrap, and the folders open in the Explorer. Started without a folder, Mayoi reopens the windows that were
+and own word wrap, and the folders open in the Explorer. Started without a folder, Zut reopens the windows that were
 open when it quit.
 A recent folder closed, by closing its window, **File → Close Folder** or opening another folder in its window, opens
 again with its tabs, columns and Explorer as they were. Closing the last window quits the app.
 
 ## Plugins
 
-Plugins are folders of JavaScript or TypeScript in `~/.mayoi/plugins`, which Mayoi runs in its own engine, each
+Plugins are folders of JavaScript or TypeScript in `~/.mayoi/plugins`, which Zut runs in its own engine, each
 apart, with no Node and no build step. They add commands, keyboard shortcuts and menu items, status bar items, views in
 the sidebar, previews beside the source, formatters, diagnostics, themes (VS Code's too), languages, snippets and
 language servers, and they work on SSH folders with nothing installed on the host. See [PLUGINS.md](PLUGINS.md).
@@ -935,17 +935,17 @@ language servers, and they work on SSH folders with nothing installed on the hos
 - A `.ts` file in `~/.mayoi/scripts` makes each function it exports a command; **Plugins → Run Selection as Script**
   runs the selection once.
 - Signed in, the plugins you install from Git follow you to your other machines.
-- Mayoi comes with **Word Count**, the words of a Markdown file in the status bar, and **TODOs**, the folder's TODO
+- Zut comes with **Word Count**, the words of a Markdown file in the status bar, and **TODOs**, the folder's TODO
   comments in the sidebar.
 
 ## Settings
 
-**Mayoi → Settings…** (⌘,), or **File → Settings…** on Windows and Linux, opens the settings window: every preference
+**Zut → Settings…** (⌘,), or **File → Settings…** on Windows and Linux, opens the settings window: every preference
 by category, with search, a mark on those changed from their defaults and a button to reset each. A change applies in
 every window at once: the code's and the terminal's fonts, weight, ligatures and line height, the theme and appearance,
 auto save, word wrap, the diff layout, vim and more.
 
-**File → Open Settings (JSON)** opens `settings.json` in a tab instead. Saving it applies it the same way. Mayoi keeps
+**File → Open Settings (JSON)** opens `settings.json` in a tab instead. Saving it applies it the same way. Zut keeps
 the windows, tabs, recent folders and layout itself, in `state.json` beside it. See [SETTINGS.md](SETTINGS.md) for
 every key and where the files are.
 
@@ -960,7 +960,7 @@ keys, click a command and press its new keys, and see which other commands alrea
 `keybindings.json` at once, keeping its comments.
 
 **File → Open Keyboard Shortcuts (JSON)** opens `keybindings.json`, in VS Code's format, so a VS Code or Cursor file can
-be pasted in. Saving it applies it in every window at once. It binds keys and chords to Mayoi's commands or VS Code's
+be pasted in. Saving it applies it in every window at once. It binds keys and chords to Zut's commands or VS Code's
 names for them, with `when` conditions. See [SETTINGS.md](SETTINGS.md#keybindingsjson) for the format, and for the
 shortcuts that differ on Windows and Linux.
 
@@ -971,10 +971,10 @@ the words selected, or the caret's.
 
 ## Settings sync
 
-**Mayoi → Sign In…** (**Help** on Linux and Windows, and the command palette's **Account** commands)
-signs in to your [Mon](https://mon.sorrycc.dev) account, with GitHub or Google. Mayoi shows a short code and opens the
+**Zut → Sign In…** (**Help** on Linux and Windows, and the command palette's **Account** commands)
+signs in to your [Mon](https://mon.sorrycc.dev) account, with GitHub or Google. Zut shows a short code and opens the
 browser to approve it. Your preferences and `keybindings.json` then sync between your machines: a change saves to the
-account a couple of seconds after you make it, and Mayoi gets the account's changes as it starts and as it comes to the
+account a couple of seconds after you make it, and Zut gets the account's changes as it starts and as it comes to the
 front. Changes made on two machines merge setting by setting.
 
 A cloud at the right of the status bar shows whether the last sync went through, and opens the account's panel: when
@@ -985,9 +985,9 @@ machines opens side by side to merge. See [SETTINGS.md](SETTINGS.md#settings-syn
 ## Updates
 
 Release builds check GitHub Releases for a new version every hour, the first time 10 seconds after launch and again
-when the computer wakes. A new version shows in the status bar, on the welcome page, and in the menu as **Mayoi → Update
+when the computer wakes. A new version shows in the status bar, on the welcome page, and in the menu as **Zut → Update
 to 0.12.0…** (**Help → Update to 0.12.0…** on Linux and Windows); without one the item reads **Check for Updates…** and
 checks right away. Clicking any of them opens a window with the release notes that offers to install the update, skip
 that version, which hides it, or remind you later. Updates download only what changed when they can, are checked
-against Mayoi's signing key, and apply when Mayoi relaunches. Development builds, and copies Mayoi can't write to, never
+against Zut's signing key, and apply when Zut relaunches. Development builds, and copies Zut can't write to, never
 check.

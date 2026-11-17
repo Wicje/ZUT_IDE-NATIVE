@@ -30,7 +30,7 @@ func (h *fakeHost) Call(p *Plugin, method string, args json.RawMessage) (any, er
 	return nil, nil
 }
 func (h *fakeHost) Settings(name string) json.RawMessage { return h.settings[name] }
-func (h *fakeHost) MayoiSetting(key string) any          { return nil }
+func (h *fakeHost) ZutSetting(key string) any          { return nil }
 func (h *fakeHost) Folder() string                       { return "/work/folder" }
 func (h *fakeHost) Changed()                             {}
 func (h *fakeHost) Logged(p *Plugin, line LogLine) {

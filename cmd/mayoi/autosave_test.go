@@ -21,7 +21,7 @@ func TestAutoSaveAfterAPause(t *testing.T) {
 	time.Sleep(autoSaveDelay + 200*time.Millisecond)
 	hs.settle()
 	data, _ := os.ReadFile(hs.path("README.md"))
-	if !strings.HasPrefix(string(data), "Hello # Mayoi") || d.dirty() {
+	if !strings.HasPrefix(string(data), "Hello # Zut") || d.dirty() {
 		t.Fatalf("after the pause: saved %q, dirty %v", data, d.dirty())
 	}
 }
@@ -38,7 +38,7 @@ func TestAutoSaveAsTheTabChanges(t *testing.T) {
 	step(tt)
 	step(tt)
 	data, _ := os.ReadFile(hs.path("README.md"))
-	if !strings.HasPrefix(string(data), "Hello # Mayoi") || readme.dirty() {
+	if !strings.HasPrefix(string(data), "Hello # Zut") || readme.dirty() {
 		t.Fatalf("after showing another tab: saved %q, dirty %v", data, readme.dirty())
 	}
 }
@@ -53,7 +53,7 @@ func TestAutoSaveClosesWithoutAsking(t *testing.T) {
 	a.run("file.close")
 	hs.settle()
 	data, _ := os.ReadFile(hs.path("README.md"))
-	if len(a.docs) != 0 || len(hs.h.asked) != 0 || !strings.HasPrefix(string(data), "Hello # Mayoi") {
+	if len(a.docs) != 0 || len(hs.h.asked) != 0 || !strings.HasPrefix(string(data), "Hello # Zut") {
 		t.Fatalf("%d docs, asked %v, saved %q", len(a.docs), hs.h.asked, data)
 	}
 }

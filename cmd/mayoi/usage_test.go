@@ -20,7 +20,7 @@ func TestReportUsage(t *testing.T) {
 	var got []usage.Payload
 	fail := false
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/api/send" || !strings.HasPrefix(r.UserAgent(), "Mozilla/5.0 (") || !strings.Contains(r.UserAgent(), "Mayoi/") {
+		if r.URL.Path != "/api/send" || !strings.HasPrefix(r.UserAgent(), "Mozilla/5.0 (") || !strings.Contains(r.UserAgent(), "Zut/") {
 			t.Errorf("sent %s with %q", r.URL.Path, r.UserAgent())
 		}
 		if fail {
@@ -126,7 +126,7 @@ func TestSendsUsage(t *testing.T) {
 
 func TestUsageUserAgent(t *testing.T) {
 	for goos, want := range map[string]string{"darwin": "Macintosh", "windows": "Windows NT", "linux": "Linux"} {
-		if ua := usage.UserAgent(goos, "arm64", "1.0.0"); !strings.Contains(ua, want) || !strings.HasSuffix(ua, "Mayoi/1.0.0") {
+		if ua := usage.UserAgent(goos, "arm64", "1.0.0"); !strings.Contains(ua, want) || !strings.HasSuffix(ua, "Zut/1.0.0") {
 			t.Errorf("%s: %q", goos, ua)
 		}
 	}

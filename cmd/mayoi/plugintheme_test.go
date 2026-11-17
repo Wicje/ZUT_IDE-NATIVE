@@ -32,7 +32,7 @@ const nightTheme = `{
   ]
 }`
 
-// Mayoi's own format, over Claude's light palette.
+// Zut's own format, over Claude's light palette.
 const paperTheme = `{"base": "claude", "dark": false, "colors": {"accent": "#c15f3c"}, "syntax": {"string": "#0a7d32"}}`
 
 const d2Snippets = `{

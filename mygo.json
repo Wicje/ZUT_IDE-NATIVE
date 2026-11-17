@@ -1,10 +1,10 @@
 {
-  "name": "Mayoi",
-  "identifier": "dev.mayoi.editor",
-  "publisher": "chencheng",
-  "version": "0.22.2",
+  "name": "Zut",
+  "identifier": "dev.zut.editor",
+  "publisher": "zut",
+  "version": "0.1.0",
   "main": "./cmd/mayoi",
-  "urlSchemes": ["mayoi"],
+  "urlSchemes": ["zut"],
   "fileAssociations": [
     { "name": "Plain Text", "ext": ["txt", "text", "log"], "mimeType": "text/plain" },
     { "name": "Markdown Document", "ext": ["md", "markdown"], "mimeType": "text/markdown" },
@@ -151,7 +151,7 @@
     }
   },
   "windows": {
-    "contextMenu": "Open with Mayoi"
+    "contextMenu": "Open with Zut"
   },
   "linux": {
     "command": "mayoi",
@@ -163,6 +163,6 @@
   },
   "updates": {
     "publicKey": "kW6/B4DkWNQdyHkFOrU6tpvLfb5xGVvyYhrIQF7Bct4=",
-    "github": "sorrycc/Mayoi"
+    "github": "sorrycc/Zut"
   }
 }

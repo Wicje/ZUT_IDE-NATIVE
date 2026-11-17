@@ -18,7 +18,7 @@ import (
 
 // The details of a plugin, which open in place of the Plugins page's list
 // as its row is clicked: its head, how it is doing, what it adds to
-// Mayoi, its settings, and what it logged last.
+// Zut, its settings, and what it logged last.
 
 // pluginInfo is what the details of a plugin show of it: what it adds,
 // worked out as they open or the plugins change, and how it is doing,

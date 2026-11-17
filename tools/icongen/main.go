@@ -1,4 +1,4 @@
-// Command icongen places Mayoi's app icon art, cmd/mayoi/icon-art.png, on
+// Command icongen places Zut's app icon art, cmd/mayoi/icon-art.png, on
 // the macOS icon grid and writes resources/icon.png:
 //
 //	go run ./tools/icongen

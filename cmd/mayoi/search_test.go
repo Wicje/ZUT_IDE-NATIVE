@@ -87,10 +87,10 @@ func TestSearchInFiles(t *testing.T) {
 	}
 
 	// Options.
-	s.matchCase, s.query = true, "Mayoi"
+	s.matchCase, s.query = true, "Zut"
 	hs.settleSearch()
 	if got := strings.Join(resultFiles(s), " "); got != "README.md web/index.html" {
-		t.Errorf("Mayoi with case: %q", got)
+		t.Errorf("Zut with case: %q", got)
 	}
 	s.query = "mayoi"
 	hs.settleSearch()
@@ -118,7 +118,7 @@ func TestSearchFilesAndEdits(t *testing.T) {
 	hs := newHarness(t, true)
 	a := hs.a
 	s := &a.inFiles
-	hs.searchFor("Mayoi")
+	hs.searchFor("Zut")
 	if got := strings.Join(resultFiles(s), " "); got != "README.md main.go web/index.html" {
 		t.Fatalf("results %q", got)
 	}
@@ -154,7 +154,7 @@ func TestSearchFilesAndEdits(t *testing.T) {
 	a.openFile(hs.path("internal/b/b.ts"), true)
 	hs.settle()
 	d := a.activeEditor()
-	d.edit(d.sel, textEdit{0, 0, "// Mayoi\n"})
+	d.edit(d.sel, textEdit{0, 0, "// Zut\n"})
 	hs.settleSearch()
 	if got := strings.Join(resultFiles(s), " "); got != "README.md internal/b/b.ts main.go web/index.html" {
 		t.Errorf("after an edit: %q", got)
@@ -174,7 +174,7 @@ func TestSearchFilesAndEdits(t *testing.T) {
 	}
 
 	// Binary files are passed by.
-	os.WriteFile(hs.path("blob.bin"), []byte("Mayoi\x00\x01"), 0o644)
+	os.WriteFile(hs.path("blob.bin"), []byte("Zut\x00\x01"), 0o644)
 	a.indexRead.Invalidate()
 	a.refreshIndex()
 	hs.settle()

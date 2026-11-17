@@ -65,7 +65,7 @@ func TestClient(t *testing.T) {
 		}
 		return status, out.String(), errs.String()
 	}
-	if s, out, _ := run("-v"); s != 0 || out != "Mayoi 1.2\n" {
+	if s, out, _ := run("-v"); s != 0 || out != "Zut 1.2\n" {
 		t.Errorf("-v: %d %q", s, out)
 	}
 	if s, _, errs := run("-q"); s != 2 || !strings.Contains(errs, "unknown option") {

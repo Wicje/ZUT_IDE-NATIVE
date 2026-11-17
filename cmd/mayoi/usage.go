@@ -15,11 +15,11 @@ import (
 	"mayoi/internal/usage"
 )
 
-// Mayoi counts its use anonymously, as usageStats in the settings allows:
+// Zut counts its use anonymously, as usageStats in the settings allows:
 // a view of /version and an "active" event a day while it is open, and an
 // "update" event on the first launch of a new version.
 const (
-	// usageInterval is how often Mayoi looks whether a day began.
+	// usageInterval is how often Zut looks whether a day began.
 	usageInterval = time.Hour
 	// usageFirstWait is how long after the launch, or after the computer
 	// wakes, the first look waits, for the network to come up.

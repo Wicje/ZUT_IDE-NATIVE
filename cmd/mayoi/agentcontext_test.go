@@ -122,7 +122,7 @@ func TestAgentContextAcrossFiles(t *testing.T) {
 	})
 	a.reviewChanged()
 	message := a.reviewText()
-	for _, part := range []string{"1. one.go:1-2\n```go\nfirst()", "2. README.md:1\n```md\n# Mayoi", "3. one.go:2 (staged)\n```diff\n+second()", "Check the change"} {
+	for _, part := range []string{"1. one.go:1-2\n```go\nfirst()", "2. README.md:1\n```md\n# Zut", "3. one.go:2 (staged)\n```diff\n+second()", "Check the change"} {
 		if !strings.Contains(message, part) {
 			t.Errorf("missing %q in %q", part, message)
 		}

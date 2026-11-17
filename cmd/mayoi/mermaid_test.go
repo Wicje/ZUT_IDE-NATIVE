@@ -191,7 +191,7 @@ func TestParseTransform(t *testing.T) {
 	}
 }
 
-const mermaidMarkdown = "# Diagrams\n\n```mermaid\nflowchart LR\n  A[Write **Markdown**] --> B{Has a diagram?}\n  B -- yes --> C[Draw it]\n  B -- no --> D[Show text]\n  C --> E((Done))\n```\n\n```mermaid\nsequenceDiagram\n  participant E as Editor\n  participant P as Pele\n  E->>P: render(source)\n  P-->>E: SVG\n  Note over E,P: labels drawn by Mayoi\n```\n\n```mermaid\nsequenceDiagram\n  A->>B hi\n```\n"
+const mermaidMarkdown = "# Diagrams\n\n```mermaid\nflowchart LR\n  A[Write **Markdown**] --> B{Has a diagram?}\n  B -- yes --> C[Draw it]\n  B -- no --> D[Show text]\n  C --> E((Done))\n```\n\n```mermaid\nsequenceDiagram\n  participant E as Editor\n  participant P as Pele\n  E->>P: render(source)\n  P-->>E: SVG\n  Note over E,P: labels drawn by Zut\n```\n\n```mermaid\nsequenceDiagram\n  A->>B hi\n```\n"
 
 // TestMermaidPreview: a Markdown preview draws its blocks of Mermaid as
 // diagrams, says why one cannot be drawn, shows one's source on asking,

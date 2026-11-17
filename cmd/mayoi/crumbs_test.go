@@ -26,8 +26,8 @@ func TestCrumbsOf(t *testing.T) {
 		{join(w, "main.go"), w, u, []crumb{{"main.go", ""}}},
 		{join(u, "notes", "a b", "中文.md"), w, u,
 			[]crumb{{"~", u}, {"notes", join(u, "notes")}, {"a b", join(u, "notes", "a b")}, {"中文.md", ""}}},
-		{join("/tmp", "Mayoi", "settings.json"), "", u,
-			[]crumb{{"tmp", join("/tmp")}, {"Mayoi", join("/tmp", "Mayoi")}, {"settings.json", ""}}},
+		{join("/tmp", "Zut", "settings.json"), "", u,
+			[]crumb{{"tmp", join("/tmp")}, {"Zut", join("/tmp", "Zut")}, {"settings.json", ""}}},
 	}
 	cases = append(cases, []struct {
 		path, root, home string

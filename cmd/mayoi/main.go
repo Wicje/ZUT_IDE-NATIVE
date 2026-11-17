@@ -1,4 +1,4 @@
-// Mayoi is a small, quick code editor: a file tree, tabs of editors and a
+// Zut is a small, quick code editor: a file tree, tabs of editors and a
 // terminal panel, drawn by MyGo's native UI.
 package main
 
@@ -87,7 +87,7 @@ type mayoi struct {
 	// beside the settings, "" without a settings file.
 	icons string
 	// updateFound is the newest version the last check found, "" when
-	// Mayoi is up to date, and update the one shown, "" when skipped.
+	// Zut is up to date, and update the one shown, "" when skipped.
 	updateFound string
 	update      string
 	// prefs is the settings window, nil while it is closed.
@@ -381,42 +381,42 @@ func settingsPath() string {
 func main() {
 	// The bridge is an internal process of this executable. It has to run
 	// before the command client and the single-instance lock: those would
-	// hand its arguments to the running Mayoi, or leave without bridging.
+	// hand its arguments to the running Zut, or leave without bridging.
 	// It does not set MAYOI_CLI and it does not open a window.
 	remote.HandleBridge(os.Args)
-	mygo.App.SetName("Mayoi")
+	mygo.App.SetName("Zut")
 	keyRepeat()
 	// MAYOI_DATA_DIR keeps the settings and window state elsewhere, such as
-	// scripts/dev.sh's Mayoi-dev, so a development app leaves Mayoi's alone.
+	// scripts/dev.sh's Zut-dev, so a development app leaves Zut's alone.
 	if dir := os.Getenv("MAYOI_DATA_DIR"); dir != "" {
 		mygo.App.SetPath(mygo.PathUserData, dir)
 	}
 	// A development build signed in to the same account keeps its theme,
-	// so that trying one leaves the everyday Mayoi's alone.
+	// so that trying one leaves the everyday Zut's alone.
 	if mygo.IsDev() {
 		settings.MachineKept = []string{"theme", "appearance"}
 	}
-	// Started as the mayoi command, Mayoi asks the app that runs, and
+	// Started as the mayoi command, Zut asks the app that runs, and
 	// exits.
 	commandLineClient()
-	// From a terminal on Linux, Mayoi runs on apart from it; before the
-	// lock, which the Mayoi it starts takes.
+	// From a terminal on Linux, Zut runs on apart from it; before the
+	// lock, which the Zut it starts takes.
 	if detach() {
 		return
 	}
-	// One Mayoi runs: the folders and files another is started with open
+	// One Zut runs: the folders and files another is started with open
 	// in this one.
 	if os.Getenv("MAYOI_SNAPSHOT") == "" && !mygo.App.RequestSingleInstanceLock() {
 		return
 	}
-	// After the lock, so that a second Mayoi leaves the first's crash.log
+	// After the lock, so that a second Zut leaves the first's crash.log
 	// alone; a snapshot, which takes no lock, leaves it alone too.
 	if dir, err := mygo.App.Path(mygo.PathUserData); err == nil && os.Getenv("MAYOI_SNAPSHOT") == "" {
 		keepCrashes(dir)
 		keepStderr(dir)
 	}
-	// Opened from the Finder or the Dock, Mayoi has the system's PATH
-	// only; git, its hooks and what else Mayoi runs look for commands
+	// Opened from the Finder or the Dock, Zut has the system's PATH
+	// only; git, its hooks and what else Zut runs look for commands
 	// where the user's shell does, and ssh signs with the agent of the
 	// user's session, whose socket the app does not inherit either. In the
 	// background, as a slow shell would hold up the window.
@@ -448,7 +448,7 @@ func main() {
 		}
 		m.open([]string{path})
 	})
-	// A mayoi:// URL, as LocatorJS opens a file, once the windows are
+	// A zut:// URL, as LocatorJS opens a file, once the windows are
 	// ready to show it.
 	mygo.App.OnOpenURL(func(rawURL string) {
 		t, ok := openURLTarget(rawURL)
@@ -553,9 +553,9 @@ func main() {
 func argPaths(args []string, wd string) []string {
 	var paths []string
 	for _, arg := range args {
-		// A mayoi:// URL, which Windows and Linux start the app with,
+		// A zut:// URL, which Windows and Linux start the app with,
 		// reaches OnOpenURL.
-		if arg == "" || strings.HasPrefix(arg, "-") || isMayoiURL(arg) {
+		if arg == "" || strings.HasPrefix(arg, "-") || isZutURL(arg) {
 			continue
 		}
 		// A file:// URL, which Linux file managers pass for %U.
@@ -627,7 +627,7 @@ func (m *mayoi) launch(paths []string) {
 	}
 }
 
-// secondInstance opens the folders and files another Mayoi was started
+// secondInstance opens the folders and files another Zut was started
 // with, or brings the first window to the front. Before the app is
 // ready, when it has no settings yet, they wait for launch.
 func (m *mayoi) secondInstance(args []string, wd string) {
@@ -776,7 +776,7 @@ func (m *mayoi) of(st *settings.Window) *desktop {
 var setThemeSource = func(s mygo.ThemeSource) { mygo.Theme.SetSource(s) }
 
 // reload applies the preferences of the settings file, which a person
-// changed as Mayoi runs.
+// changed as Zut runs.
 func (m *mayoi) reload(p settings.Prefs) {
 	old := m.s.SetPrefs(p)
 	setHCConfig(p)
@@ -811,7 +811,7 @@ func (m *mayoi) reload(p settings.Prefs) {
 }
 
 // reloadKeys applies the shortcuts of keybindings.json, which a person
-// saved as Mayoi runs: those of a file that does not parse stay.
+// saved as Zut runs: those of a file that does not parse stay.
 func (m *mayoi) reloadKeys(km *keymap.Map, err error) {
 	if len(m.wins) == 0 {
 		return

@@ -18,7 +18,7 @@ import (
 	"mayoi/locales"
 )
 
-// crashApp is Mayoi's client id at Mon, which takes its crash reports.
+// crashApp is Zut's client id at Mon, which takes its crash reports.
 const crashApp = "mayoi"
 
 // maxCrashReport is how much of a crash log a report sends: Mon takes
@@ -30,7 +30,7 @@ const maxCrashReport = 192 << 10
 const crashUnknownVersion = "unknown"
 
 // The kinds of crash log, as their names in the crashes folder end:
-// -recovered for a panic Mayoi recovered from, -system for the system's
+// -recovered for a panic Zut recovered from, -system for the system's
 // report.
 const (
 	crashFatal     = mon.CrashFatal
@@ -102,7 +102,7 @@ func sendsCrashes() bool {
 	return os.Getenv("MAYOI_MON_URL") != "" || mygo.Updater.Enabled()
 }
 
-// offerCrashes, as Mayoi starts, sends the crash logs the person chose to
+// offerCrashes, as Zut starts, sends the crash logs the person chose to
 // send and asks about the new ones in h's window, or, as crashReports in
 // the settings says, sends them or doesn't without asking.
 func (m *mayoi) offerCrashes(h *desktop) {
@@ -252,7 +252,7 @@ func crashReport(l crashLog, log string) mon.Crash {
 		if json.Unmarshal([]byte(first), &ips) == nil && ips.AppVersion != "" {
 			c.Version = ips.AppVersion
 		}
-	} else if f := strings.Fields(first); len(f) >= 4 && f[0] == "Mayoi" {
+	} else if f := strings.Fields(first); len(f) >= 4 && f[0] == "Zut" {
 		// crashHeader's line.
 		c.Version, c.Runtime = f[1], strings.TrimSuffix(f[3], ",")
 		if goos, arch, ok := strings.Cut(f[2], "/"); ok {

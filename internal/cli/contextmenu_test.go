@@ -2,10 +2,10 @@ package cli
 
 import "testing"
 
-// TestContextMenus checks the keys and commands of the "Open with Mayoi"
+// TestContextMenus checks the keys and commands of the "Open with Zut"
 // item, which must match those the installer writes.
 func TestContextMenus(t *testing.T) {
-	exe := `C:\Users\Jane\AppData\Local\Programs\Mayoi\Mayoi.exe`
+	exe := `C:\Users\Jane\AppData\Local\Programs\Zut\Zut.exe`
 	want := map[string]string{
 		`Software\Classes\*\shell\dev.mayoi.editor`:                    `"` + exe + `" "%1"`,
 		`Software\Classes\Directory\shell\dev.mayoi.editor`:            `"` + exe + `" "%1"`,

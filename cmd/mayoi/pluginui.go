@@ -186,7 +186,7 @@ func (a *app) pluginStatusItem(c *ui.Context, st *pluginStatus, text func(string
 	})
 }
 
-// runAny runs a command of Mayoi's or of a plugin's by its id.
+// runAny runs a command of Zut's or of a plugin's by its id.
 func (a *app) runAny(id string) {
 	if plugins != nil && plugins.reg.CommandPlugin(id) != nil {
 		plugins.runCommand(a, id, "")

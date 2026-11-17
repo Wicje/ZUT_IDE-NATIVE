@@ -1641,7 +1641,7 @@ func markdownLinkIn(line string, at int) (string, bool) {
 }
 
 // followLiveLink opens the link of Markdown at the caret: a page in the
-// browser, a file in Mayoi, or a heading of a note.
+// browser, a file in Zut, or a heading of a note.
 func (a *app) followLiveLink(d *editor) {
 	snap := d.buf.Snapshot()
 	caret := min(d.sel[1], snap.Len())
@@ -1688,7 +1688,7 @@ func (a *app) openLiveLink(d *editor, link [2]int) {
 }
 
 // openLiveDest opens the destination of a link of Markdown in an
-// editor's note: a page in the browser, a file in Mayoi, or a heading of
+// editor's note: a page in the browser, a file in Zut, or a heading of
 // a note.
 func (a *app) openLiveDest(d *editor, dest string) {
 	u, err := url.Parse(dest)

@@ -181,10 +181,10 @@ func (h *fakeHost) shown() bool { return h.visible }
 // fixtureFiles are the files of a test's folder, by their paths in it.
 var fixtureFiles = map[string]string{
 	"main.go":             "package main\n\nimport \"fmt\"\n\n// main says hello.\nfunc main() {\n\tfmt.Println(\"hello, mayoi\")\n}\n",
-	"README.md":           "# Mayoi\n\nA small editor.\n",
+	"README.md":           "# Zut\n\nA small editor.\n",
 	"internal/a/a.go":     "package a\n\nconst Answer = 42\n",
 	"internal/b/b.ts":     "export const greet = (name: string) => `hi ${name}`;\n",
-	"web/index.html":      "<!doctype html>\n<title>Mayoi</title>\n",
+	"web/index.html":      "<!doctype html>\n<title>Zut</title>\n",
 	"web/style.css":       "body { color: #333; }\n",
 	"node_modules/x/x.js": "module.exports = 1\n",
 	"go.mod":              "module example\n\ngo 1.27\n",
@@ -455,7 +455,7 @@ func TestEditSaveAndDirtyClose(t *testing.T) {
 	tt.Type("Hello ")
 	hs.settle()
 	d := a.activeEditor()
-	if !d.dirty() || !strings.HasPrefix(d.buf.String(), "Hello # Mayoi") {
+	if !d.dirty() || !strings.HasPrefix(d.buf.String(), "Hello # Zut") {
 		t.Fatalf("typed: dirty %v text %q", d.dirty(), d.buf.String())
 	}
 	if !strings.Contains(hs.h.title, "●") {
@@ -464,7 +464,7 @@ func TestEditSaveAndDirtyClose(t *testing.T) {
 	a.run("file.save")
 	hs.settle()
 	data, _ := os.ReadFile(hs.path("README.md"))
-	if !strings.HasPrefix(string(data), "Hello # Mayoi") || d.dirty() {
+	if !strings.HasPrefix(string(data), "Hello # Zut") || d.dirty() {
 		t.Fatalf("saved %q, dirty %v", data, d.dirty())
 	}
 	// Our own save comes back from the watcher without changing anything.

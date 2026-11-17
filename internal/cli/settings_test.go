@@ -79,7 +79,7 @@ func TestSettingsListNoFile(t *testing.T) {
 func TestSettingsGet(t *testing.T) {
 	dir := t.TempDir()
 	path := filepath.Join(dir, "settings.json")
-	// A value the file holds to the wrong type is the default, as Mayoi
+	// A value the file holds to the wrong type is the default, as Zut
 	// has it, and a value out of its bounds is in them.
 	putFile(t, path, `{"fontSize": 100, "theme": "claude", "vim": "yes"}`)
 	out, err := Settings{Verb: "get", Keys: []string{"theme", "fontSize", "vim"}}.Do(path)
@@ -90,7 +90,7 @@ func TestSettingsGet(t *testing.T) {
 		t.Errorf("got %q, want %q", out, want)
 	}
 	if _, err := (Settings{Verb: "get", Keys: []string{"theme", "nope"}}).Do(path); err == nil || !strings.Contains(err.Error(), `"nope"`) {
-		t.Errorf("get of a key Mayoi has none of: %v", err)
+		t.Errorf("get of a key Zut has none of: %v", err)
 	}
 }
 
@@ -197,7 +197,7 @@ func TestSettingsNoChange(t *testing.T) {
 		t.Errorf("the file is %s", got)
 	}
 	if _, err := (Settings{Verb: "nope"}).Do(path); err == nil {
-		t.Error("a verb Mayoi has none of took the file")
+		t.Error("a verb Zut has none of took the file")
 	}
 }
 
@@ -220,7 +220,7 @@ func TestSettingsUnset(t *testing.T) {
 		t.Errorf("got %s", data)
 	}
 	if _, err := (Settings{Verb: "unset", Changes: []Change{{Op: OpUnset, Key: "nope"}}}).Do(path); err == nil {
-		t.Error("unset of a key Mayoi has none of took it")
+		t.Error("unset of a key Zut has none of took it")
 	}
 }
 
@@ -299,7 +299,7 @@ func TestSettingsFolder(t *testing.T) {
 	// A preference the folder does not choose prints null, so each line
 	// is still its key's.
 	if out, err := (Settings{Folder: true, Verb: "get", Keys: []string{"nope", "vim"}}).Do(path); err == nil {
-		t.Errorf("get of a key Mayoi has none of: %q", out)
+		t.Errorf("get of a key Zut has none of: %q", out)
 	}
 	if out, err := (Settings{Folder: true, Verb: "get", Keys: []string{"wordWrap", "vim"}}).Do(path); err != nil || out != "null\ntrue\n" {
 		t.Errorf("get of one the folder does not choose: %q, %v", out, err)

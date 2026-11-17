@@ -53,7 +53,7 @@ func folderFile(cwd string) string {
 // file at path, the person's settings.json or a folder's
 // .mayoi/settings.json, and returns what to print. It changes the file
 // itself, a preference at a time, keeping the ones it does not change as
-// the file has them; a Mayoi running reads the file again, as it does one
+// the file has them; a Zut running reads the file again, as it does one
 // a person saves.
 func (s Settings) Do(path string) (string, error) {
 	values, err := readPrefs(path)
@@ -540,9 +540,9 @@ func samePrefs(x, y map[string]json.RawMessage) bool {
 	return maps.EqualFunc(x, y, func(a, b json.RawMessage) bool { return bytes.Equal(a, b) })
 }
 
-// prefsOf returns the preferences of values as Mayoi has them, those the
+// prefsOf returns the preferences of values as Zut has them, those the
 // file leaves out at their default, and those it holds to the wrong type
-// too, as a folder's file may. The keys Mayoi has none of are left out.
+// too, as a folder's file may. The keys Zut has none of are left out.
 func prefsOf(values map[string]json.RawMessage) settings.Prefs {
 	p := settings.Default().Prefs
 	for key, raw := range values {
@@ -610,7 +610,7 @@ func hasPref(values map[string]json.RawMessage, key string) bool {
 }
 
 // checked checks the value of the preference of f and returns it as the
-// settings' file keeps it, in its bounds and its options, as Mayoi makes
+// settings' file keeps it, in its bounds and its options, as Zut makes
 // it.
 func checked(f settings.Field, raw json.RawMessage) (json.RawMessage, error) {
 	if len(raw) == 0 {

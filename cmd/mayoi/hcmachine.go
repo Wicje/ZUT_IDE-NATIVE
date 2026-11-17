@@ -15,12 +15,12 @@ import (
 // outlives the connection too. A host hc doesn't know is added once the
 // user agrees, which may copy hc to it; its terminals use ssh until then.
 
-// hcAsked are the hosts asked about adding to hc as Mayoi runs: those
+// hcAsked are the hosts asked about adding to hc as Zut runs: those
 // declined keep ssh until it quits, those that failed are asked again.
 // The main thread's.
 var hcAsked = map[string]bool{}
 
-// hcMachineName is the name Mayoi gives a host as one of hc's machines:
+// hcMachineName is the name Zut gives a host as one of hc's machines:
 // its name without the user, and its port.
 func hcMachineName(host string) string {
 	target, port := remote.SSHTarget(host)
@@ -39,7 +39,7 @@ func hcMachineName(host string) string {
 	return strings.Trim(name, "-")
 }
 
-// hcMachine returns the name of host's machine in hc: the one Mayoi
+// hcMachine returns the name of host's machine in hc: the one Zut
 // added, or one added by hand that ssh reaches the same way. False when
 // hc doesn't know the host.
 func hcMachine(host string) (string, bool) {
@@ -77,7 +77,7 @@ func hcAddMachine(host string) error {
 	return err
 }
 
-// hcOffer asks, once for a host as Mayoi runs, whether to add a host hc
+// hcOffer asks, once for a host as Zut runs, whether to add a host hc
 // doesn't know as one of its machines: its terminals use ssh until then.
 func (a *app) hcOffer(host string) {
 	if hcAsked[host] {

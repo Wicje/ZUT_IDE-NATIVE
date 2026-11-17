@@ -95,7 +95,7 @@ func (a *app) commandsIn(t locales.Messages) []command {
 		{"sel.deleteLine", t.CmdSelDeleteLine(), "Shift+CmdOrCtrl+K", a.editActive(deleteLines)},
 		{"sel.lineBelow", t.CmdSelLineBelow(), "", a.editActive(func(d *editor) { insertLine(d, false) })},
 		{"sel.lineAbove", t.CmdSelLineAbove(), "", a.editActive(func(d *editor) { insertLine(d, true) })},
-		{"sel.line", t.CmdSelLine(), "CmdOrCtrl+L", a.editActive(selectLines)},
+		{"sel.line", t.CmdSelLine(), "CmdOrCtrl+Alt+L", a.editActive(selectLines)},
 		{"sel.indentTabs", t.CmdSelIndentTabs(), "", a.editActive(func(d *editor) { d.indent.tabs = true })},
 		{"sel.indent2", t.CmdSelIndentSpaces(2), "", a.editActive(func(d *editor) { d.indent = indentStyle{size: 2} })},
 		{"sel.indent4", t.CmdSelIndentSpaces(4), "", a.editActive(func(d *editor) { d.indent = indentStyle{size: 4} })},
@@ -227,6 +227,7 @@ func (a *app) commandsIn(t locales.Messages) []command {
 		// The whole window, independent of the focused pane.
 		{"view.zoomIn", t.CmdViewZoomIn(), "CmdOrCtrl+=", func() { a.zoom(1) }},
 		{"view.zoomOut", t.CmdViewZoomOut(), "CmdOrCtrl+-", func() { a.zoom(-1) }},
+		{"view.openPreview", "Open Zut Preview", "CmdOrCtrl+L", a.openPreview},
 		{"view.zoomReset", t.CmdViewZoomReset(), "CmdOrCtrl+0", func() { a.zoom(0) }},
 		{"editor.fontZoomIn", t.CmdEditorFontZoomIn(), "", func() { a.fontZoom(1) }},
 		{"editor.fontZoomOut", t.CmdEditorFontZoomOut(), "", func() { a.fontZoom(-1) }},
@@ -241,7 +242,7 @@ func (a *app) commandsIn(t locales.Messages) []command {
 		{"view.appearance.light", t.CmdViewAppearanceLight(), "", func() { a.setAppearance("light") }},
 		{"view.appearance.dark", t.CmdViewAppearanceDark(), "", func() { a.setAppearance("dark") }},
 		{"view.selectTheme", t.CmdViewSelectTheme(), "", a.openThemePicker},
-		{"view.theme.mayoi", "Mayoi", "", func() { a.setTheme("") }},
+		{"view.theme.mayoi", "Zut", "", func() { a.setTheme("") }},
 		{"view.theme.matrix", t.CmdViewThemeMatrix(), "", func() { a.setTheme(themeMatrix) }},
 		{"view.theme.claude", "Claude", "", func() { a.setTheme(themeClaude) }},
 		{"view.theme.qoder", "Qoder", "", func() { a.setTheme(themeQoder) }},
@@ -408,7 +409,7 @@ func (a *app) setAppearance(appearance string) {
 	a.themeChanged()
 }
 
-// setTheme gives the windows Mayoi's own theme for "", The Matrix for
+// setTheme gives the windows Zut's own theme for "", The Matrix for
 // "matrix" or Claude for "claude", in their appearance.
 func (a *app) setTheme(theme string) {
 	a.settings.Theme = theme

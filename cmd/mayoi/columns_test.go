@@ -324,7 +324,7 @@ func TestColumnsKeepTheirTabs(t *testing.T) {
 	hs.settle()
 	tt.Type("m")
 	hs.settle()
-	if m, r := a.cols[0].tab().ed.buf.String(), a.cols[1].tab().ed.buf.String(); !strings.HasPrefix(m, "mpackage") || !strings.HasPrefix(r, "r# Mayoi") {
+	if m, r := a.cols[0].tab().ed.buf.String(), a.cols[1].tab().ed.buf.String(); !strings.HasPrefix(m, "mpackage") || !strings.HasPrefix(r, "r# Zut") {
 		t.Fatalf("typed %q and %q", m[:8], r[:8])
 	}
 	// A file opens in the column that has the keyboard, and the same file
@@ -341,7 +341,7 @@ func TestColumnsKeepTheirTabs(t *testing.T) {
 	if len(a.cols[0].tabs) != 2 || len(a.cols[1].tabs) != 1 || a.col != 1 || len(a.docs[1].views) != 1 {
 		t.Fatalf("joined: %d and %d tabs, keyboard in %d", len(a.cols[0].tabs), len(a.cols[1].tabs), a.col)
 	}
-	if got := a.cols[1].tab().ed.buf.String(); !strings.HasPrefix(got, "r# Mayoi") {
+	if got := a.cols[1].tab().ed.buf.String(); !strings.HasPrefix(got, "r# Zut") {
 		t.Errorf("the tab kept shows %q", got[:8])
 	}
 	// The column goes with its last tab, and the keyboard to the other.

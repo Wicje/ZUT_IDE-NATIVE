@@ -264,7 +264,7 @@ func (w *prefsWindow) view(c *ui.Context) {
 	if title := locales.PrefsTitle(); w.win != nil && w.win.Title() != title {
 		w.win.SetTitle(title)
 	}
-	// As a window of Mayoi's, Close closes it and Find finds: the menu
+	// As a window of Zut's, Close closes it and Find finds: the menu
 	// bar of macOS takes their shortcuts first.
 	if !macKeys() && c.Shortcut(ui.Cmd, ui.KeyW) {
 		w.m.closePrefs()

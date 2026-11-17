@@ -401,13 +401,13 @@ func TestHCKill(t *testing.T) {
 }
 
 // Ctrl+\ in a terminal of herdr-core goes to its shell through hc keys,
-// rather than detaching hc attach; other keys, and terminals of Mayoi's,
+// rather than detaching hc attach; other keys, and terminals of Zut's,
 // are left alone.
 func TestHCDetachKey(t *testing.T) {
 	f := useFakeHC(t, nil)
 	here := &session{}
 	if hcDetachKey(here, ui.Ctrl, ui.KeyBackslash) {
-		t.Error("took Ctrl+\\ of a terminal of Mayoi's")
+		t.Error("took Ctrl+\\ of a terminal of Zut's")
 	}
 	s := &session{hc: "t3"}
 	if hcDetachKey(s, ui.Ctrl|ui.Shift, ui.KeyBackslash) || hcDetachKey(s, ui.Ctrl, ui.KeyC) {
@@ -724,7 +724,7 @@ func TestTermWaitPill(t *testing.T) {
 }
 
 // The menu of a terminal whose shell runs in herdr-core copies its
-// address; that of one of Mayoi's has no such item.
+// address; that of one of Zut's has no such item.
 func TestHCCopyAddress(t *testing.T) {
 	hs := newHarness(t, true)
 	a := hs.a
@@ -749,7 +749,7 @@ func TestHCCopyAddress(t *testing.T) {
 		t.Fatal(err)
 	}
 	if err := hs.tt.ChooseMenuItem("Copy hc Address"); err == nil {
-		t.Error("a terminal of Mayoi's copies an address")
+		t.Error("a terminal of Zut's copies an address")
 	}
 }
 

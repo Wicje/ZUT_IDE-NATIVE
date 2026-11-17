@@ -16,7 +16,7 @@ import (
 	"time"
 )
 
-// RecordsFile is the file in the plugins folder where Mayoi notes where
+// RecordsFile is the file in the plugins folder where Zut notes where
 // each plugin it installed came from.
 const RecordsFile = "plugins.json"
 
@@ -164,7 +164,7 @@ func Install(ctx context.Context, dir, url, ref string) (*Manifest, error) {
 	}
 	m, err := ReadManifest(tmp)
 	if err != nil {
-		return nil, fmt.Errorf("%s is not a Mayoi plugin: %v", url, err)
+		return nil, fmt.Errorf("%s is not a Zut plugin: %v", url, err)
 	}
 	commit, _ := git(ctx, tmp, "rev-parse", "HEAD")
 	dest := filepath.Join(dir, m.Name)
@@ -251,7 +251,7 @@ func Remove(dir, name string) error {
 }
 
 // Link links a folder in development into the plugins folder, so that
-// Mayoi loads it from where it is, and again on each change.
+// Zut loads it from where it is, and again on each change.
 func Link(dir, folder string) (*Manifest, error) {
 	abs, err := filepath.Abs(folder)
 	if err != nil {
@@ -351,7 +351,7 @@ func Scaffold(dir, name string) error {
 
 commands.register("%s.hello", async () => {
   const ed = await editor.active();
-  const name = ed?.document.name ?? "Mayoi";
+  const name = ed?.document.name ?? "Zut";
   await window.notify(`+"`Hello from %s, in ${name}`"+`);
 });
 `, name, title),

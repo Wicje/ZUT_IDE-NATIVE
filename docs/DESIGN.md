@@ -1,6 +1,6 @@
 # Design
 
-How Mayoi should feel, and the tests that hold it there. A rule here that no test checks is a rule for review; add
+How Zut should feel, and the tests that hold it there. A rule here that no test checks is a rule for review; add
 the test when you can. The website has its own, in `website/DESIGN.md`.
 
 The order: it works, then it is easy, then it looks good. Polish never covers a broken interaction.

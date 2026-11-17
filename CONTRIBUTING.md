@@ -3,7 +3,7 @@
 ## Development
 
 ```sh
-scripts/dev.sh                                              # run Mayoi Dev with live reload, with its own settings
+scripts/dev.sh                                              # run Zut Dev with live reload, with its own settings
 scripts/test.sh                                             # the tests, cmd/mayoi's over every core, as CI runs them
 scripts/test.sh -full                                       # and the tests that start a shell
 RUN=TestMerge scripts/test.sh                               # only cmd/mayoi's tests whose names match
@@ -31,7 +31,7 @@ scripts/bump.sh patch    # or minor, major, or a version such as 0.2.0
 It sets the version in `mygo.json`, renames `## Unreleased` to `## <version>` in `CHANGELOG.md`, commits and tags `v<version>`, and after asking pushes `main` and the tag. The
 [Release workflow](.github/workflows/release.yml) then builds macOS (arm64 and Intel, signed and notarized), Windows and
 Linux, uploads them with their signed updates, and publishes the release. Installed apps check for it every hour and
-show it in the status bar, or from **Mayoi → Check for Updates…**; the update window shows the changelog section.
+show it in the status bar, or from **Zut → Check for Updates…**; the update window shows the changelog section.
 
 The workflow needs these repository secrets:
 

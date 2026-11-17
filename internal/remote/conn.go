@@ -773,7 +773,7 @@ func sshError(stderr string, fallback error) error {
 	case strings.Contains(msg, "Host key verification failed"):
 		return &refusedError{msg + " Connect once with ssh in a terminal to trust the host's key."}
 	case strings.Contains(msg, "Permission denied"):
-		return &refusedError{msg + " Mayoi signs in with keys and the SSH agent, not passwords."}
+		return &refusedError{msg + " Zut signs in with keys and the SSH agent, not passwords."}
 	}
 	return errors.New(msg)
 }

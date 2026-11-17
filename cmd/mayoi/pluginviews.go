@@ -23,7 +23,7 @@ import (
 )
 
 // viewNode is a node of the tree a plugin renders a view or a preview
-// with, which Mayoi draws in its theme.
+// with, which Zut draws in its theme.
 type viewNode struct {
 	Type        string      `json:"type"`
 	Children    []*viewNode `json:"children"`
@@ -209,7 +209,7 @@ func pluginSlots() []pluginSlot {
 }
 
 // pluginSidebarView is the id of the plugin view the sidebar shows, ""
-// for one of Mayoi's.
+// for one of Zut's.
 func (a *app) pluginSidebarView() string {
 	id, _ := strings.CutPrefix(a.window.SidebarView, "plugin:")
 	if id == a.window.SidebarView {

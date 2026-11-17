@@ -13,17 +13,17 @@ import (
 	"mayoi/locales"
 )
 
-// openURLTarget reads the file, line and column of a mayoi:// URL:
+// openURLTarget reads the file, line and column of a zut:// URL:
 //
-//	mayoi://file/Users/me/app/src/App.tsx:12:5
-//	mayoi://open?file=/Users/me/app/src/App.tsx&line=12&column=5
+//	zut://file/Users/me/app/src/App.tsx:12:5
+//	zut://open?file=/Users/me/app/src/App.tsx&line=12&column=5
 //
 // The first is what LocatorJS's Custom link opens.
 func openURLTarget(raw string) (cli.Target, bool) {
 	// The path as written, which url.Parse would cut at a # or ? of a
 	// file's name, or refuse for a %, all of which LocatorJS leaves
 	// unescaped.
-	const file = "mayoi://file"
+	const file = "zut://file"
 	if len(raw) > len(file) && strings.EqualFold(raw[:len(file)], file) && raw[len(file)] == '/' {
 		path := raw[len(file):]
 		if p, err := url.PathUnescape(path); err == nil {
@@ -82,13 +82,13 @@ func urlLineColumn(line, column string) (int, int, bool) {
 	return l, c, true
 }
 
-// isMayoiURL reports whether arg is a mayoi:// URL rather than a path.
-func isMayoiURL(arg string) bool {
+// isZutURL reports whether arg is a zut:// URL rather than a path.
+func isZutURL(arg string) bool {
 	scheme, _, ok := strings.Cut(arg, "://")
 	return ok && strings.EqualFold(scheme, "mayoi")
 }
 
-// openURL opens the file a mayoi:// URL names, at its line and column. A
+// openURL opens the file a zut:// URL names, at its line and column. A
 // file that is not there says so in the window in front, as the link has
 // no other place to tell it.
 func (m *mayoi) openURL(t cli.Target) {

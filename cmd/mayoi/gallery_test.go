@@ -22,11 +22,11 @@ import (
 	"mayoi/internal/git"
 )
 
-// galleryThemes are the themes of the gallery, "" for Mayoi's own.
+// galleryThemes are the themes of the gallery, "" for Zut's own.
 var galleryThemes = []string{"", themeMatrix, themeClaude, themeQoder, themeGrokBot, themeCursor,
 	themePurpleGold, themePumpkin, themeWitchsBrew, themeBloodMoon, themeGTAVI}
 
-// galleryLocales are the languages Mayoi has a catalog of.
+// galleryLocales are the languages Zut has a catalog of.
 var galleryLocales = []string{"en", "ja", "zh-Hans"}
 
 // galleryStates are the states shown, each brought about on a window just
@@ -295,7 +295,7 @@ func TestGallery(t *testing.T) {
 		t.Skip("GALLERY is not set")
 	}
 	var page strings.Builder
-	page.WriteString(`<!doctype html><meta charset="utf-8"><title>Mayoi state gallery</title>
+	page.WriteString(`<!doctype html><meta charset="utf-8"><title>Zut state gallery</title>
 <style>body{font:13px system-ui;margin:16px;background:#888}h2{margin:24px 0 8px}
 .row{display:flex;gap:8px;overflow-x:auto}figure{margin:0}img{width:480px;display:block}figcaption{padding:2px 0}</style>`)
 	for _, st := range galleryStates {

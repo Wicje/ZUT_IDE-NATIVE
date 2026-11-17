@@ -51,6 +51,9 @@ type colTab struct {
 	diff  *diffView
 	merge *mergeView
 	term  *session
+	// preview is the web preview of the running app,
+	// in a tab of its own.
+	preview *previewView
 	// tool is a tool of the plugins: Running Plugins, or the Plugin Log.
 	tool *toolView
 	// issue is an issue of GitHub, or a pull request's conversation.
@@ -84,6 +87,8 @@ func (t *colTab) name() string {
 		return t.diff.name()
 	case t.merge != nil:
 		return t.merge.name()
+	case t.preview != nil:
+		return t.preview.name()
 	case t.tool != nil:
 		return t.tool.name()
 	case t.issue != nil:
@@ -468,6 +473,8 @@ func (a *app) focusTab(t *colTab) {
 		t.view.pane.Focus()
 	case t.diff != nil:
 		t.diff.pane.Focus()
+	case t.preview != nil:
+		t.preview.pane.Focus()
 	case t.tool != nil:
 		t.tool.pane.Focus()
 	case t.issue != nil:
@@ -577,7 +584,7 @@ func (a *app) closeTab(t *colTab, then, cancelled func()) {
 		}
 		done()
 	}
-	if t.view != nil || t.diff != nil || t.tool != nil || t.issue != nil {
+	if t.view != nil || t.diff != nil || t.tool != nil || t.issue != nil || t.preview != nil {
 		remove()
 		return
 	}
@@ -643,6 +650,9 @@ func (a *app) dropTab(t *colTab) {
 	col.take(i)
 	if t.view != nil {
 		t.view.stop()
+	}
+	if t.preview != nil && t.preview.web != nil {
+		t.preview.web.Destroy()
 	}
 	if t.diff != nil {
 		t.diff.stop()
@@ -771,6 +781,8 @@ func (a *app) splitRight() {
 		a.addTab(nc, 0, &colTab{diff: v})
 		a.activate(nc, 0, true)
 		return
+	case t.preview != nil:
+		a.addTab(nc, 0, &colTab{preview: t.preview.clone()})
 	case t.tool != nil:
 		a.addTab(nc, 0, &colTab{tool: t.tool.clone()})
 		a.activate(nc, 0, true)
@@ -871,6 +883,8 @@ func (a *app) moveTab(t *colTab, to *column, at int) {
 			j = to.showingDiff(t.diff)
 		case t.merge != nil:
 			j = to.showingMerge(t.merge.path)
+		case t.preview != nil:
+			break
 		case t.tool != nil:
 			j = slices.IndexFunc(to.tabs, func(o *colTab) bool { return o.tool != nil && o.tool.kind == t.tool.kind })
 		case t.issue != nil:

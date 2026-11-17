@@ -412,7 +412,7 @@ func TestBranchesAndBlame(t *testing.T) {
 	}
 	a.switchBranch("main", false)
 	hs.settleGit()
-	hs.until("the file reloads", func() bool { return d.buf.String() == "# Mayoi\n\nA small editor.\n" })
+	hs.until("the file reloads", func() bool { return d.buf.String() == "# Zut\n\nA small editor.\n" })
 	if b := a.branch(); b != "main" {
 		t.Fatalf("branch %q", b)
 	}
@@ -447,7 +447,7 @@ func TestBlameWraps(t *testing.T) {
 	a := hs.a
 	a.settings.WordWrap = true
 	long := strings.Repeat("word ", 400)
-	os.WriteFile(hs.path("README.md"), []byte("# Mayoi\n\nA small editor.\n"+long+"\n"+long+"xxxxxxxxxxxxxxx\n"), 0o644)
+	os.WriteFile(hs.path("README.md"), []byte("# Zut\n\nA small editor.\n"+long+"\n"+long+"xxxxxxxxxxxxxxx\n"), 0o644)
 	git("commit", "-qam", "a long line to wrap")
 	a.openFile(hs.path("README.md"), true)
 	hs.settleGit()
@@ -971,7 +971,7 @@ func TestDiffOfEveryFile(t *testing.T) {
 	git := hs.gitRepo()
 	a := hs.a
 	os.WriteFile(hs.path("main.go"), []byte("package main\n\nimport \"fmt\"\n\n// main says hi.\nfunc main() {\n\tfmt.Println(\"hello, mayoi\")\n}\n"), 0o644)
-	os.WriteFile(hs.path("README.md"), []byte("# Mayoi\n\nA small editor, with diffs.\n"), 0o644)
+	os.WriteFile(hs.path("README.md"), []byte("# Zut\n\nA small editor, with diffs.\n"), 0o644)
 	git("add", "README.md")
 	os.WriteFile(hs.path("new.txt"), []byte("a new file\n"), 0o644)
 	hs.settleGit()

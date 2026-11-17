@@ -7,11 +7,11 @@ import (
 	"time"
 )
 
-// keepSystemCrashes copies the reports macOS wrote of Mayoi's crashes
+// keepSystemCrashes copies the reports macOS wrote of Zut's crashes
 // since the last launch into dir, the crashes folder, with the home folder
 // taken out: such as of an uncaught Objective-C exception, which crash.log
 // misses. dir's .ips-seen file has the time of the latest one seen. At the
-// first launch none are copied, being from before Mayoi kept them, and
+// first launch none are copied, being from before Zut kept them, and
 // neither is one of a crash crash.log already kept.
 func keepSystemCrashes(dir string) {
 	home, err := os.UserHomeDir()

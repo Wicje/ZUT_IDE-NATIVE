@@ -1,4 +1,4 @@
-// Package workspace is the folder Mayoi has open: its file tree, read a
+// Package workspace is the folder Zut has open: its file tree, read a
 // directory at a time as the user opens them and kept up to date as files
 // change on disk, and an index of its files for quick open.
 package workspace

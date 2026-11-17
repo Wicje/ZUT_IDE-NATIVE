@@ -1,6 +1,6 @@
-# A Mayoi plugin
+# A Zut plugin
 
-This folder is a plugin for [Mayoi](https://github.com/sorrycc/Mayoi), a code editor written in Go. Notes for
+This folder is a plugin for [Zut](https://github.com/sorrycc/Zut), a code editor written in Go. Notes for
 agents and people working on it.
 
 ## How it runs
@@ -8,7 +8,7 @@ agents and people working on it.
 - `plugin.json` declares the plugin: its `name`, its entry module `main`, when it starts (`activation`) and what it
   adds (`contributes`: commands, keybindings, menus, settings, status items, views, previews, formatters, themes,
   languages, snippets, coding agents for the Sessions view). Every id starts with the plugin's name and a dot.
-- `main.ts` runs in Mayoi's own JavaScript engine (moejs), not Node. TypeScript runs as it is, with no build step.
+- `main.ts` runs in Zut's own JavaScript engine (moejs), not Node. TypeScript runs as it is, with no build step.
 - The API is the `mayoi` module; its types are in `mayoi.d.ts`. Every call that touches the editor returns a promise.
 - There is no `require`, no `node:` module and no npm package at run time. Import relative files of this folder. To use
   a package, run `mayoi plugin pack .`, which copies what the code imports into `vendor/`.
@@ -18,11 +18,11 @@ agents and people working on it.
 ## Try it
 
 ```sh
-mayoi plugin dev .      # load this folder into Mayoi, and again on each save
+mayoi plugin dev .      # load this folder into Zut, and again on each save
 mayoi run <command-id>  # run one of its commands
 ```
 
-Logs from `console.log` and errors show in Mayoi under **Plugins: Show Log**.
+Logs from `console.log` and errors show in Zut under **Plugins: Show Log**.
 
 ## Limits
 

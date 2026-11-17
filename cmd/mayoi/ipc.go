@@ -18,7 +18,7 @@ import (
 	"github.com/egoist/mygo/i18n"
 )
 
-// commandLineClient runs Mayoi as the mayoi command, when it is started as
+// commandLineClient runs Zut as the mayoi command, when it is started as
 // one: it asks the running app over its socket, or starts it, and exits
 // with the command's status. It returns when the app is to start here.
 func commandLineClient() {
@@ -86,7 +86,7 @@ func (m *mayoi) serve(req cli.Request, reply func(cli.Reply)) {
 		plugins.reg.SetSafe(true)
 		go plugins.reloadAll()
 		if len(req.Paths) == 0 && req.Run == nil && !req.List && req.Diff == nil && req.Remote == "" {
-			reply(cli.Reply{Output: "Plugins are off until Mayoi starts again.\n"})
+			reply(cli.Reply{Output: "Plugins are off until Zut starts again.\n"})
 			return
 		}
 	}

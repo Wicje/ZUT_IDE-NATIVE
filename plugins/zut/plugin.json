@@ -1,0 +1,18 @@
+{
+  "name": "zut",
+  "displayName": "Zut Preview",
+  "version": "0.1.0",
+  "description": "The running Zut app in a sidebar panel",
+  "author": "Zut",
+  "mayoi": ">=0.20.0",
+  "main": "main.ts",
+  "enabled": true,
+  "activation": ["onView:zut.panel"],
+  "contributes": {
+    "commands": [
+      { "id": "zut.open", "title": "Open Zut Preview" }
+    ],
+    "views": [{ "id": "zut.panel", "title": "Zut", "icon": "sparkles" }],
+    "webviews": [{ "id": "zut.panel", "title": "Zut Preview", "path": "panel.html" }]
+  }
+}

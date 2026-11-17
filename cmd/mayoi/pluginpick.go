@@ -179,7 +179,7 @@ func (a *app) pluginPickRow(c *ui.Context, i int, m workspace.Match) {
 	})
 }
 
-// namedIcon is the icon a plugin names, of Mayoi's own: a plug for a name
+// namedIcon is the icon a plugin names, of Zut's own: a plug for a name
 // it does not know.
 func namedIcon(name string) *ui.SVG {
 	switch strings.ToLower(name) {

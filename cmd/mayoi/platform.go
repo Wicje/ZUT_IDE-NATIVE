@@ -11,7 +11,7 @@ import (
 	"mayoi/locales"
 )
 
-// hostOS is the system Mayoi runs on, as runtime.GOOS names it: its keys,
+// hostOS is the system Zut runs on, as runtime.GOOS names it: its keys,
 // and the names of its file manager, follow it.
 var hostOS = runtime.GOOS
 
@@ -55,7 +55,7 @@ func platformAccel(id, accel string) string {
 	return strings.ReplaceAll(accel, "CmdOrCtrl", "Ctrl")
 }
 
-// parseAccel reads an accelerator as Mayoi takes it on the system: with
+// parseAccel reads an accelerator as Zut takes it on the system: with
 // Command for CmdOrCtrl on macOS, where MyGo's would follow the machine.
 func parseAccel(accel string) (keymap.Stroke, bool) {
 	if macKeys() {
@@ -145,7 +145,7 @@ func (a *app) menuKeys(c *ui.Context) {
 	}
 }
 
-// shellSkips are the commands whose shortcuts a terminal leaves to Mayoi
+// shellSkips are the commands whose shortcuts a terminal leaves to Zut
 // on Windows and Linux, as VS Code's commandsToSkipShell, find among them:
 // the shell has the other keys with Control, which edit its line.
 var shellSkips = map[string]bool{

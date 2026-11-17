@@ -13,7 +13,7 @@ import (
 	"mayoi/locales"
 )
 
-// Mayoi checks for a new version itself, every updateInterval, and shows
+// Zut checks for a new version itself, every updateInterval, and shows
 // it in the status bar, the app menu and the welcome page rather than in
 // the updater's window, which opens when one of them is clicked.
 const (

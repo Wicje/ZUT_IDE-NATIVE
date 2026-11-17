@@ -1,4 +1,4 @@
-// Package plugin runs Mayoi's plugins: folders with a plugin.json and an
+// Package plugin runs Zut's plugins: folders with a plugin.json and an
 // entry module of JavaScript or TypeScript, each in a moejs runtime of its
 // own, on a goroutine of its own. The app sees them through a Registry,
 // and they see the app through the Host it implements.
@@ -27,8 +27,8 @@ type Manifest struct {
 	Description string `json:"description,omitempty"`
 	// Author is who wrote the plugin, as the Plugins page shows it.
 	Author string `json:"author,omitempty"`
-	// Mayoi is the versions of Mayoi the plugin works with, as ">=0.20.0".
-	Mayoi string `json:"mayoi,omitempty"`
+	// Zut is the versions of Zut the plugin works with, as ">=0.20.0".
+	Zut string `json:"mayoi,omitempty"`
 	// Main is the entry module, relative to the folder: .ts, .js or .mjs.
 	Main string `json:"main,omitempty"`
 	// Activation are the events that start the plugin: onCommand:<id>,
@@ -41,7 +41,7 @@ type Manifest struct {
 	Contributes Contributes `json:"contributes"`
 }
 
-// Contributes are what a plugin adds to Mayoi, known without running it.
+// Contributes are what a plugin adds to Zut, known without running it.
 type Contributes struct {
 	Commands        []CommandContrib          `json:"commands,omitempty"`
 	Keybindings     []KeyContrib              `json:"keybindings,omitempty"`
@@ -170,7 +170,7 @@ type ThemeContrib struct {
 	Dark bool `json:"dark,omitempty"`
 }
 
-// LanguageContrib tells Mayoi of a language: its files, how its comments
+// LanguageContrib tells Zut of a language: its files, how its comments
 // start, and which Chroma lexer highlights it.
 type LanguageContrib struct {
 	ID         string   `json:"id"`
@@ -237,7 +237,7 @@ type AgentContrib struct {
 	// the id by default.
 	App string `json:"app,omitempty"`
 	// Icon is the shapes of an SVG of a 24 by 24 view, drawn in strokes, a
-	// whole SVG, or the name of one of Mayoi's icons.
+	// whole SVG, or the name of one of Zut's icons.
 	Icon string `json:"icon,omitempty"`
 	// Tint is the color of its icon: one hex color, or one for a dark
 	// window and one for a light one.
@@ -281,7 +281,7 @@ var hexRe = regexp.MustCompile(`^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$`)
 
 var nameRe = regexp.MustCompile(`^[a-z][a-z0-9-]*$`)
 
-// Reserved are the prefixes of Mayoi's own command ids, which no plugin
+// Reserved are the prefixes of Zut's own command ids, which no plugin
 // may take as its name.
 var Reserved = []string{
 	"file", "edit", "sel", "go", "view", "git", "review", "remote", "account",
@@ -329,8 +329,8 @@ func (m *Manifest) check() error {
 	if m.Main != "" && (filepath.IsAbs(m.Main) || strings.HasPrefix(filepath.Clean(m.Main), "..")) {
 		return fmt.Errorf("main %q must be a path inside the plugin's folder", m.Main)
 	}
-	if m.Mayoi != "" && !versionRangeOK(m.Mayoi) {
-		return fmt.Errorf("mayoi %q is not a version range such as \">=0.20.0\"", m.Mayoi)
+	if m.Zut != "" && !versionRangeOK(m.Zut) {
+		return fmt.Errorf("mayoi %q is not a version range such as \">=0.20.0\"", m.Zut)
 	}
 	own := func(kind, id string) error {
 		if !strings.HasPrefix(id, m.Name+".") || len(id) == len(m.Name)+1 {
@@ -436,7 +436,7 @@ func (m *Manifest) check() error {
 	}
 	for key := range c.Settings {
 		if key == "enabled" {
-			return errors.New(`setting "enabled" is Mayoi's own`)
+			return errors.New(`setting "enabled" is Zut's own`)
 		}
 	}
 	return nil

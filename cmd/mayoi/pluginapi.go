@@ -550,7 +550,7 @@ func (h *pluginHost) Call(p *plugin.Plugin, method string, raw json.RawMessage) 
 		v, err := h.main(func(a *app) (any, error) {
 			client := a.host.ai()
 			if client == nil {
-				return nil, errors.New("sign in to Mayoi to use AI")
+				return nil, errors.New("sign in to Zut to use AI")
 			}
 			return client, nil
 		})

@@ -95,7 +95,7 @@ type host interface {
 	// path, and take it away, saying how it went.
 	installCLI()
 	uninstallCLI()
-	// addContextMenu and removeContextMenu put "Open with Mayoi" in
+	// addContextMenu and removeContextMenu put "Open with Zut" in
 	// Explorer's right-click menu on Windows, and take it away, saying how
 	// it went.
 	addContextMenu()
@@ -118,7 +118,7 @@ type host interface {
 	// account was signed out elsewhere.
 	ai() *mon.Client
 	aiSignedOut()
-	// update is the new version of Mayoi a check found, "" when there is
+	// update is the new version of Zut a check found, "" when there is
 	// none, and installUpdate opens the update window to install it.
 	update() string
 	installUpdate()
@@ -152,7 +152,7 @@ type host interface {
 	shown() bool
 }
 
-// app is the state of a window of Mayoi.
+// app is the state of a window of Zut.
 type app struct {
 	host     host
 	settings *settings.Settings
@@ -1018,7 +1018,7 @@ func (a *app) windowTitle() string {
 		}
 	}
 	if len(parts) == 0 {
-		return "Mayoi"
+		return "Zut"
 	}
 	return strings.Join(parts, " — ")
 }

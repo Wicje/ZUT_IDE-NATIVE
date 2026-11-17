@@ -268,12 +268,12 @@ needs a `## <version>` section here, or its build fails.
 - A session that drops out of **Sessions** fades out faster, and one that comes back mid-fade picks up where it was.
 - Clicking a repository's name or row background in source control expands or collapses its changes.
 - **Settings > Shortcuts** lists **Report a Problem** under Help instead of Account.
-- A `mayoi://file` link opens its file at the line and column it names.
+- A `zut://file` link opens its file at the line and column it names.
 - On Linux, Mayoi is offered for text, Markdown, JSON and other text files, and `xdg-mime default` takes it.
 - On Linux, opening a file in Mayoi from the file manager opens that file.
 - On Windows, **Open with** lists Mayoi for text, Markdown, JSON and other text files.
-- LocatorJS's **Custom link** reaches Mayoi with `mayoi://file/${projectPath}${filePath}:${line}:${column}`.
-- A `mayoi://` link to a missing file says Mayoi could not open it, in the window in front.
+- LocatorJS's **Custom link** reaches Mayoi with `zut://file/${projectPath}${filePath}:${line}:${column}`.
+- A `zut://` link to a missing file says Mayoi could not open it, in the window in front.
 - Math with `\tag{…}` now renders in the Markdown preview, its label beside the equation.
 - After a full-screen program is killed, scrolling or typing in the terminal no longer prints escape codes.
 - The sidebar's new **Sessions** view lists Claude Code, Qoder, Codex and Grok sessions, the latest first.

@@ -1,45 +1,45 @@
 # Settings
 
-Mayoi's preferences and keyboard shortcuts are two JSON files. You can change them in the
-[settings window](#the-settings-window), or edit the files with Mayoi or any other editor. Either way, the change
+Zut's preferences and keyboard shortcuts are two JSON files. You can change them in the
+[settings window](#the-settings-window), or edit the files with Zut or any other editor. Either way, the change
 applies in every window right away. You don't need to restart.
 
 ## Where the files are
 
-All of Mayoi's files are in one data folder:
+All of Zut's files are in one data folder:
 
 | System  | Folder                                                       |
 | ------- | ------------------------------------------------------------ |
-| macOS   | `~/Library/Application Support/Mayoi`                        |
-| Linux   | `$XDG_CONFIG_HOME/Mayoi`, or `~/.config/Mayoi` if it's unset |
-| Windows | `%AppData%\Mayoi`                                            |
+| macOS   | `~/Library/Application Support/Zut`                        |
+| Linux   | `$XDG_CONFIG_HOME/Zut`, or `~/.config/Zut` if it's unset |
+| Windows | `%AppData%\Zut`                                            |
 
 | File                | Who writes it | What it holds                                                                     |
 | ------------------- | ------------- | --------------------------------------------------------------------------------- |
-| `settings.json`     | you and Mayoi | [Preferences](#settingsjson): fonts, theme, auto save, vim and more               |
-| `keybindings.json`  | you and Mayoi | [Keyboard shortcuts](#keybindingsjson), in VS Code's format                       |
-| `state.json`        | Mayoi         | Windows, tabs, recent folders and layout                                          |
-| `window-state.json` | Mayoi         | Each window's position and size                                                   |
-| `updater.json`      | Mayoi         | Update choices: automatic downloads, a skipped version, the last check            |
-| `sync.json`         | Mayoi         | [Settings sync](#settings-sync): the account, and the settings as last synced     |
-| `crash.log`         | Mayoi         | Mayoi's version and system, then what ended it if it crashed, with every stack    |
-| `crashes/`          | Mayoi         | The last 10 crash logs, by time; `.sent` or `.unsent` once asked about            |
-| `usage.json`        | Mayoi         | [`usageStats`](#the-rest): the day and version of the last count sent             |
+| `settings.json`     | you and Zut | [Preferences](#settingsjson): fonts, theme, auto save, vim and more               |
+| `keybindings.json`  | you and Zut | [Keyboard shortcuts](#keybindingsjson), in VS Code's format                       |
+| `state.json`        | Zut         | Windows, tabs, recent folders and layout                                          |
+| `window-state.json` | Zut         | Each window's position and size                                                   |
+| `updater.json`      | Zut         | Update choices: automatic downloads, a skipped version, the last check            |
+| `sync.json`         | Zut         | [Settings sync](#settings-sync): the account, and the settings as last synced     |
+| `crash.log`         | Zut         | Zut's version and system, then what ended it if it crashed, with every stack    |
+| `crashes/`          | Zut         | The last 10 crash logs, by time; `.sent` or `.unsent` once asked about            |
+| `usage.json`        | Zut         | [`usageStats`](#the-rest): the day and version of the last count sent             |
 
 Plugins, user scripts and what plugins store are in `~/.mayoi` instead: see [PLUGINS.md](PLUGINS.md#where-they-are).
 
-To keep the files somewhere else, start Mayoi with `MAYOI_DATA_DIR` set to a folder. Mayoi then reads and writes all
+To keep the files somewhere else, start Zut with `MAYOI_DATA_DIR` set to a folder. Zut then reads and writes all
 of these files there instead, which is a way to try a setup without touching your own. Create the folder first, and
-quit Mayoi before, since a Mayoi already running takes over a second one. On macOS:
+quit Zut before, since a Zut already running takes over a second one. On macOS:
 
 ```sh
 mkdir -p ~/mayoi-test
-MAYOI_DATA_DIR=~/mayoi-test /Applications/Mayoi.app/Contents/MacOS/Mayoi
+MAYOI_DATA_DIR=~/mayoi-test /Applications/Zut.app/Contents/MacOS/Zut
 ```
 
 ## The settings window
 
-**Mayoi → Settings…** (⌘,), or **File → Settings…** on Windows and Linux, opens the settings window. It lists every
+**Zut → Settings…** (⌘,), or **File → Settings…** on Windows and Linux, opens the settings window. It lists every
 preference by category, with what it does and its key in `settings.json`:
 
 - **Search** at the top finds preferences in every category, by name, description or key.
@@ -69,12 +69,12 @@ takes its default.
 | `terminalFontFamily`    | `""`          | Font names, separated by commas                             |                                                |
 | `terminalFontSize`      | `0`           | 0, or 9 to 28                                               |                                                |
 | `terminalCopyOnSelect`  | `true`        | `true`, `false`                                             |                                                |
-| `theme`                 | `""`          | `""` (Mayoi), `"matrix"`, `"claude"`, `"qoder"`, `"grokbot"`, `"cursor"`, `"purplegold"`, `"pumpkin"`, `"witchsbrew"`, `"bloodmoon"`, `"gtavi"` | **View → Theme**, **Color Theme…**             |
+| `theme`                 | `""`          | `""` (Zut), `"matrix"`, `"claude"`, `"qoder"`, `"grokbot"`, `"cursor"`, `"purplegold"`, `"pumpkin"`, `"witchsbrew"`, `"bloodmoon"`, `"gtavi"` | **View → Theme**, **Color Theme…**             |
 | `appearance`            | `""`          | `""` (follow the system), `"light"`, `"dark"`               | **View → Theme**                               |
 | `sidebarRight`          | `false`       | `true`, `false`                                             | **View → Sidebar on Right**                    |
 | `panelPosition`         | `""`          | `""` (bottom), `"left"`, `"right"`                          | **View → Panel Position**                      |
 | `terminalLocation`      | `""`          | `""` (the panel), `"editor"`                                | **View → New Terminals in Editor Area**        |
-| `terminalBackend`       | `""`          | `""` (Mayoi), `"hc"` (herdr-core)                           |                                                |
+| `terminalBackend`       | `""`          | `""` (Zut), `"hc"` (herdr-core)                           |                                                |
 | `terminalBackendHcPath` | `""`          | A path to `hc`, a folder that has it, or a name on `PATH`   |                                                |
 | `terminalBackendHcEnv`  | none          | A list of `KEY=value` environment variables for `hc`        |                                                |
 | `terminalBackendHcShowInHerdr` | `true` | `true`, `false`                                      |                                                |
@@ -107,7 +107,7 @@ takes its default.
 | `syncIgnored`           | none          | Keys, `"settings.json"`, `"keybindings.json"`               | The [settings sync](#settings-sync) panel      |
 | `aiModel`               | `""`          | `""` (`deepseek-flash`), or a model of the AI gateway       | Only this file                                 |
 | `aiSecretFiles`         | none          | Patterns of files AI commit messages send by name only      | Only this file                                 |
-| `crashReports`          | `""`          | `""` (ask), `"always"`, `"never"`                           | **Don't ask again** when Mayoi asks           |
+| `crashReports`          | `""`          | `""` (ask), `"always"`, `"never"`                           | **Don't ask again** when Zut asks           |
 | `usageStats`            | `true`        | `true`, `false`                                             | Only this file                                 |
 | `plugins`               | none          | Each plugin's own settings, and `"enabled": false` to turn it off | The **Plugins** page of the settings window |
 | `formatOnSave`          | none          | `true` for each language to format as it saves, or `"*"` for all | Only this file                          |
@@ -115,8 +115,8 @@ takes its default.
 
 ### Language
 
-- **`locale`** is the language Mayoi shows: English, Simplified Chinese (`"zh-Hans"`) or Japanese (`"ja"`). Left
-  empty, Mayoi shows the first of these that the system's preferred languages list, and English otherwise. Another tag
+- **`locale`** is the language Zut shows: English, Simplified Chinese (`"zh-Hans"`) or Japanese (`"ja"`). Left
+  empty, Zut shows the first of these that the system's preferred languages list, and English otherwise. Another tag
   of the same language works too, as `"zh"` or `"ja-JP"`. The menus, the command palette and every window change at
   once. The command palette also finds commands by their English names. In Japanese, the parts that MyGo draws itself,
   as the editor's own menu and the native dialogs' buttons, stay in English.
@@ -158,7 +158,7 @@ differ in width lines them up only roughly.
 
 ### The rest
 
-- **`theme`** is Mayoi's own theme, The Matrix, Claude, Qoder, Grok Bot, Cursor, Purple Gold, a Halloween theme:
+- **`theme`** is Zut's own theme, The Matrix, Claude, Qoder, Grok Bot, Cursor, Purple Gold, a Halloween theme:
   `"pumpkin"` for Jack-o'-Lantern, `"witchsbrew"` for Witch's Brew and `"bloodmoon"` for Blood Moon, or `"gtavi"` for
   GTA VI. The Matrix, Purple Gold, the Halloween themes and GTA VI are always dark, so they ignore `appearance`.
 - **`panelPosition`** is where the terminal panel is: `""` or `"bottom"` below the editors, `"left"` or `"right"` at a
@@ -168,27 +168,27 @@ differ in width lines them up only roughly.
   in the column files open in, as **New Terminal in Editor Area** does. It applies to New Terminal (⌃⇧`) and the
   Explorer's **Open in Terminal**. Toggle Terminal (⌃`), the title bar's terminal button and the panel's **+** still
   open the panel.
-- **`terminalBackend`** is what runs a terminal's shell: `""` Mayoi, or `"hc"` a terminal of
-  [herdr-core](https://herdr.dev/core/), which `hc attach` shows. Its shell keeps running as the window closes or Mayoi
+- **`terminalBackend`** is what runs a terminal's shell: `""` Zut, or `"hc"` a terminal of
+  [herdr-core](https://herdr.dev/core/), which `hc attach` shows. Its shell keeps running as the window closes or Zut
   quits, where `hc ls` and the Herdr app see it, and the next start attaches to it again, in its tab or the panel,
   with its scrollback. Closing the terminal ends it. In a remote folder the shell runs on the host, one of hc's
   machines (`hc machine ls`): the first terminal of a host hc doesn't know asks to add it, which may copy `hc` there,
-  and until then, or if you decline, terminals of the host use ssh until Mayoi quits. Mayoi takes `Ctrl+\`, hc's detach key,
-  and sends it to the shell. Mayoi finds `hc` at `terminalBackendHcPath` when it is set, then on the path or in
-  `~/.local/bin`; without it, terminals run in Mayoi, and the first one asks once whether to install it.
+  and until then, or if you decline, terminals of the host use ssh until Zut quits. Zut takes `Ctrl+\`, hc's detach key,
+  and sends it to the shell. Zut finds `hc` at `terminalBackendHcPath` when it is set, then on the path or in
+  `~/.local/bin`; without it, terminals run in Zut, and the first one asks once whether to install it.
   **View → Install hc…** installs it there with herdr's installer, on macOS and Linux, and new terminals use it without
   a restart.
-- **`terminalBackendHcPath`** is the `hc` Mayoi runs when `terminalBackend` is `"hc"`: a path to the program, or a
+- **`terminalBackendHcPath`** is the `hc` Zut runs when `terminalBackend` is `"hc"`: a path to the program, or a
   folder that has it, which may start with `~`; a bare name, as `"herdr-core"`, is found on the path, and any other
-  relative path is the working folder of Mayoi, so give an absolute path. Mayoi looks there first, and quietly falls
+  relative path is the working folder of Zut, so give an absolute path. Zut looks there first, and quietly falls
   back to the path and `~/.local/bin` when it isn't there, so a path that is wrong still runs another `hc` if there is
-  one. With it set, Mayoi doesn't offer to install hc. It has no effect with another backend.
-- **`terminalBackendHcEnv`** is the environment of the `hc` commands Mayoi starts when `terminalBackend` is `"hc"`: a
+  one. With it set, Zut doesn't offer to install hc. It has no effect with another backend.
+- **`terminalBackendHcEnv`** is the environment of the `hc` commands Zut starts when `terminalBackend` is `"hc"`: a
   list of `KEY=value` strings, as `["HC_NO_UPDATE=1"]`. Strings without `=` or with a NUL are ignored. It reaches the
-  commands Mayoi starts, not a terminal already attached; a server hc already has running keeps the environment it
+  commands Zut starts, not a terminal already attached; a server hc already has running keeps the environment it
   started with.
-- **`terminalBackendHcShowInHerdr`** shows Mayoi's terminals in the Herdr app when `terminalBackend` is `"hc"`, in a
-  space for each folder, a tab for each terminal. Terminals already running there show up as Mayoi attaches them again.
+- **`terminalBackendHcShowInHerdr`** shows Zut's terminals in the Herdr app when `terminalBackend` is `"hc"`, in a
+  space for each folder, a tab for each terminal. Terminals already running there show up as Zut attaches them again.
   Turned off, new terminals stay out of Herdr, and those already there stay until closed. Closing one in either app
   ends its shell, which closes it in the other. Terminals of a remote folder stay out of Herdr.
 - **`agentSessionsClaudeDirs`** lists more Claude Code config folders whose sessions the **Sessions** view shows, as
@@ -247,18 +247,18 @@ differ in width lines them up only roughly.
   branch is of the same repository. The branch of the work tree stays.
 - **`aiModel`** is the model of Mon's AI gateway that writes commit messages, `deepseek-flash` when empty. The models
   your account can use are listed at `https://mon.sorrycc.dev/api/v1/ai/v1/models`.
-- **`crashReports`** is what Mayoi does at launch with the crash logs of the last runs: `""` asks whether to send them
+- **`crashReports`** is what Zut does at launch with the crash logs of the last runs: `""` asks whether to send them
   to Mon, `"always"` sends them and `"never"` doesn't. A report is anonymous, never sent with your account's token,
   and has your home folder taken out, but not other paths, such as `/Volumes/...` or `/opt/...`. **Show Report** in
   the question opens the logs as they would be sent. Only releases send reports, and builds started with
   `MAYOI_MON_URL`. Enter answers **Don't Send**.
-- **`usageStats`** sends an anonymous count of Mayoi's use to Umami at `umami.sorrycc.dev`: an `active` event once a
-  day while Mayoi is open, and an `update` event on the first launch of a new version. Each holds only Mayoi's
+- **`usageStats`** sends an anonymous count of Zut's use to Umami at `umami.sorrycc.dev`: an `active` event once a
+  day while Zut is open, and an `update` event on the first launch of a new version. Each holds only Zut's
   version (and the one before, for `update`), the system and its architecture, and the language of the menus; never a
-  path, a file, a name or your account. Turn it off to send nothing. `DO_NOT_TRACK=1` in Mayoi's environment turns
+  path, a file, a name or your account. Turn it off to send nothing. `DO_NOT_TRACK=1` in Zut's environment turns
   it off too. Only releases send, and builds started with `MAYOI_UMAMI_URL`. See [PRIVACY.md](PRIVACY.md).
 - **`aiSecretFiles`** adds patterns of files whose lines **Write Commit Message with AI** never sends, after
-  Mayoi's own list of `.env` files, keys and credentials. A name matches in any folder, a path such as
+  Zut's own list of `.env` files, keys and credentials. A name matches in any folder, a path such as
   `config/prod.yml` matches the end of a file's path, and `/config/prod.yml` its start. `**` is any run of folders,
   and `deploy/` is everything in a `deploy` folder. `!` first sends files a pattern before it left out, as in
   `"!.env.local"`. Whatever the patterns say, keys and tokens in any file's lines are left out, line by line. A
@@ -299,19 +299,19 @@ differ in width lines them up only roughly.
 ### Good to know
 
 - **It's plain JSON.** Comments and trailing commas don't parse, though `keybindings.json` allows comments.
-- **Mayoi rewrites the file** in its own formatting soon after it starts, when you open it with ⌘, and when you
+- **Zut rewrites the file** in its own formatting soon after it starts, when you open it with ⌘, and when you
   change a preference from a menu, a button or zoom. It writes every key, defaults included, and drops any key it
   doesn't know.
-- **Mayoi ignores a file that doesn't parse,** and says nothing. The preferences stay as they were until you fix it
+- **Zut ignores a file that doesn't parse,** and says nothing. The preferences stay as they were until you fix it
   and save again.
-- **Mayoi quietly corrects values out of range.** A `fontSize` of 40 becomes 28, and an empty `fontFamily` becomes
+- **Zut quietly corrects values out of range.** A `fontSize` of 40 becomes 28, and an empty `fontFamily` becomes
   `"monospace"`.
-- **Older files still work.** Themes used to be appearances, so Mayoi reads `"appearance": "matrix"` or `"claude"`
+- **Older files still work.** Themes used to be appearances, so Zut reads `"appearance": "matrix"` or `"claude"`
   as that `theme`.
 
 ### From the command line
 
-The `mayoi` command reads and changes the preferences itself, while Mayoi runs or not, as the [`mayoi`
+The `mayoi` command reads and changes the preferences itself, while Zut runs or not, as the [`mayoi`
 command](FEATURES.md#the-mayoi-command) of the app does:
 
 ```sh
@@ -336,11 +336,11 @@ mayoi settings --folder set vim=true   # the current folder's own file
   `projectTabStyle.~/src/my.app.label`, and one told from the current folder or from `~` is the folder whole. An icon is no field here: it names a
   picture the app copied into its own folder, which the rail's menu chooses, so a look the command changes keeps the
   icon it has.
-- **A value Mayoi has none of changes nothing,** and says what the preference takes instead: an unknown key, a value
+- **A value Zut has none of changes nothing,** and says what the preference takes instead: an unknown key, a value
   of the wrong type, a number out of its range or a choice that isn't one of its options exits with status 1.
 - **Only the preference you change is written,** the others stay as the file has them, a key a line in the order of
   their names, and the folder is made when the file is new.
-- **A Mayoi running reads the file again** and applies the change at once, as it does one you save in an editor, so
+- **A Zut running reads the file again** and applies the change at once, as it does one you save in an editor, so
   the window and every other window change with it.
 - **`--folder` (`-f`) acts on the current folder's own `.mayoi/settings.json`,** of the preferences a folder can
   choose, which `mayoi settings --folder` lists, and `get` prints `null` of one it doesn't choose. In a subfolder of a
@@ -364,32 +364,32 @@ A folder can set these: `autoSave`, `wordWrap`, `markdownMode`, `previewMermaid`
 }
 ```
 
-- **Mayoi ignores the folder's other keys** and leaves them in the file as they are.
+- **Zut ignores the folder's other keys** and leaves them in the file as they are.
 - **A change to one of these preferences goes to the folder's file** while the folder sets it. For example, with
   `vim` in the file, **View → Vim Mode** changes the folder's `vim`, not yours.
 - **Saving the file applies it** to the folder's window at once, as does a checkout that changes it.
 - **Remote folders have no settings of their own.** Folder settings don't sync, since they're part of the folder,
   which you can commit along with it.
 
-## Files Mayoi keeps itself
+## Files Zut keeps itself
 
-`state.json`, `window-state.json` and `updater.json` are Mayoi's memory, not settings. Mayoi writes them as it runs,
-so it overwrites any change you make to one while it's open. To start fresh, quit Mayoi and delete the file.
+`state.json`, `window-state.json` and `updater.json` are Zut's memory, not settings. Zut writes them as it runs,
+so it overwrites any change you make to one while it's open. To start fresh, quit Zut and delete the file.
 
 - **`state.json`** holds the open windows with their folders, columns and tabs, each tab with its caret, selection,
   scroll position and own word wrap. It also holds the folders open in the Explorer, the recent folders and the sessions
-  Mayoi restores when one opens again, and each window's layout: its sidebar's view, whether it is open and its width,
+  Zut restores when one opens again, and each window's layout: its sidebar's view, whether it is open and its width,
   and its panel's height and, at a side, its width. Deleting it forgets all of that.
 - **`window-state.json`** holds each window's position and size.
 - **`updater.json`** holds your choices in the update window. See [Updates](FEATURES.md#updates).
 
-Versions before 0.5.1 kept the windows and layout in `settings.json`. Mayoi moves them to `state.json` the first time
+Versions before 0.5.1 kept the windows and layout in `settings.json`. Zut moves them to `state.json` the first time
 it starts.
 
 ## Settings sync
 
-**Mayoi → Sign In…** (**Help → Sign In…** on Windows and Linux, or **Account: Sign In…** in the command palette) signs in to your account at [mon.sorrycc.dev](https://mon.sorrycc.dev).
-Mayoi shows a code and opens it in the browser: sign in there with GitHub or Google, check that the page shows the same
+**Zut → Sign In…** (**Help → Sign In…** on Windows and Linux, or **Account: Sign In…** in the command palette) signs in to your account at [mon.sorrycc.dev](https://mon.sorrycc.dev).
+Zut shows a code and opens it in the browser: sign in there with GitHub or Google, check that the page shows the same
 code and approve it. The dialog counts down until the code expires.
 
 What syncs:
@@ -440,12 +440,12 @@ its own.
 ### When it syncs
 
 A change saves to the account about two seconds after you make it, whether from a menu or by saving the file. A change
-made just before you quit saves as Mayoi quits, waiting three seconds at most. Mayoi fetches the account's changes as it
-starts, as it comes to the front, and with **Sync Settings Now**. Without a connection, nothing is lost: Mayoi tries
+made just before you quit saves as Zut quits, waiting three seconds at most. Zut fetches the account's changes as it
+starts, as it comes to the front, and with **Sync Settings Now**. Without a connection, nothing is lost: Zut tries
 again after 10 seconds, then waits longer each time, up to five minutes, and the next sync merges what changed.
 
-The first time a machine signs in, a machine with Mayoi's default settings takes the account's, and an account with
-none takes the machine's. When both have settings of their own, Mayoi asks once which to keep.
+The first time a machine signs in, a machine with Zut's default settings takes the account's, and an account with
+none takes the machine's. When both have settings of their own, Zut asks once which to keep.
 
 **Sign Out of Settings Sync…** asks first, then stops syncing and signs the machine out. The settings stay as they are
 on the machine and in the account. Each machine signed in shows on your account page at mon.sorrycc.dev, where you can
@@ -460,24 +460,24 @@ the Keychain would ask again after every rebuild.
 
 **File → Open Keyboard Shortcuts (JSON)** opens `keybindings.json`, beside `settings.json`, in VS Code's format,
 comments and all, so a VS Code or Cursor file can be pasted in. Saving it applies it in every window at once. A file that does not
-parse is left alone until it does, and a key or a condition Mayoi can't read is named in a toast.
+parse is left alone until it does, and a key or a condition Zut can't read is named in a toast.
 
 - **`key`** is a key, as `"cmd+1"`, or a chord, as `"ctrl+. g c"`. Its modifiers are `cmd`, `ctrl`, `alt` and `shift`.
   While a chord is waiting for its next key, the status bar shows its keys. A key it has no binding of does nothing and
   ends it, and Escape ends it too.
-- **`command`** is a command of Mayoi's, by its id as `view.sidebar`, or VS Code's name for it, as
+- **`command`** is a command of Zut's, by its id as `view.sidebar`, or VS Code's name for it, as
   `workbench.action.toggleSidebarVisibility`. A command named with a `-` first takes the key away from that command.
   `runCommands` runs its `commands` in order, each once the edits and the Git commands of the one before are done, and
   stops at an error. `vscode.open` opens the file of its `args`: an absolute path, one from `~`, or one in the folder.
   `type` types the `text` of its `args` in the editor or the terminal, and `workbench.action.terminal.sendSequence`
   sends it to the terminal. A command that `mayoi run` gives an argument after `=` takes it as its `args`, as
   `{ "key": "ctrl+. g n", "command": "file.openFolder", "args": "~/Projects/notes" }`. Pressing the key of a command
-  Mayoi doesn't have says so.
+  Zut doesn't have says so.
 - **`when`** is when it applies: `editorTextFocus`, `editorFocus`, `inputFocus`, `textInputFocus`,
   `filesExplorerFocus`, `terminalFocus`, `terminalHasBeenCreated`, `terminalIsOpen`, `sideBarVisible`,
   `editorHasSelection`, `isMac`, `isLinux` and `isWindows`, with `!`, `&&`, `||` and parentheses. Other names don't hold.
 
-The keys of the file take the place of Mayoi's own: the menus drop a key the file binds, ⌘1 to ⌘9 and ⌃R let the file
+The keys of the file take the place of Zut's own: the menus drop a key the file binds, ⌘1 to ⌘9 and ⌃R let the file
 have theirs, and the command palette shows the file's keys. The shortcuts apply in the editor, the terminal, the
 Explorer, diffs, pictures, and the text fields of find, search, quick open and the commit message.
 
@@ -493,17 +493,17 @@ Explorer, diffs, pictures, and the text fields of find, search, quick open and t
 ### Changing shortcuts
 
 **File → Keyboard Shortcuts…** opens the settings window at its list of commands. Each command shows its keys and
-where they come from: **Default** for Mayoi's own, **User** for `keybindings.json`'s, and **Removed** when the file
+where they come from: **Default** for Zut's own, **User** for `keybindings.json`'s, and **Removed** when the file
 takes them away. **+1 more** means the file has further keys for the command, with a `when` or `args`.
 
 - **Search** finds commands by name, id or keys. The keyboard button next to it finds them by keys you press.
 - **Click a command**, or its pencil, and press its new keys: two for a chord. Enter saves, Escape cancels and
   Backspace starts over. If other commands have those keys, the dialog says which.
-- **The minus** removes the command's keys, and **the arrow** gives it back Mayoi's own.
+- **The minus** removes the command's keys, and **the arrow** gives it back Zut's own.
 
-Mayoi writes each change to `keybindings.json` and applies it at once. It changes only the command's entries without
+Zut writes each change to `keybindings.json` and applies it at once. It changes only the command's entries without
 a `when` or `args`, and keeps the file's comments and order. New keys go at the end, with an entry that takes away
-Mayoi's own, as VS Code writes them:
+Zut's own, as VS Code writes them:
 
 ```json
 { "key": "cmd+s", "command": "-file.save" },

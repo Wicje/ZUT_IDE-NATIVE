@@ -182,12 +182,12 @@ func TestKeymapRunCommands(t *testing.T) {
 	tt.Key(0, ui.KeyG)
 	tt.Key(0, ui.KeyC)
 	hs.settle()
-	// Sorted, a note of the command Mayoi has not, then saved.
+	// Sorted, a note of the command Zut has not, then saved.
 	if data, _ := os.ReadFile(hs.path("list.txt")); string(data) != "\na\nb" {
 		t.Errorf("saved %q", data)
 	}
-	if !tt.HasText("Mayoi has no command cursor.generateGitCommitMessage") {
-		t.Errorf("no note of the command Mayoi has not: %q", tt.Texts())
+	if !tt.HasText("Zut has no command cursor.generateGitCommitMessage") {
+		t.Errorf("no note of the command Zut has not: %q", tt.Texts())
 	}
 
 	// vscode.open opens a file of the folder.

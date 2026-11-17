@@ -7,7 +7,7 @@ import (
 	"github.com/egoist/mygo/ui"
 )
 
-// Mayoi's motion, in one place. Every animation in the UI takes its
+// Zut's motion, in one place. Every animation in the UI takes its
 // length from one of these, so that what moves alike moves alike;
 // TestMotionUsesTokens fails on a length written out elsewhere.
 //

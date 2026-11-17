@@ -78,7 +78,7 @@ func (m *mayoi) newFrame(h *desktop) *frame {
 		key = fmt.Sprintf("main-%d", st.ID)
 	}
 	opts := mygo.WindowOptions{
-		Title: "Mayoi", Width: 1280, Height: 820, MinWidth: 640, MinHeight: 420,
+		Title: "Zut", Width: 1280, Height: 820, MinWidth: 640, MinHeight: 420,
 		StateKey:             key,
 		TitleBarStyle:        mygo.TitleBarHidden,
 		TitleBarHeight:       titleBarH,
@@ -282,7 +282,7 @@ func (f *frame) activate(h *desktop) {
 	if f.win != nil { // a tester's has none
 		title := a.title
 		if title == "" {
-			title = "Mayoi"
+			title = "Zut"
 		}
 		f.win.SetTitle(title)
 		f.win.Invalidate()

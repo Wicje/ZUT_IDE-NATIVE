@@ -26,8 +26,8 @@ PATH="$tmp/bin:$PATH"
 export PATH
 
 # A release updates its version and checksums and keeps unrelated edits.
-sed 's/Small, fast code editor/Edited description/; /  app "Mayoi.app"/a\
-  zap trash: "~/Library/Mayoi"\
+sed 's/Small, fast code editor/Edited description/; /  app "Zut.app"/a\
+  zap trash: "~/Library/Zut"\
 ' "$tmp/original.rb" > "$tmp/Casks/mayoi.rb"
 sh "$tmp/scripts/update-homebrew.sh" 0.12.9
 grep -Fxq '  version "0.12.9"' "$tmp/Casks/mayoi.rb"
@@ -36,7 +36,7 @@ for arch in arm64 amd64; do
   grep -Fq "\"$sum\"" "$tmp/Casks/mayoi.rb"
 done
 grep -Fq '  desc "Edited description"' "$tmp/Casks/mayoi.rb"
-grep -Fq '  zap trash: "~/Library/Mayoi"' "$tmp/Casks/mayoi.rb"
+grep -Fq '  zap trash: "~/Library/Zut"' "$tmp/Casks/mayoi.rb"
 grep -Fxq '    MAYOI_CLI=1 exec "$app" "$@"' "$tmp/Casks/mayoi.rb"
 cp "$tmp/Casks/mayoi.rb" "$tmp/updated.rb"
 sh "$tmp/scripts/update-homebrew.sh" 0.12.9

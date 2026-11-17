@@ -5,7 +5,7 @@ import (
 	"runtime"
 )
 
-// reportProblem opens a new issue of Mayoi's repository in the browser,
+// reportProblem opens a new issue of Zut's repository in the browser,
 // titled title, with details and what any report needs: the version and
 // the system. The person reads it and sends it, or not.
 func (a *app) reportProblem(title, details string) {
@@ -13,9 +13,9 @@ func (a *app) reportProblem(title, details string) {
 }
 
 // reportURL is the address of a new issue of title, its body details and
-// the version and system Mayoi runs on.
+// the version and system Zut runs on.
 func reportURL(title, details string) string {
-	body := "Mayoi " + appVersion() + " on " + runtime.GOOS + "/" + runtime.GOARCH + "\n\n"
+	body := "Zut " + appVersion() + " on " + runtime.GOOS + "/" + runtime.GOARCH + "\n\n"
 	if details != "" {
 		body += details + "\n\n"
 	}

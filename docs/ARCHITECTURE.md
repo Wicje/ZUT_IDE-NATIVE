@@ -1,6 +1,6 @@
 # Architecture
 
-Mayoi is a single Go package (`main`) with its internal packages, drawn by [MyGo](https://github.com/egoist/mygo).
+Zut is a single Go package (`main`) with its internal packages, drawn by [MyGo](https://github.com/egoist/mygo).
 Chroma highlights code on a background goroutine, libghostty-vt runs the terminal, and fsnotify keeps the file tree and
 the quick-open index current. Undo history, editing commands and decorations belong to the app rather than the text
 area, so every column showing a file shares its text and history. This page walks through the source by area.
@@ -13,7 +13,7 @@ on Linux is the command itself: it reads its options (`cli.Parse`), and sends th
 data folder, which the running app listens on, to `serve` on the main thread. The reply is what to print, or what went
 wrong, and with `--wait` it comes once the files are closed. With no app running, the command starts it, and sends what
 it asked once the app answers; folders and files alone go to the app as it starts, as the Finder's do. The Finder hands
-the app folders and files to open, and a second Mayoi started with paths passes them on and exits. Each folder goes to
+the app folders and files to open, and a second Zut started with paths passes them on and exits. Each folder goes to
 the window that already has it, or to a new one. A file goes to the window whose folder contains it, and a command to
 the project whose folder contains the directory it ran in. `mayoi settings` is the command's own work instead: it
 reads and writes the preferences' file, or a folder's own, and a running app reads it again as it does one a person
@@ -38,7 +38,7 @@ watches the folder too, and when the file changes into something it did not writ
 layout stay as the app has them. Each frame, a window checks the code's font and the terminals' against the settings and
 measures them anew when they differ.
 
-**`locales`.** What Mayoi says is in catalogs of ICU messages, `en.json`, `zh-Hans.json` and `ja.json`, from which
+**`locales`.** What Zut says is in catalogs of ICU messages, `en.json`, `zh-Hans.json` and `ja.json`, from which
 `mygo generate` writes `catalog_gen.go`, a typed function per message, in the language the app shows. The views say
 their words each frame, so they follow a change of language as they draw. What is made once, the menus and the command
 palette's titles, is made again when `App.OnLocaleChanged` tells of it. The `locale` setting, which **View → Language**
@@ -49,7 +49,7 @@ matches their English titles too. The text sent to agents and Git's own messages
 settings are. Every place that takes keys itself, the editor, the terminal (`OnKey`), the Explorer, diffs, pictures and
 text fields, asks the keymap first with `takeKeys`, as the key comes, so that a chord's next key never types. Where the
 keyboard is in none of them, the window registers the keys of the file as its shortcuts. A binding's command runs with
-the next frame, by Mayoi's id or VS Code's name, and `runCommands` steps through its commands one frame at a time, until
+the next frame, by Zut's id or VS Code's name, and `runCommands` steps through its commands one frame at a time, until
 the edits and Git commands before each are done.
 
 **`view.go`.** This is the layout. The sidebar, the columns and the panel keep stable keys as panes come and go, so
@@ -282,13 +282,13 @@ plugin runs on a goroutine and reaches the window in front on the main thread th
 holds up a frame, and the main thread never waits for a plugin. A document's text is read as a snapshot, and an edit
 names the version it was worked out from: one of a document changed since is refused. Plugin commands join
 `commandsIn`, so the menus, the palette, the keymap and `mayoi run` have them; a plugin's shortcut takes a key only
-where Mayoi's commands and keybindings.json leave it free. `pluginevents.go` compares the documents with the last frame
+where Zut's commands and keybindings.json leave it free. `pluginevents.go` compares the documents with the last frame
 to tell plugins of what opened, changed, saved and closed, and to start those whose activation names it.
 
 **`pluginui.go`, `pluginviews.go`, `plugintheme.go`, `pluginsnippets.go`.** What plugins show: status items,
 diagnostics as underlines (`editor.go`) and in Show Problems, formatters (`saveDoc` waits for one, 1.5 s at most),
 views as trees of nodes drawn with MyGo's widgets in the sidebar, previews in the viewer's place, webviews through
-`ui.WebView` with a bridge of messages, themes as palettes over Mayoi's (or VS Code themes mapped to them), languages
+`ui.WebView` with a bridge of messages, themes as palettes over Zut's (or VS Code themes mapped to them), languages
 through `highlight.LexerName`, and snippets. `prefsplugins.go` is the Plugins page of the settings window.
 
 **`internal/lsp`, `lsp.go`.** A language server a plugin declares starts for a folder as a document of its languages
@@ -298,7 +298,7 @@ hovers, definitions, completions and formatting.
 
 ## Theme
 
-**`theme.go`.** The palettes for the window, the code and the terminal: Mayoi's own light and
+**`theme.go`.** The palettes for the window, the code and the terminal: Zut's own light and
 dark, and the other themes that the `theme` setting names: The Matrix, Purple Gold and the Halloween themes, which make the native window dark whatever the
 `appearance` setting is, and Claude, Qoder, Grok Bot and Cursor, which have a light and a dark palette and are as the appearance is. A palette with a `card` radius, Qoder's, has `workbench.go` lay the editors and the bottom panel out as a card in a grained shell of chrome, with no lines between the shell's parts and splitters lit around the pointer. `rain.go` paints The Matrix's digital rain behind the welcome page,
 worked out from the time alone, a step every 70 ms. `mascot.go` places a theme's character on the welcome page and in

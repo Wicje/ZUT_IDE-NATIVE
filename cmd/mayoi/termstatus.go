@@ -24,7 +24,7 @@ import (
 type termState int
 
 const (
-	termHere     termState = iota // runs in Mayoi: no dot
+	termHere     termState = iota // runs in Zut: no dot
 	termKept                      // its shell runs in herdr-core
 	termStarting                  // its shell starts in herdr-core
 	termWaiting                   // waits for the connection or the machine that went

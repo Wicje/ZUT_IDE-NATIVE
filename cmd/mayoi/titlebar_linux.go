@@ -55,7 +55,7 @@ func initGTK() {
 }
 
 // controlsCSS styles the window controls in the palette's colors, flat as
-// Mayoi's icons, with the bars' empty title labels collapsed so that they
+// Zut's icons, with the bars' empty title labels collapsed so that they
 // take no clicks from the title bar under them. mygo clears the bars.
 const controlsCSS = `
 headerbar.mygo-window-controls { padding: 0; margin: 0; }

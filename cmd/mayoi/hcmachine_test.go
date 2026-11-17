@@ -26,7 +26,7 @@ func TestHCMachineName(t *testing.T) {
 	}
 }
 
-// A host is hc's machine by the name Mayoi gives it, or by its ssh
+// A host is hc's machine by the name Zut gives it, or by its ssh
 // target for one added by hand; a host with a port goes through ssh -p.
 func TestHCMachine(t *testing.T) {
 	f := useFakeHC(t, func(args []string) ([]byte, error) {

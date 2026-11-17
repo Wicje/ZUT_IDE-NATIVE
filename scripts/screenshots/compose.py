@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Frame Mayoi's raw feature screenshots on gradient backdrops.
+"""Frame Zut's raw feature screenshots on gradient backdrops.
 
 Usage: compose.py <raw dir> <framed dir>. Needs Pillow and macOS's fonts.
 """
@@ -12,7 +12,7 @@ RAW, OUT = sys.argv[1], sys.argv[2]
 FONT = "/System/Library/Fonts/SFNS.ttf"
 
 CAPTIONS = {
-    "01-hero": ("Mayoi", "A small, fast code editor in Go — native GPU UI, no webview, no Electron"),
+    "01-hero": ("Zut", "A small, fast code editor in Go — native GPU UI, no webview, no Electron"),
     "02-explorer": ("Explorer", "A live file tree with Git status letters and colors, and ignored files dimmed"),
     "03-reading-aids": ("Reading aids", "Indent guides, the caret's block brighter, and the word at the caret highlighted"),
     "03-selection": ("Selection", "Rounded selections that show their tabs and spaces"),
@@ -49,7 +49,7 @@ CAPTIONS = {
     "19-remote-hosts": ("Connect to host", "Hosts from ~/.ssh/config and recent ones, resolved with ssh -G"),
     "19-remote-folders": ("Browse a host", "Pick a folder on the host; nothing needs installing on the other side"),
     "20-remote-window": ("Remote folder", "Explorer, Git, search and terminals run on the host, and ports forward here"),
-    "20-remote-disconnected": ("Offline-safe", "Files go read-only while the host is away, and Mayoi reconnects by itself"),
+    "20-remote-disconnected": ("Offline-safe", "Files go read-only while the host is away, and Zut reconnects by itself"),
     "21-theme-matrix-welcome": ("The Matrix", "Phosphor green on black, with digital rain behind the welcome page"),
     "21-theme-matrix-editor": ("The Matrix", "The whole window in the code's font"),
     "21-theme-claude-light-welcome": ("Claude · light", "Ivory and Claude's orange, with Clawd on the welcome page"),
@@ -139,16 +139,16 @@ def compose(src, dst, title, caption, dark, bg):
     d.text(((W - cw) / 2, 210), caption, font=cf, fill=sub)
     # A small wordmark at the bottom.
     mf = font(34, "Semibold")
-    mark = "Mayoi · 迷い"
+    mark = "Zut · 迷い"
     try:
         mf2 = ImageFont.truetype("/System/Library/Fonts/Hiragino Sans GB.ttc", 34)
     except Exception:
         mf2 = mf
-    mw = d.textlength("Mayoi · ", font=mf) + d.textlength("迷い", font=mf2)
+    mw = d.textlength("Zut · ", font=mf) + d.textlength("迷い", font=mf2)
     x = (W - mw) / 2
     y = H - bottom / 2 - 10
-    d.text((x, y), "Mayoi · ", font=mf, fill=sub)
-    d.text((x + d.textlength("Mayoi · ", font=mf), y), "迷い", font=mf2, fill=sub)
+    d.text((x, y), "Zut · ", font=mf, fill=sub)
+    d.text((x + d.textlength("Zut · ", font=mf), y), "迷い", font=mf2, fill=sub)
     canvas.convert("RGB").save(dst, optimize=True)
 
 

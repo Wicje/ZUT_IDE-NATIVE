@@ -8,7 +8,7 @@ import (
 	"syscall"
 )
 
-// startDetached starts Mayoi again with args, and env added to its
+// startDetached starts Zut again with args, and env added to its
 // environment, in a session of its own.
 func startDetached(args []string, env ...string) error {
 	exe, err := os.Executable()

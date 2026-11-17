@@ -257,7 +257,7 @@ func (a *app) spawnTerminal(s *session, dir string) (*terminal.Terminal, error) 
 		// remote host open the port forwarded to it here.
 		OpenLink: func(link string) bool { return a.terminalLink(s, link) },
 		// The shortcuts of keybindings.json, before the shell, and on
-		// Windows and Linux those of Mayoi's it leaves to Mayoi.
+		// Windows and Linux those of Zut's it leaves to Zut.
 		OnKey: func(mods ui.Modifiers, key ui.Key) bool {
 			a.keyTerm = s
 			st := keymap.Stroke{Mods: mods, Key: key}

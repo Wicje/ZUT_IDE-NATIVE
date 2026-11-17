@@ -10,7 +10,7 @@ import (
 	bundled "mayoi/plugins"
 )
 
-// withBundled starts the plugins Mayoi comes with over a folder that has
+// withBundled starts the plugins Zut comes with over a folder that has
 // TODOs in it, a Markdown file open.
 func withBundled(hs *harness) *pluginHost {
 	os.WriteFile(hs.path("main.go"), []byte("package main\n\n// TODO: say more\n// FIXME: the edge case\nfunc main() {}\n"), 0o644)
@@ -29,7 +29,7 @@ func withBundled(hs *harness) *pluginHost {
 	return h
 }
 
-// turnOnBundled turns on the plugins Mayoi comes with, which start off.
+// turnOnBundled turns on the plugins Zut comes with, which start off.
 func turnOnBundled(hs *harness, h *pluginHost) {
 	entries, _ := fs.ReadDir(bundled.FS, ".")
 	all := map[string]json.RawMessage{}
