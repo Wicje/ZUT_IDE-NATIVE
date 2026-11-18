@@ -481,10 +481,11 @@ func (a *app) chatRevertBanner(c *ui.Context) {
 			}
 		})
 		for _, row := range rows {
+			raw := row
 			ui.Row(c).Gap(6).AlignItems(ui.Center).MinHeight(16).Children(func() {
-				badge := row.Status
+				badge := raw.Status
 				col := p.muted
-				switch row.Status {
+				switch raw.Status {
 				case "added":
 					badge, col = "A", p.added
 				case "modified":
@@ -493,7 +494,21 @@ func (a *app) chatRevertBanner(c *ui.Context) {
 					badge, col = "D", p.dangerFg
 				}
 				ui.Text(c, badge).FontSize(9).FontWeight(700).TextColor(col).Padding(0, 2)
-				ui.Text(c, clip(row.Path, 48)).FontSize(10.5).TextColor(p.text).SingleLine().Grow(1)
+				name := clip(raw.Path, 48)
+				Btn := ui.ButtonBase(c.Key("chat-revert-open-"+raw.Path)).Height(16).AlignItems(ui.Center).
+					Justify(ui.Start).Radius(4).Padding(0, 4).Children(func() {
+					ui.Text(c, name).FontSize(10.5).TextColor(p.text).SingleLine().Grow(1)
+				})
+				if Btn.Hovered() {
+					Btn.Background(p.hover)
+				}
+				if Btn.Clicked() {
+					dir := a.folder()
+					if dir != "" {
+						path := filepath.Join(dir, filepath.FromSlash(raw.Path))
+						a.showChanges(diffTarget{path: path, any: true}, true, dir)
+					}
+				}
 			})
 		}
 	})
