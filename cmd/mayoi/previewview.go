@@ -32,12 +32,13 @@ func (v *previewView) reload() {
 
 const previewURL = "http://127.0.0.1:5173"
 
-// detectDevServer finds the dev server the agent started by trying the
-// ports commonly used for web development. Any one that answers is the
-// preview. Zut can see which ports are listening, not which project each
-// port serves.
-func detectDevServer() string {
+// detectDevServers finds the dev servers the agent started by trying
+// the common web development ports. They all answer for a machine with
+// several projects with a server up; Zut can see which ports are
+// listening, not which project each port serves.
+func detectDevServers() []string {
 	candidates := []int{5173, 5174, 5175, 3000, 3001, 8080, 8000, 8081}
+	var out []string
 	for _, port := range candidates {
 		client := &http.Client{Timeout: 400 * time.Millisecond}
 		req, err := http.NewRequest("GET", fmt.Sprintf("http://127.0.0.1:%d/", port), nil)
@@ -52,16 +53,30 @@ func detectDevServer() string {
 		}
 		io.Copy(io.Discard, resp.Body)
 		resp.Body.Close()
-		return fmt.Sprintf("http://127.0.0.1:%d", port)
+		out = append(out, fmt.Sprintf("http://127.0.0.1:%d", port))
 	}
-	return previewURL
+	return out
 }
 
-// openPreview shows the web preview in a tab, focusing it if open,
-// reloading its page so a dev server that came up after the first try
-// works too.
+// openPreview shows the web preview in a tab. Repeated presses cycle
+// through the dev servers that answered, so Ctrl+L again shows the one
+// next to the last.
 func (a *app) openPreview() {
-	url := detectDevServer()
+	servers := detectDevServers()
+	if len(servers) == 0 {
+		servers = []string{previewURL}
+	}
+	idx := 0
+	if a.previewLast != "" {
+		for i, s := range servers {
+			if s == a.previewLast {
+				idx = (i + 1) % len(servers)
+				break
+			}
+		}
+	}
+	url := servers[idx]
+	a.previewLast = url
 	for _, col := range a.cols {
 		for i, t := range col.tabs {
 			if t.preview != nil {
@@ -78,6 +93,7 @@ func (a *app) openPreview() {
 	a.addTab(col, at, &colTab{preview: &previewView{url: url}})
 	a.activate(col, at, true)
 	a.rememberTabs()
+	a.tell(note{message: "Preview: " + url})
 }
 
 // previewViewUI draws the tab of the web preview, creating its web view

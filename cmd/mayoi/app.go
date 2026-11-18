@@ -387,6 +387,9 @@ type app struct {
 	asks       []*confirm // the questions asked in the background, waiting their turn
 	signin     *signin
 	diagram    *diagramOverlay // a preview's diagram shown over the window
+	// previewLast is the URL the preview tab showed last, so the preview
+	// cycling through the dev servers it finds knows where to start.
+	previewLast string
 	// syncOpen shows the account's panel above its part of the status
 	// bar, and tickAt is when a countdown shown repaints next.
 	syncOpen bool
