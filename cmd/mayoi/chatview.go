@@ -2,17 +2,26 @@ package main
 
 import (
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"math"
+	"net/http"
+	"os"
+	"path/filepath"
 	"strings"
 	"time"
 
+	"github.com/egoist/mygo"
 	"github.com/egoist/mygo/ui"
 
 	"mayoi/internal/opencode"
 	"mayoi/locales"
 )
+
+// chatSystemHint is appended to every prompt the pane sends: it teaches
+// the agent where it runs and what the preview tab is.
+const chatSystemHint = `You run inside Zut, a native IDE for this project. The app has a preview tab (Ctrl+L, "Open Preview") that shows the running web app: it probes common dev-server ports (5173, 5174, 5175, 3000, 3001, 8080, 8000, 8081) and shows whatever responds, and it reloads when the user presses Ctrl+L again. When you start a server for the app to look at, bind the one of those ports the user can open, and tell them to press Ctrl+L to preview it.`
 
 // chatRow is one bubble of the transcript: the user's prompt or the
 // agent's turn.
@@ -54,6 +63,14 @@ type chatAsk struct {
 	decided string // "" | "once" | "always" | "reject"
 }
 
+// chatAttachment is a file staged in the composer: presented as a chip,
+// sent as a file part of the next prompt.
+type chatAttachment struct {
+	name string
+	mime string
+	uri  string // data:<mime>;base64,<payload>
+}
+
 type chatState struct {
 	sessionID     string
 	model         opencode.Model
@@ -70,14 +87,18 @@ type chatState struct {
 	composer string
 	input    ui.Handle
 	scroll   ui.ScrollState
+	// attachments are the files staged in the composer, ready to go with
+	// the next prompt.
+	attachments []chatAttachment
 
 	// cancel stops the events pump of the turn running, if any.
-	cancel context.CancelFunc
+	cancel    context.CancelFunc
 	busySince time.Time
 }
 
 func (st *chatState) reset(a *app) {
 	st.sessionID, st.rows, st.ask = "", nil, nil
+	st.attachments = nil
 	st.busy = false
 	st.busySince = time.Time{}
 	if st.cancel != nil {
@@ -92,7 +113,7 @@ func (st *chatState) reset(a *app) {
 // the pane follows it on the event bus.
 func (st *chatState) send(a *app) {
 	text := strings.TrimSpace(st.composer)
-	if text == "" || st.busy {
+	if (text == "" && len(st.attachments) == 0) || st.busy {
 		return
 	}
 	if !st.hasModel {
@@ -101,6 +122,9 @@ func (st *chatState) send(a *app) {
 		return
 	}
 	dir := a.folder()
+	attachments := st.attachments
+	st.attachments = nil
+	system := chatSystemHint
 	st.busy = true
 	st.busySince = time.Now()
 	st.composer = ""
@@ -122,7 +146,11 @@ func (st *chatState) send(a *app) {
 			sid = newSID
 			a.post(func() { st.sessionID = newSID })
 		}
-		if err := cl.Prompt(ctx, sid, text, providerID, modelID); err != nil {
+		parts := []opencode.MessagePart{{Type: "text", Text: text}}
+		for _, at := range attachments {
+			parts = append(parts, opencode.MessagePart{Type: "file", Mime: at.mime, URL: at.uri, Filename: at.name})
+		}
+		if err := cl.PromptWith(ctx, sid, parts, system, providerID, modelID); err != nil {
 			a.post(func() { st.fail(a, err) })
 			return
 		}
@@ -405,6 +433,112 @@ func clip(s string, max int) string {
 	return string(r[:max]) + "…"
 }
 
+// chatAttachmentChips renders the staged files above the composer, one
+// pill each with its name and a remove button.
+func (a *app) chatAttachmentChips(c *ui.Context) {
+	p, st := a.pal, &a.chat
+	ui.Row(c).Gap(5).AlignItems(ui.Center).Children(func() {
+		for i := range st.attachments {
+			at := &st.attachments[i]
+			icon := iconFileText
+			if len(at.mime) >= 6 && at.mime[:6] == "image/" {
+				icon = iconImage
+			}
+			pill := ui.Row(c).Height(22).Padding(0, 4, 0, 8).Gap(5).Radius(11).
+				Background(p.hover).AlignItems(ui.Center).Children(func() {
+				ui.Icon(c, icon).FontSize(11).TextColor(p.muted)
+				ui.Text(c, clip(at.name, 22)).FontSize(10.5).TextColor(p.text).SingleLine()
+			})
+			pill.Children(func() {
+				b := ui.ButtonBase(c.Key("chat-attach-x")).Size(16, 16).Radius(8).
+					Justify(ui.Center).AlignItems(ui.Center).Label(locales.ChatRemove()).Tooltip(locales.ChatRemove())
+				b.Children(func() { ui.Text(c, "✕").FontSize(9).TextColor(p.muted) })
+				if b.Clicked() {
+					st.attachments = append(st.attachments[:i], st.attachments[i+1:]...)
+					a.invalidate()
+				}
+			})
+		}
+	})
+}
+
+// chatPickAttachments opens the native file dialog; the chosen files
+// land in the composer, ready to go with the next prompt.
+func (a *app) chatPickAttachments() {
+	go func() {
+		paths, err := mygo.Dialog.Open(mygo.OpenDialogOptions{
+			Title:    locales.ChatAttach(),
+			Multiple: true,
+		})
+		if err != nil || len(paths) == 0 {
+			return
+		}
+		var atts []chatAttachment
+		for _, path := range paths {
+			fi, err := os.Stat(path)
+			if err != nil {
+				continue
+			}
+			if fi.Size() > 4<<20 {
+				a.post(func() { a.fail("%s", locales.ChatTooBig(filepath.Base(path))) })
+				continue
+			}
+			data, err := os.ReadFile(path)
+			if err != nil {
+				continue
+			}
+			mime := mimeType(path, data)
+			atts = append(atts, chatAttachment{
+				name: filepath.Base(path),
+				mime: mime,
+				uri:  "data:" + mime + ";base64," + base64.StdEncoding.EncodeToString(data),
+			})
+		}
+		if len(atts) == 0 {
+			return
+		}
+		a.post(func() {
+			st := &a.chat
+			st.attachments = append(st.attachments, atts...)
+			a.invalidate()
+		})
+	}()
+}
+
+// mimeType guesses a MIME type from the extension first, then the bytes.
+func mimeType(path string, data []byte) string {
+	ext := strings.ToLower(filepath.Ext(path))
+	switch ext {
+	case ".png":
+		return "image/png"
+	case ".jpg", ".jpeg":
+		return "image/jpeg"
+	case ".gif":
+		return "image/gif"
+	case ".webp":
+		return "image/webp"
+	case ".svg":
+		return "image/svg+xml"
+	case ".pdf":
+		return "application/pdf"
+	case ".md", ".markdown":
+		return "text/markdown"
+	case ".json":
+		return "application/json"
+	case ".txt", ".log":
+		return "text/plain"
+	case ".go":
+		return "text/x-go"
+	case ".ts", ".tsx", ".js", ".jsx":
+		return "text/plain"
+	case ".html":
+		return "text/html"
+	case ".css":
+		return "text/css"
+	}
+	return http.DetectContentType(data)
+}
+
 // chatSpinner shows something is happening while a turn runs: a glyph
 // walking through its steps and the seconds the turn has taken.
 func (a *app) chatSpinner(c *ui.Context) {
@@ -463,6 +597,10 @@ func (a *app) chatView(c *ui.Context) {
 					st.showMenu = !st.showMenu
 				}
 			}
+			pv := a.iconButton(c, iconEye, locales.ChatPreview(), false)
+			if pv.Clicked() {
+				a.openPreview()
+			}
 			if st.busy {
 				a.chatSpinner(c)
 			}
@@ -494,39 +632,52 @@ func (a *app) chatView(c *ui.Context) {
 			})
 		})
 
-		// The composer.
+		// The composer, with the staged files above it when there are
+		// any.
 		ui.Box(c).Shrink(0).BorderWidth(1, 0, 0, 0).BorderColor(p.border).
 			Padding(6, 8, 10, 8).Background(p.chrome).Children(func() {
-			field := ui.Row(c).MinHeight(54).Radius(8).
-				Background(p.editor).Border(1, p.border).Padding(4, 6).AlignItems(ui.Center).Gap(4)
-			field.Children(func() {
-				area := a.textKeys(ui.TextAreaBase(c.Key("chat-prompt"), &st.composer)).
-					Grow(1).Lines(2, 8).MinWidth(0).FontSize(12.5).Padding(2).
-					Placeholder(locales.ChatPlaceholder()).Label(locales.ChatPlaceholder())
-				area.Bind(&st.input)
-				if area.Shortcut(ui.Ctrl, ui.KeyEnter) || area.Shortcut(ui.Cmd, ui.KeyEnter) {
-					st.send(a)
-					return
+			ui.Column(c).Gap(6).Children(func() {
+				if len(st.attachments) > 0 {
+					a.chatAttachmentChips(c)
 				}
-				if st.busy {
-					stop := ui.ButtonBase(c.Key("chat-stop")).Size(26, 26).Radius(8).
-						Justify(ui.Center).AlignItems(ui.Center).Label(locales.ChatStop()).Tooltip(locales.ChatStop())
-					stop.Children(func() {
-						ui.Icon(c, ui.MustParseSVG(lucideSVG(`<rect x="9" y="9" width="6" height="6" rx="1"/>`))).FontSize(13).TextColor(p.muted)
-					})
-					if stop.Clicked() && st.cancel != nil {
-						st.cancel()
-						st.busy = false
-						st.finishTurn(a)
+				field := ui.Row(c).MinHeight(54).Radius(8).
+					Background(p.editor).Border(1, p.border).Padding(4, 6).AlignItems(ui.Center).Gap(4)
+				field.Children(func() {
+					attach := ui.ButtonBase(c.Key("chat-attach")).Size(26, 26).Radius(8).
+						Justify(ui.Center).AlignItems(ui.Center).Label(locales.ChatAttach()).Tooltip(locales.ChatAttach())
+					attach.Children(func() { ui.Icon(c, iconPaperclip).FontSize(15).TextColor(p.muted) })
+					if attach.Clicked() {
+						a.chatPickAttachments()
 					}
-				} else {
-					send := ui.ButtonBase(c.Key("chat-send")).Size(26, 26).Radius(8).
-						Justify(ui.Center).AlignItems(ui.Center).Label(locales.ChatSend()).Tooltip(locales.ChatSend())
-					send.Children(func() { ui.Icon(c, iconSend).FontSize(15).TextColor(p.accent) })
-					if send.Clicked() {
+					area := a.textKeys(ui.TextAreaBase(c.Key("chat-prompt"), &st.composer)).
+						Grow(1).Lines(2, 8).MinWidth(0).FontSize(12.5).Padding(2).
+						Placeholder(locales.ChatPlaceholder()).Label(locales.ChatPlaceholder())
+					area.Bind(&st.input)
+					if area.Shortcut(ui.Ctrl, ui.KeyEnter) || area.Shortcut(ui.Cmd, ui.KeyEnter) {
 						st.send(a)
+						return
 					}
-				}
+					if st.busy {
+						stop := ui.ButtonBase(c.Key("chat-stop")).Size(26, 26).Radius(8).
+							Justify(ui.Center).AlignItems(ui.Center).Label(locales.ChatStop()).Tooltip(locales.ChatStop())
+						stop.Children(func() {
+							ui.Icon(c, ui.MustParseSVG(lucideSVG(`<rect x="9" y="9" width="6" height="6" rx="1"/>`))).FontSize(13).TextColor(p.muted)
+						})
+						if stop.Clicked() && st.cancel != nil {
+							st.cancel()
+							st.busy = false
+							st.busySince = time.Time{}
+							st.finishTurn(a)
+						}
+					} else {
+						send := ui.ButtonBase(c.Key("chat-send")).Size(26, 26).Radius(8).
+							Justify(ui.Center).AlignItems(ui.Center).Label(locales.ChatSend()).Tooltip(locales.ChatSend())
+						send.Children(func() { ui.Icon(c, iconSend).FontSize(15).TextColor(p.accent) })
+						if send.Clicked() {
+							st.send(a)
+						}
+					}
+				})
 			})
 		})
 	})
@@ -617,7 +768,7 @@ func (a *app) chatApproval(c *ui.Context, ask *chatAsk) {
 						{locales.ChatReject(), "reject"},
 					} {
 						label, reply := kv[0], kv[1]
-						b := ui.ButtonBase(c.Key("chat-perm-" + reply)).Height(22).Padding(0, 9).Radius(6).
+						b := ui.ButtonBase(c.Key("chat-perm-"+reply)).Height(22).Padding(0, 9).Radius(6).
 							Label(label).Border(1, p.border).Justify(ui.Center).AlignItems(ui.Center)
 						if reply == "reject" {
 							b.Background(p.editor)

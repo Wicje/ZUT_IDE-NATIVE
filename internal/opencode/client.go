@@ -215,52 +215,6 @@ func (c *Client) NewSession(ctx context.Context, dir string) (string, error) {
 	return raw.ID, nil
 }
 
-// Prompt sends a prompt to a session without waiting for the reply; the
-// server streams progress on the event bus (see Events).
-func (c *Client) Prompt(ctx context.Context, sessionID, text, providerID, modelID string) error {
-	type payload struct {
-		Parts []struct {
-			Type string `json:"type"`
-			Text string `json:"text"`
-		} `json:"parts"`
-		Model *struct {
-			ProviderID string `json:"providerID"`
-			ModelID    string `json:"modelID"`
-		} `json:"model,omitempty"`
-	}
-	body := payload{
-		Parts: []struct {
-			Type string `json:"type"`
-			Text string `json:"text"`
-		}{{Type: "text", Text: text}},
-	}
-	if providerID != "" && modelID != "" {
-		body.Model = &struct {
-			ProviderID string `json:"providerID"`
-			ModelID    string `json:"modelID"`
-		}{providerID, modelID}
-	}
-	b, err := json.Marshal(body)
-	if err != nil {
-		return err
-	}
-	req, err := http.NewRequestWithContext(ctx, "POST", c.base+"/session/"+sessionID+"/prompt_async", bytes.NewReader(b))
-	if err != nil {
-		return err
-	}
-	req.Header.Set("Content-Type", "application/json")
-	resp, err := c.hc.Do(req)
-	if err != nil {
-		return err
-	}
-	io.Copy(io.Discard, resp.Body)
-	resp.Body.Close()
-	if !ok2xx(resp.StatusCode) {
-		return fmt.Errorf("opencode server answered %d", resp.StatusCode)
-	}
-	return nil
-}
-
 // Permission is a pending approval of a tool the agent wants to run.
 type Permission struct {
 	ID         string
@@ -538,19 +492,19 @@ func escape(s string) string {
 // Message is a message of a session, with its parts inline: what the
 // agent said, did and finished.
 type Message struct {
-	Info MessageInfo `json:"info"`
-	Parts []Part    `json:"parts"`
+	Info  MessageInfo `json:"info"`
+	Parts []Part      `json:"parts"`
 }
 
 // MessageInfo is who spoke and when.
 type MessageInfo struct {
-	ID        string          `json:"id"`
-	Role      string          `json:"role"`
-	SessionID string          `json:"sessionID"`
-	ParentID  string          `json:"parentID"`
-	ProviderID string         `json:"providerID"`
-	ModelID   string          `json:"modelID"`
-	Time      *struct {
+	ID         string `json:"id"`
+	Role       string `json:"role"`
+	SessionID  string `json:"sessionID"`
+	ParentID   string `json:"parentID"`
+	ProviderID string `json:"providerID"`
+	ModelID    string `json:"modelID"`
+	Time       *struct {
 		Created   int64 `json:"created"`
 		Completed int64 `json:"completed"`
 	} `json:"time"`
@@ -575,6 +529,56 @@ type Part struct {
 		Title  string          `json:"title"`
 		Input  json.RawMessage `json:"input"`
 	} `json:"state"`
+}
+
+// MessagePart is a part of a prompt as it goes on the wire: either
+// text, or a file as a data: URI.
+type MessagePart struct {
+	Type     string `json:"type"`
+	Text     string `json:"text,omitempty"`
+	Mime     string `json:"mime,omitempty"`
+	URL      string `json:"url,omitempty"`
+	Filename string `json:"filename,omitempty"`
+}
+
+// PromptWith sends a turn of the given parts: the text of the prompt and
+// any attachments, images and files included. system, when not empty, is
+// sent with the request; empty keeps the agent's default prompt.
+func (c *Client) PromptWith(ctx context.Context, sessionID string, parts []MessagePart, system, providerID, modelID string) error {
+	type payload struct {
+		Parts  []MessagePart `json:"parts"`
+		System string         `json:"system,omitempty"`
+		Model  *struct {
+			ProviderID string `json:"providerID"`
+			ModelID    string `json:"modelID"`
+		} `json:"model,omitempty"`
+	}
+	body := payload{Parts: parts, System: system}
+	if providerID != "" && modelID != "" {
+		body.Model = &struct {
+			ProviderID string `json:"providerID"`
+			ModelID    string `json:"modelID"`
+		}{providerID, modelID}
+	}
+	b, err := json.Marshal(body)
+	if err != nil {
+		return err
+	}
+	req, err := http.NewRequestWithContext(ctx, "POST", c.base+"/session/"+sessionID+"/prompt_async", bytes.NewReader(b))
+	if err != nil {
+		return err
+	}
+	req.Header.Set("Content-Type", "application/json")
+	resp, err := c.hc.Do(req)
+	if err != nil {
+		return err
+	}
+	io.Copy(io.Discard, resp.Body)
+	resp.Body.Close()
+	if !ok2xx(resp.StatusCode) {
+		return fmt.Errorf("opencode server answered %d", resp.StatusCode)
+	}
+	return nil
 }
 
 // Messages lists the messages of a session, oldest first: what the user

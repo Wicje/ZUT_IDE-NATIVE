@@ -2195,5 +2195,9 @@
   "chatReject": "Reject",
   "chatApprovedOnce": "Approved once",
   "chatApprovedAlways": "Always allowed",
-  "chatRejected": "Rejected"
+  "chatRejected": "Rejected",
+  "chatAttach": "Attach file",
+  "chatRemove": "Remove attachment",
+  "chatTooBig": "File too big (4 MB max): {name}",
+  "chatPreview": "Open Preview"
 }

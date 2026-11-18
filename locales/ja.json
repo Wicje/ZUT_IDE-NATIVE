@@ -1967,5 +1967,9 @@
   "chatReject": "拒否",
   "chatApprovedOnce": "許可しました",
   "chatApprovedAlways": "常に許可しました",
-  "chatRejected": "拒否しました"
+  "chatRejected": "拒否しました",
+  "chatAttach": "ファイルを添付",
+  "chatRemove": "添付を削除",
+  "chatTooBig": "ファイルが大きすぎます（4 MB まで）：{name}",
+  "chatPreview": "プレビューを開く"
 }

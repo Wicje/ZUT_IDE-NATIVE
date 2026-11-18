@@ -19889,3 +19889,43 @@ func ChatRejected() string { return In(i18n.Locale()).ChatRejected() }
 func (msgs Messages) ChatRejected() string {
 	return Catalog.Format(msgs.locale, "chatRejected", nil)
 }
+
+// ChatAttach says "Attach file"
+// in the language the app shows.
+func ChatAttach() string { return In(i18n.Locale()).ChatAttach() }
+
+// ChatAttach says "Attach file"
+// in the language of msgs.
+func (msgs Messages) ChatAttach() string {
+	return Catalog.Format(msgs.locale, "chatAttach", nil)
+}
+
+// ChatRemove says "Remove attachment"
+// in the language the app shows.
+func ChatRemove() string { return In(i18n.Locale()).ChatRemove() }
+
+// ChatRemove says "Remove attachment"
+// in the language of msgs.
+func (msgs Messages) ChatRemove() string {
+	return Catalog.Format(msgs.locale, "chatRemove", nil)
+}
+
+// ChatTooBig says "File too big (4 MB max): {name}"
+// in the language the app shows.
+func ChatTooBig(name string) string { return In(i18n.Locale()).ChatTooBig(name) }
+
+// ChatTooBig says "File too big (4 MB max): {name}"
+// in the language of msgs.
+func (msgs Messages) ChatTooBig(name string) string {
+	return Catalog.Format(msgs.locale, "chatTooBig", map[string]any{"name": name})
+}
+
+// ChatPreview says "Open Preview"
+// in the language the app shows.
+func ChatPreview() string { return In(i18n.Locale()).ChatPreview() }
+
+// ChatPreview says "Open Preview"
+// in the language of msgs.
+func (msgs Messages) ChatPreview() string {
+	return Catalog.Format(msgs.locale, "chatPreview", nil)
+}

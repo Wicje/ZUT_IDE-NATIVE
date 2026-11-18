@@ -1967,5 +1967,9 @@
   "chatReject": "拒绝",
   "chatApprovedOnce": "已允许一次",
   "chatApprovedAlways": "已始终允许",
-  "chatRejected": "已拒绝"
+  "chatRejected": "已拒绝",
+  "chatAttach": "附加文件",
+  "chatRemove": "移除附件",
+  "chatTooBig": "文件过大（4 MB 上限）：{name}",
+  "chatPreview": "打开预览"
 }
