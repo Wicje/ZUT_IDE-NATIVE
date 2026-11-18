@@ -2208,5 +2208,6 @@
   "chatAdded": "added",
   "chatModified": "modified",
   "chatDeleted": "deleted",
-  "chatModelFilter": "Filter models…"
+  "chatModelFilter": "Filter models…",
+  "chatFreeOnly": "Free only"
 }

@@ -20019,3 +20019,13 @@ func ChatModelFilter() string { return In(i18n.Locale()).ChatModelFilter() }
 func (msgs Messages) ChatModelFilter() string {
 	return Catalog.Format(msgs.locale, "chatModelFilter", nil)
 }
+
+// ChatFreeOnly says "Free only"
+// in the language the app shows.
+func ChatFreeOnly() string { return In(i18n.Locale()).ChatFreeOnly() }
+
+// ChatFreeOnly says "Free only"
+// in the language of msgs.
+func (msgs Messages) ChatFreeOnly() string {
+	return Catalog.Format(msgs.locale, "chatFreeOnly", nil)
+}

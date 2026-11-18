@@ -96,8 +96,9 @@ type chatState struct {
 	busySince time.Time
 	// filter narrows the model menu to a typed query; filterRef is the
 	// filter's input.
-	filter    string
-	filterRef ui.Handle
+	filter       string
+	filterRef    ui.Handle
+	showFreeOnly bool
 
 	// snapshot is what the workspace looked like before this turn ran;
 	// taken right before the agent is sent the prompt. changed is
@@ -496,9 +497,16 @@ func (a *app) chatRevertBanner(c *ui.Context) {
 				a.invalidate()
 			}
 		})
-		for _, row := range rows {
+		// Show the first few; the rest are named in the summary so
+		// the banner stays small.
+		const shown = 4
+		slice := rows
+		if len(slice) > shown {
+			slice = slice[:shown]
+		}
+		for _, row := range slice {
 			raw := row
-			ui.Row(c).Gap(6).AlignItems(ui.Center).MinHeight(16).Children(func() {
+			ui.Row(c).Gap(6).AlignItems(ui.Center).MinHeight(15).Children(func() {
 				badge := raw.Status
 				col := p.muted
 				switch raw.Status {
@@ -510,9 +518,9 @@ func (a *app) chatRevertBanner(c *ui.Context) {
 					badge, col = "D", p.dangerFg
 				}
 				ui.Text(c, badge).FontSize(9).FontWeight(700).TextColor(col).Padding(0, 2)
-				name := clip(raw.Path, 48)
-				Btn := ui.ButtonBase(c.Key("chat-revert-open-"+raw.Path)).Height(16).AlignItems(ui.Center).
-					Justify(ui.Start).Radius(4).Padding(0, 4).Children(func() {
+				name := clip(raw.Path, 52)
+				Btn := ui.ButtonBase(c.Key("chat-revert-open-"+raw.Path)).Height(15).AlignItems(ui.Center).
+					Justify(ui.Start).Radius(3).Padding(0, 3).Children(func() {
 					ui.Text(c, name).FontSize(10.5).TextColor(p.text).SingleLine().Grow(1)
 				})
 				if Btn.Hovered() {
@@ -526,6 +534,9 @@ func (a *app) chatRevertBanner(c *ui.Context) {
 					}
 				}
 			})
+		}
+		if len(rows) > shown {
+			ui.Text(c, fmt.Sprintf("+ %d more", len(rows)-shown)).FontSize(10).TextColor(p.muted).Padding(2, 2)
 		}
 	})
 }
@@ -898,10 +909,24 @@ func (a *app) chatApproval(c *ui.Context, ask *chatAsk) {
 func (a *app) chatModelMenu(c *ui.Context) {
 	p, st := a.pal, &a.chat
 	ui.Column(c).BorderWidth(0, 0, 1, 0).BorderColor(p.border).Padding(3, 6, 6, 6).Children(func() {
-		f := a.searchField(c, "chat-model-filter", &st.filter, locales.ChatModelFilter(), &st.filterRef, nil)
-		_ = f
+		ui.Row(c).Gap(4).AlignItems(ui.Center).Children(func() {
+			f := a.searchField(c, "chat-model-filter", &st.filter, locales.ChatModelFilter(), &st.filterRef, nil)
+			_ = f
+			free := ui.ButtonBase(c.Key("chat-free-toggle")).Height(22).Padding(0, 8).Radius(5).
+				Label(locales.ChatFreeOnly()).Justify(ui.Center).AlignItems(ui.Center)
+			if st.showFreeOnly {
+				free.Background(p.accentDim.Alpha(0.55))
+			}
+			if free.Clicked() {
+				st.showFreeOnly = !st.showFreeOnly
+				a.invalidate()
+			}
+		})
 		filter := strings.ToLower(strings.TrimSpace(st.filter))
 		matches := func(m opencode.Model) bool {
+			if st.showFreeOnly && !m.Free {
+				return false
+			}
 			if filter == "" {
 				return true
 			}
