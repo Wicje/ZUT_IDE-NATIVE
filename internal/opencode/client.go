@@ -8,12 +8,16 @@ import (
 	"bufio"
 	"bytes"
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
 	"net/http"
+	neturl "net/url"
+
 	"os"
+	"path/filepath"
 	"sort"
 	"strings"
 	"time"
@@ -524,11 +528,74 @@ type Part struct {
 	Text      string `json:"text"`
 	Tool      string `json:"tool"`
 	CallID    string `json:"callID"`
+	Mime      string `json:"mime"`
+	Filename  string `json:"filename"`
+	URL       string `json:"url"`
+
+	// image reports whether the part is an inline image we can render,
+	// for the chat pane's image rows and seeds.
 	State     *struct {
 		Status string          `json:"status"`
 		Title  string          `json:"title"`
 		Input  json.RawMessage `json:"input"`
 	} `json:"state"`
+}
+
+// Image reports whether the part is an inline image, returning the
+// decoded bytes, its MIME type and its filename.
+func (p Part) Image() (img chatImage, ok bool) {
+	if p.Mime == "" || !strings.HasPrefix(p.Mime, "image/") {
+		return img, false
+	}
+	data, ok := decodeDataURI(p.URL)
+	if !ok && p.URL != "" {
+		data, ok = readLocalImage(p.URL)
+	}
+	return chatImage{Mime: p.Mime, Data: data}, ok
+}
+
+// chatImage is an inline image from the agent.
+type chatImage struct {
+	Mime string
+	Data []byte
+}
+
+// decodeDataURI decodes a data:<mime>;base64,<payload> URL.
+func decodeDataURI(u string) ([]byte, bool) {
+	if !strings.HasPrefix(u, "data:") {
+		return nil, false
+	}
+	comma := strings.Index(u, ",")
+	if comma < 0 {
+		return nil, false
+	}
+	meta, body := u[5:comma], u[comma+1:]
+	if strings.Contains(meta, "base64") {
+		b, err := base64.StdEncoding.DecodeString(body)
+		if err != nil {
+			return nil, false
+		}
+		return b, true
+	}
+	r, err := neturl.QueryUnescape(body)
+	if err == nil {
+		return []byte(r), true
+	}
+	return nil, false
+}
+
+// readLocalImage reads /absolute/path or file:///absolute/path and returns
+// the bytes. Only local absolute paths; the chat pane has no other URL.
+func readLocalImage(u string) ([]byte, bool) {
+	path := strings.TrimPrefix(u, "file://")
+	if !filepath.IsAbs(path) {
+		return nil, false
+	}
+	b, err := os.ReadFile(path)
+	if err != nil {
+		return nil, false
+	}
+	return b, true
 }
 
 // MessagePart is a part of a prompt as it goes on the wire: either

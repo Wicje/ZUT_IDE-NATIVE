@@ -20029,3 +20029,33 @@ func ChatFreeOnly() string { return In(i18n.Locale()).ChatFreeOnly() }
 func (msgs Messages) ChatFreeOnly() string {
 	return Catalog.Format(msgs.locale, "chatFreeOnly", nil)
 }
+
+// ChatHistory says "Session history"
+// in the language the app shows.
+func ChatHistory() string { return In(i18n.Locale()).ChatHistory() }
+
+// ChatHistory says "Session history"
+// in the language of msgs.
+func (msgs Messages) ChatHistory() string {
+	return Catalog.Format(msgs.locale, "chatHistory", nil)
+}
+
+// ChatHistoryRecent says "Recent sessions"
+// in the language the app shows.
+func ChatHistoryRecent() string { return In(i18n.Locale()).ChatHistoryRecent() }
+
+// ChatHistoryRecent says "Recent sessions"
+// in the language of msgs.
+func (msgs Messages) ChatHistoryRecent() string {
+	return Catalog.Format(msgs.locale, "chatHistoryRecent", nil)
+}
+
+// ChatNoSessions says "No sessions yet"
+// in the language the app shows.
+func ChatNoSessions() string { return In(i18n.Locale()).ChatNoSessions() }
+
+// ChatNoSessions says "No sessions yet"
+// in the language of msgs.
+func (msgs Messages) ChatNoSessions() string {
+	return Catalog.Format(msgs.locale, "chatNoSessions", nil)
+}

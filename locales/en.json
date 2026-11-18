@@ -2209,5 +2209,8 @@
   "chatModified": "modified",
   "chatDeleted": "deleted",
   "chatModelFilter": "Filter models…",
-  "chatFreeOnly": "Free only"
+  "chatFreeOnly": "Free only",
+  "chatHistory": "Session history",
+  "chatHistoryRecent": "Recent sessions",
+  "chatNoSessions": "No sessions yet"
 }

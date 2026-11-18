@@ -28,6 +28,7 @@ const chatSystemHint = `You run inside Zut, a native IDE for this project. The a
 type chatRow struct {
 	role   string // "user" | "assistant"
 	parts  []chatPart
+	images []chatImage
 	tools  []chatTool
 	status string // "streaming" | "done" | "error"
 	err    string
@@ -37,6 +38,11 @@ type chatPart struct {
 	id   string
 	typ  string // "text" | "reasoning"
 	text string
+}
+
+type chatImage struct {
+	mime string
+	data []byte
 }
 
 type chatTool struct {
@@ -99,6 +105,11 @@ type chatState struct {
 	filter       string
 	filterRef    ui.Handle
 	showFreeOnly bool
+
+	// sessions lists the recent sessions of this folder, so the pane
+	// can offer a history dropdown; pickSession shows the menu.
+	pickSession bool
+	sessions    []opencode.Session
 
 	// snapshot is what the workspace looked like before this turn ran;
 	// taken right before the agent is sent the prompt. changed is
@@ -231,6 +242,18 @@ type turnState struct {
 	rows map[string]int
 }
 
+// upsertPlain single-shot sets the text for id, creating the part if it is
+// missing and replacing it if it exists.
+func upsertPlain(parts []chatPart, id, text string) []chatPart {
+	for i, p := range parts {
+		if p.id == id {
+			parts[i].text = text
+			return parts
+		}
+	}
+	return append(parts, chatPart{id: id, typ: "text", text: text})
+}
+
 // filterPending keeps the permissions of this session.
 func filterPending(pps []opencode.Permission, id string) []opencode.Permission {
 	out := pps[:0]
@@ -251,6 +274,34 @@ func (a *app) applyTurnMessages(_ *app, turn *turnState, sid string, ms []openco
 		return
 	}
 	for _, m := range ms {
+		if m.Info.Role == "user" {
+			idx, ok := turn.rows[m.Info.ID]
+			if !ok {
+				idx = len(st.rows)
+				turn.rows[m.Info.ID] = idx
+				st.rows = append(st.rows, chatRow{role: "user", status: "done"})
+			}
+			r := &st.rows[idx]
+			var text string
+			var images []chatImage
+			for _, p := range m.Parts {
+				switch p.Type {
+				case "text":
+					if p.Text != "" {
+						text = p.Text
+					}
+				case "file":
+					if img, ok := p.Image(); ok {
+						images = append(images, chatImage{mime: img.Mime, data: img.Data})
+					}
+				}
+			}
+			if text != "" {
+				r.parts = upsertPlain(r.parts, "u"+m.Info.ID, text)
+			}
+			r.images = images
+			continue
+		}
 		if m.Info.Role != "assistant" {
 			continue
 		}
@@ -420,8 +471,16 @@ func (a *app) loadChatModelsOnce() {
 	}
 	st.modelsLoading, st.modelsErr, st.modelsAttempt = true, "", time.Now()
 	go func() {
-		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+		ctx, cancel := context.WithTimeout(context.Background(), 35*time.Second)
 		defer cancel()
+		if err := ensureOpencodeServer(ctx); err != nil {
+			a.post(func() {
+				st.modelsLoading = false
+				st.modelsErr = err.Error()
+				a.invalidate()
+			})
+			return
+		}
 		ms, err := opencode.New().Models(ctx)
 		a.post(func() {
 			st.modelsLoading = false
@@ -712,6 +771,33 @@ func (a *app) chatView(c *ui.Context) {
 			if st.busy {
 				a.chatSpinner(c)
 			}
+			hist := a.iconButton(c, iconHistory, locales.ChatHistory(), st.pickSession)
+			if hist.Clicked() {
+				st.pickSession = !st.pickSession
+				if st.pickSession {
+					go func() {
+						ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+						defer cancel()
+						ss, err := opencode.New().Sessions(ctx, 200)
+						if err == nil {
+							folder := a.folder()
+							var keep []opencode.Session
+							for _, s := range ss {
+								if s.Dir == folder || s.Dir == "" {
+									keep = append(keep, s)
+									if len(keep) >= 12 {
+										break
+									}
+								}
+							}
+							a.post(func() {
+								st.sessions = keep
+								a.invalidate()
+							})
+						}
+					}()
+				}
+			}
 			if b := a.iconButton(c, iconPlus, locales.ChatNewChat(), false); b.Clicked() {
 				st.reset(a)
 			}
@@ -720,6 +806,9 @@ func (a *app) chatView(c *ui.Context) {
 		// The model menu, right under the header, until the user picks.
 		if st.showMenu {
 			a.chatModelMenu(c)
+		}
+		if st.pickSession {
+			a.chatSessionMenu(c)
 		}
 
 		// The writer: the transcript.
@@ -848,6 +937,15 @@ func (a *app) chatBubble(c *ui.Context, r *chatRow) {
 					ui.Text(c, clip(line, 200)).FontSize(10.5).TextColor(p.muted).SingleLine().Grow(1)
 				})
 			}
+			// Inline images the agent sent or the user attached — decoded
+			// here each frame; the bytes are bounded by the attachment cap.
+			for i, img := range r.images {
+				if bmp, err := ui.DecodeBitmap(img.data); err == nil && bmp != nil {
+					ui.Image(c.Key(fmt.Sprintf("chat-img-%d", i)), bmp).MaxHeight(240).Width(220).Radius(6)
+				} else {
+					ui.Text(c, clip(img.mime+" (image)", 40)).FontSize(10.5).TextColor(p.muted).Padding(2, 0)
+				}
+			}
 			if r.err != "" {
 				ui.Text(c, r.err).FontSize(11.5).TextColor(p.dangerFg).Selectable()
 			}
@@ -902,6 +1000,94 @@ func (a *app) chatApproval(c *ui.Context, ask *chatAsk) {
 			}
 		})
 	})
+}
+
+// chatSessionMenu shows the folder's recent sessions; picking one seeds
+// the transcript with the messages of that session.
+func (a *app) chatSessionMenu(c *ui.Context) {
+	p, st := a.pal, &a.chat
+	ui.Column(c).BorderWidth(0, 0, 1, 0).BorderColor(p.border).Padding(3, 6, 6, 6).Children(func() {
+		ui.Text(c, locales.ChatHistoryRecent()).FontSize(9).FontWeight(700).LetterSpacing(0.7).TextColor(p.muted).SingleLine().Padding(0, 4, 3, 4)
+		for _, s := range st.sessions {
+			id, title, folder := s.ID, s.Title, s.Dir
+			if title == "" {
+				title = "Session " + id[:min(12, len(id))]
+			}
+			if len(title) > 60 {
+				title = title[:60] + "…"
+			}
+			b := ui.ButtonBase(c.Key("chat-session-"+id)).Height(28).Padding(0, 6).Gap(8).Radius(5).
+				Justify(ui.Start).AlignItems(ui.Center)
+			if b.Hovered() {
+				b.Background(p.hover)
+			}
+			b.Children(func() {
+				ui.Text(c, title).FontSize(10.5).TextColor(p.text).SingleLine().Grow(1)
+				shown := folder
+				if len(shown) > 40 {
+					shown = shown[:12] + "…" + shown[len(shown)-25:]
+				}
+				u := time.Since(s.Updated)
+				var when string
+				switch {
+				case u < time.Hour:
+					when = fmt.Sprintf("%dm", int(u.Minutes()))
+				case u < 24*time.Hour:
+					when = fmt.Sprintf("%dh", int(u.Hours()))
+				default:
+					when = fmt.Sprintf("%dd", int(u.Hours()/24))
+				}
+				ui.Text(c, shown+"  · "+when).FontSize(9.5).TextColor(p.muted).SingleLine()
+			})
+			if b.Clicked() {
+				seed := func() {
+					sid := id
+					a.pickSessionLoad(a, sid)
+				}
+				go seed()
+				st.pickSession = false
+			}
+		}
+		if len(st.sessions) == 0 {
+			ui.Text(c, locales.ChatNoSessions()).FontSize(10.5).TextColor(p.muted).Padding(4, 8).SingleLine()
+		}
+	})
+}
+
+// pickSessionLoad seeds the transcript with the messages of an old
+// session; used when the user picks a row from the history dropdown.
+func (a *app) pickSessionLoad(_ *app, sid string) {
+	st := &a.chat
+	st.busy = true
+	st.busySince = time.Now()
+	a.invalidate()
+	cl := opencode.New()
+	ctx, cancel := context.WithTimeout(context.Background(), 8*time.Second)
+	defer cancel()
+	ms, err := cl.Messages(ctx, sid)
+	if err != nil {
+		ms = nil
+		a.post(func() { st.fail(a, err) })
+		st.busy = false
+		a.invalidate()
+		return
+	}
+	st.sessionID = sid
+	st.rows = nil
+	st.ask = nil
+	st.snapshot, st.changed = nil, nil
+	if st.cancel != nil {
+		st.cancel()
+		st.cancel = nil
+	}
+	turn := &turnState{rows: map[string]int{}}
+	a.applyTurnMessages(a, turn, sid, ms, nil)
+	st.busy = false
+	st.busySince = time.Time{}
+	if st.scroll.MaxY > 0 {
+		st.scroll.Y = st.scroll.MaxY
+	}
+	a.invalidate()
 }
 
 // chatModelMenu lists the models of the connected providers, the free

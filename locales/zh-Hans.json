@@ -1981,5 +1981,8 @@
   "chatModified": "修改",
   "chatDeleted": "删除",
   "chatModelFilter": "筛选模型…",
-  "chatFreeOnly": "仅免费"
+  "chatFreeOnly": "仅免费",
+  "chatHistory": "会话历史",
+  "chatHistoryRecent": "最近的会话",
+  "chatNoSessions": "还没有会话"
 }
