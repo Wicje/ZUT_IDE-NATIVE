@@ -2305,6 +2305,11 @@ const (
 // between them, need about 175 DIP.
 const scmRemoteRowW = 180
 
+// scmActionTitleW is the narrowest sidebar whose title row still keeps
+// the action button beside the view switches; below it, the action hides
+// as the remote buttons do below scmRemoteRowW.
+const scmActionTitleW = 248
+
 // scmBranchRow is the row at the top of the source control view: the
 // branch, which a click switches, and the buttons of its remote, which
 // say how far it is ahead and behind.

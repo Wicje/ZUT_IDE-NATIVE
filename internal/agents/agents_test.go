@@ -10,6 +10,14 @@ import (
 	"time"
 )
 
+// The OpenCode harness lists its sessions off the running server, not
+// files, so a test that expects an exact count would flake wherever one
+// is running. A dead URL keeps the suite hermetic.
+func TestMain(m *testing.M) {
+	os.Setenv("OPENCODE_BASE_URL", "http://127.0.0.1:9")
+	os.Exit(m.Run())
+}
+
 func write(t *testing.T, path, text string) {
 	t.Helper()
 	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
@@ -291,6 +299,9 @@ func TestUseAddsAgents(t *testing.T) {
 // comes with the next, and late says so.
 func TestSlowListComesLate(t *testing.T) {
 	t.Cleanup(func() { Use(nil) })
+	// The OpenCode harness lists off the running server, not off files;
+	// a dead one keeps this test hermetic.
+	t.Setenv("OPENCODE_BASE_URL", "http://127.0.0.1:9")
 	release := make(chan struct{})
 	Use([]Agent{{ID: "slow.agent", Name: "Slow", List: func(ctx context.Context) ([]Session, error) {
 		select {

@@ -17,6 +17,10 @@ import (
 	"mayoi/locales"
 )
 
+// sidebarNarrowW: below it, the Search switch hides (Search is on the
+// keyboard) when two agent switches sit beside it.
+const sidebarNarrowW = 220
+
 // sidebar is the explorer, the workspace's files in a tree, or the
 // changes to commit, as the switch at its top chooses.
 func (a *app) sidebar(c *ui.Context) {
@@ -24,7 +28,7 @@ func (a *app) sidebar(c *ui.Context) {
 	sb := ui.Column(c).Fill().Background(p.chrome)
 	hovered := sb.Hovered()
 	view := a.window.SidebarView
-	if a.root == "" || view == "sessions" && !a.hasSessions() {
+	if a.root == "" || (view == "sessions" || view == "chat") && !a.hasSessions() {
 		view = ""
 	}
 	if ctx := a.repository(); view == "github" && ctx.githubKnown() && !ctx.onGitHub() {
@@ -32,20 +36,25 @@ func (a *app) sidebar(c *ui.Context) {
 		// repository that is.
 		view = ""
 	}
-	scm, search, sessions, github := view == "git", view == "search", view == "sessions", view == "github"
+	scm, search, sessions, chat, github := view == "git", view == "search", view == "sessions", view == "chat", view == "github"
 	ghSwitch := a.root != "" && (github || a.hasGitHub())
 	pluginView := a.root != "" && a.pluginSidebarView() != ""
 	sb.Children(func() {
 		ui.Row(c).Height(34).Padding(0, 6, 0, 8).Gap(2).AlignItems(ui.Center).Children(func() {
 			if a.root != "" {
-				a.sidebarSwitch(c, iconFiles, a.withKey(locales.SidebarExplorer(), "view.explorer"), !scm && !search && !sessions && !github && !pluginView, 0, a.showExplorer)
-				a.sidebarSwitch(c, iconSearch, a.withKey(locales.SidebarSearch(), "edit.findInFiles"), search, 0, func() { a.showSearch(false) })
+				narrow := a.window.SidebarWidth < sidebarNarrowW
+				exp := !scm && !search && !sessions && !chat && !github && !pluginView
+				a.sidebarSwitch(c, iconFiles, a.withKey(locales.SidebarExplorer(), "view.explorer"), exp, 0, a.showExplorer)
 				a.sidebarSwitch(c, iconBranch, a.withKey(locales.SidebarScm(), "view.scm"), scm, a.changeCount(), a.showSourceControl)
 				if ghSwitch {
 					a.sidebarSwitch(c, iconGitHub, a.withKey(locales.SidebarGitHub(), "view.github"), github, a.githubCount(), a.showGitHub)
 				}
 				if a.hasSessions() {
 					a.sidebarSwitch(c, iconClock, a.withKey(locales.CmdViewSessions(), "view.sessions"), sessions, 0, a.showSessions)
+					a.sidebarSwitch(c, iconAgent, a.withKey(locales.CmdViewChat(), "view.chat"), chat, 0, a.showChat)
+				}
+				if !(narrow && a.hasSessions()) {
+					a.sidebarSwitch(c, iconSearch, a.withKey(locales.SidebarSearch(), "edit.findInFiles"), search, 0, func() { a.showSearch(false) })
 				}
 				a.pluginSwitches(c)
 			}
@@ -63,6 +72,8 @@ func (a *app) sidebar(c *ui.Context) {
 				}
 			case sessions:
 				title = locales.SidebarTitleSessions()
+			case chat:
+				title = locales.SidebarTitleChat()
 			case github:
 				title = locales.SidebarTitleGitHub()
 				if hovered {
@@ -71,16 +82,24 @@ func (a *app) sidebar(c *ui.Context) {
 			case pluginView:
 				title = a.pluginSidebarTitle()
 			}
+			if scm && actions > 0 && a.window.SidebarWidth < scmActionTitleW {
+				// Too narrow for the action beside the switches: it
+				// hides, as the remote buttons do below theirs.
+				actions = 0
+			}
 			// The switches, the gaps, the paddings and the actions' buttons
 			// take the rest of the row.
 			room := a.window.SidebarWidth - 1 - 14 - 6 - float32(actions)*28
 			if a.root != "" {
-				n := float32(3 + len(pluginSlots()))
-				if a.hasSessions() {
-					n++
-				}
+				n := float32(2 + len(pluginSlots())) // Files, Git, plugins
 				if ghSwitch {
 					n++
+				}
+				if a.hasSessions() {
+					n += 2 // Sessions and OpenCode
+				}
+				if !(a.hasSessions() && a.window.SidebarWidth < sidebarNarrowW) {
+					n++ // Search hides below sidebarNarrowW
 				}
 				room -= n*26 + (n-1)*3
 			}
@@ -89,7 +108,9 @@ func (a *app) sidebar(c *ui.Context) {
 			ui.Text(c, title).FontSize(size).FontWeight(600).LetterSpacing(spacing).TextColor(p.muted).Grow(1).
 				Padding(0, 0, 0, 6).SingleLine()
 			if scm {
-				a.scmTitleActions(c)
+				if actions > 0 {
+					a.scmTitleActions(c)
+				}
 				return
 			}
 			if search {
@@ -116,6 +137,10 @@ func (a *app) sidebar(c *ui.Context) {
 			}
 			if sessions {
 				a.sessionsView(c)
+				return
+			}
+			if chat {
+				a.chatView(c)
 				return
 			}
 			if github {

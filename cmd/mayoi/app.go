@@ -380,6 +380,7 @@ type app struct {
 	find       findState
 	inFiles    searchState // search in the files, of the sidebar
 	sessions   sessionsState
+	chat       chatState
 	github     githubPanel
 	prompt     *prompt
 	confirm    *confirm

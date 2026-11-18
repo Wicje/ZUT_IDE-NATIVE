@@ -563,7 +563,10 @@ func TestSourceControlRowFitsNarrowSidebar(t *testing.T) {
 	for _, w := range []float32{160, 240, 400} {
 		a.window.SidebarWidth = w
 		draw()
-		controls := []control{{name, iconLeast}, {locales.BranchLabel(branch), branchLeast}, more}
+		controls := []control{{name, iconLeast}, {locales.BranchLabel(branch), branchLeast}}
+		if w >= scmActionTitleW {
+			controls = append(controls, more)
+		}
 		if w >= scmRemoteRowW {
 			controls = append(controls, remoteButtons...)
 		} else if _, ok := tt.Find(locales.CmdGitFetch()); ok {
@@ -579,7 +582,10 @@ func TestSourceControlRowFitsNarrowSidebar(t *testing.T) {
 	for _, w := range []float32{160, 180, 200, 240, 400} {
 		a.window.SidebarWidth = w
 		draw()
-		controls := []control{{name, iconLeast}, {locales.BranchLabel(branch), branchLeast}, more}
+		controls := []control{{name, iconLeast}, {locales.BranchLabel(branch), branchLeast}}
+		if w >= scmActionTitleW {
+			controls = append(controls, more)
+		}
 		if _, ok := tt.Find(locales.CmdGitFetch()); ok || w >= 400 {
 			controls = append(controls, control{locales.CmdGitFetch(), iconLeast},
 				control{locales.ScmPullCount(10), iconLeast}, control{locales.ScmPushCount(10), iconLeast})
@@ -607,7 +613,10 @@ func TestSourceControlRowFitsNarrowSidebar(t *testing.T) {
 				draw()
 				// The badge is shown whole or by its number beside the worktree and
 				// branch buttons at every width; the remote buttons show where they fit.
-				controls := []control{{name, iconLeast}, {locales.BranchLabel(branch), branchLeast}, {prTip(pr), iconLeast}, more}
+				controls := []control{{name, iconLeast}, {locales.BranchLabel(branch), branchLeast}, {prTip(pr), iconLeast}}
+				if w >= scmActionTitleW {
+					controls = append(controls, more)
+				}
 				if _, ok := tt.Find(locales.CmdGitFetch()); ok || w >= 400 {
 					controls = append(controls, control{locales.CmdGitFetch(), iconLeast}, control{pull, iconLeast}, control{push, iconLeast})
 				}
@@ -627,10 +636,14 @@ func TestSourceControlRowFitsNarrowSidebar(t *testing.T) {
 	for _, w := range []float32{160, 240, 400} {
 		a.window.SidebarWidth = w
 		draw()
-		fitsSidebar(t, tt, w, []control{
+		controls2 := []control{
 			{locales.WorktreeStatusTip(filepath.Base(dir2)), iconLeast}, {locales.BranchLabel(branch + "2"), branchLeast},
-			{locales.CmdGitFetch(), iconLeast}, {locales.ScmPublishBranch(), iconLeast}, more,
-		})
+			{locales.CmdGitFetch(), iconLeast}, {locales.ScmPublishBranch(), iconLeast},
+		}
+		if w >= scmActionTitleW {
+			controls2 = append(controls2, more)
+		}
+		fitsSidebar(t, tt, w, controls2)
 	}
 }
 
@@ -894,9 +907,9 @@ func TestPullRequestBadgeAppearsInAFrame(t *testing.T) {
 		// row by the badge's width as it was drawn.
 		tt.Frame()
 		tt.Frame()
-		controls := []control{{locales.WorktreeStatusTip(name), iconLeast}, {locales.BranchLabel(branch), branchLeast}, {prTip(reviewed), iconLeast}, {locales.ScmMoreActions(), iconLeast}}
-		if _, ok := tt.Find(locales.CmdGitFetch()); ok || w >= 400 {
-			controls = append(controls, control{locales.CmdGitFetch(), iconLeast}, control{locales.CmdGitPull(), iconLeast}, control{locales.CmdGitPush(), iconLeast})
+		controls := []control{{locales.WorktreeStatusTip(name), iconLeast}, {locales.BranchLabel(branch), branchLeast}, {prTip(reviewed), iconLeast}}
+		if w >= scmActionTitleW {
+			controls = append(controls, control{locales.ScmMoreActions(), iconLeast})
 		}
 		fitsSidebar(t, tt, w, controls)
 		a.git.pr, a.git.prRepo, a.git.prBranch = nil, nil, ""

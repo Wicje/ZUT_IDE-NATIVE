@@ -35,6 +35,9 @@ func TestMain(m *testing.M) {
 	}
 	locale := i18n.Locale()
 	i18n.SetLocaleFunc(func() string { return locale })
+	// The OpenCode harness lists its sessions off the running server,
+	// not files: a dead URL keeps the suite hermetic.
+	os.Setenv("OPENCODE_BASE_URL", "http://127.0.0.1:9")
 	// The previews' pictures of the web are not fetched, but by the tests
 	// of them, from servers of their own.
 	markdownRemote.get = func(string) ([]byte, error) { return nil, errors.New("offline") }

@@ -4082,11 +4082,11 @@ func (msgs Messages) CopyRelativePath() string {
 	return Catalog.Format(msgs.locale, "copyRelativePath", nil)
 }
 
-// CrashDetail says "The report says where in Zut's code it happened, with Zut's version and your system. It holds none of your files,…"
+// CrashDetail says "The report says where in Zut's code it happened, with Zut's version and your system. It holds none of your files, and…"
 // in the language the app shows.
 func CrashDetail() string { return In(i18n.Locale()).CrashDetail() }
 
-// CrashDetail says "The report says where in Zut's code it happened, with Zut's version and your system. It holds none of your files,…"
+// CrashDetail says "The report says where in Zut's code it happened, with Zut's version and your system. It holds none of your files, and…"
 // in the language of msgs.
 func (msgs Messages) CrashDetail() string {
 	return Catalog.Format(msgs.locale, "crashDetail", nil)
@@ -12526,11 +12526,11 @@ func (msgs Messages) HcAddTitle(host string) string {
 	return Catalog.Format(msgs.locale, "hcAddTitle", map[string]any{"host": host})
 }
 
-// HcAddDetail says "Zut adds {host} to hc as a machine, which may copy hc to it. Its shells then keep running after Zut quits. Until …"
+// HcAddDetail says "Zut adds {host} to hc as a machine, which may copy hc to it. Its shells then keep running after Zut quits. Until then…"
 // in the language the app shows.
 func HcAddDetail(host string) string { return In(i18n.Locale()).HcAddDetail(host) }
 
-// HcAddDetail says "Zut adds {host} to hc as a machine, which may copy hc to it. Its shells then keep running after Zut quits. Until …"
+// HcAddDetail says "Zut adds {host} to hc as a machine, which may copy hc to it. Its shells then keep running after Zut quits. Until then…"
 // in the language of msgs.
 func (msgs Messages) HcAddDetail(host string) string {
 	return Catalog.Format(msgs.locale, "hcAddDetail", map[string]any{"host": host})
@@ -12636,11 +12636,11 @@ func (msgs Messages) HcInstallTitle() string {
 	return Catalog.Format(msgs.locale, "hcInstallTitle", nil)
 }
 
-// HcInstallDetail says "terminalBackend is \"hc\", but hc isn't installed, so terminals run in Zut. herdr's installer puts hc in ~/.local/bin…"
+// HcInstallDetail says "terminalBackend is \"hc\", but hc isn't installed, so terminals run in Zut. herdr's installer puts hc in ~/.local/bin f…"
 // in the language the app shows.
 func HcInstallDetail() string { return In(i18n.Locale()).HcInstallDetail() }
 
-// HcInstallDetail says "terminalBackend is \"hc\", but hc isn't installed, so terminals run in Zut. herdr's installer puts hc in ~/.local/bin…"
+// HcInstallDetail says "terminalBackend is \"hc\", but hc isn't installed, so terminals run in Zut. herdr's installer puts hc in ~/.local/bin f…"
 // in the language of msgs.
 func (msgs Messages) HcInstallDetail() string {
 	return Catalog.Format(msgs.locale, "hcInstallDetail", nil)
@@ -13258,11 +13258,11 @@ func (msgs Messages) WelcomeStart() string {
 	return Catalog.Format(msgs.locale, "welcomeStart", nil)
 }
 
-// WelcomeTagline says "迷い · a small, quick code editor"
+// WelcomeTagline says "Zut · the workspace that follows you"
 // in the language the app shows.
 func WelcomeTagline() string { return In(i18n.Locale()).WelcomeTagline() }
 
-// WelcomeTagline says "迷い · a small, quick code editor"
+// WelcomeTagline says "Zut · the workspace that follows you"
 // in the language of msgs.
 func (msgs Messages) WelcomeTagline() string {
 	return Catalog.Format(msgs.locale, "welcomeTagline", nil)
@@ -19658,4 +19658,234 @@ func PickWSLDistributions() string { return In(i18n.Locale()).PickWSLDistributio
 // in the language of msgs.
 func (msgs Messages) PickWSLDistributions() string {
 	return Catalog.Format(msgs.locale, "pickWSLDistributions", nil)
+}
+
+// SidebarChat says "OpenCode"
+// in the language the app shows.
+func SidebarChat() string { return In(i18n.Locale()).SidebarChat() }
+
+// SidebarChat says "OpenCode"
+// in the language of msgs.
+func (msgs Messages) SidebarChat() string {
+	return Catalog.Format(msgs.locale, "sidebarChat", nil)
+}
+
+// SidebarTitleChat says "OPENCODE"
+// in the language the app shows.
+func SidebarTitleChat() string { return In(i18n.Locale()).SidebarTitleChat() }
+
+// SidebarTitleChat says "OPENCODE"
+// in the language of msgs.
+func (msgs Messages) SidebarTitleChat() string {
+	return Catalog.Format(msgs.locale, "sidebarTitleChat", nil)
+}
+
+// CmdViewChat says "OpenCode Chat"
+// in the language the app shows.
+func CmdViewChat() string { return In(i18n.Locale()).CmdViewChat() }
+
+// CmdViewChat says "OpenCode Chat"
+// in the language of msgs.
+func (msgs Messages) CmdViewChat() string {
+	return Catalog.Format(msgs.locale, "cmdViewChat", nil)
+}
+
+// ChatModel says "Choose model"
+// in the language the app shows.
+func ChatModel() string { return In(i18n.Locale()).ChatModel() }
+
+// ChatModel says "Choose model"
+// in the language of msgs.
+func (msgs Messages) ChatModel() string {
+	return Catalog.Format(msgs.locale, "chatModel", nil)
+}
+
+// ChatNewChat says "New chat"
+// in the language the app shows.
+func ChatNewChat() string { return In(i18n.Locale()).ChatNewChat() }
+
+// ChatNewChat says "New chat"
+// in the language of msgs.
+func (msgs Messages) ChatNewChat() string {
+	return Catalog.Format(msgs.locale, "chatNewChat", nil)
+}
+
+// ChatSend says "Send"
+// in the language the app shows.
+func ChatSend() string { return In(i18n.Locale()).ChatSend() }
+
+// ChatSend says "Send"
+// in the language of msgs.
+func (msgs Messages) ChatSend() string {
+	return Catalog.Format(msgs.locale, "chatSend", nil)
+}
+
+// ChatStop says "Stop"
+// in the language the app shows.
+func ChatStop() string { return In(i18n.Locale()).ChatStop() }
+
+// ChatStop says "Stop"
+// in the language of msgs.
+func (msgs Messages) ChatStop() string {
+	return Catalog.Format(msgs.locale, "chatStop", nil)
+}
+
+// ChatPlaceholder says "Ask OpenCode… (Ctrl+Enter to send)"
+// in the language the app shows.
+func ChatPlaceholder() string { return In(i18n.Locale()).ChatPlaceholder() }
+
+// ChatPlaceholder says "Ask OpenCode… (Ctrl+Enter to send)"
+// in the language of msgs.
+func (msgs Messages) ChatPlaceholder() string {
+	return Catalog.Format(msgs.locale, "chatPlaceholder", nil)
+}
+
+// ChatEmptyTitle says "Talk to OpenCode"
+// in the language the app shows.
+func ChatEmptyTitle() string { return In(i18n.Locale()).ChatEmptyTitle() }
+
+// ChatEmptyTitle says "Talk to OpenCode"
+// in the language of msgs.
+func (msgs Messages) ChatEmptyTitle() string {
+	return Catalog.Format(msgs.locale, "chatEmptyTitle", nil)
+}
+
+// ChatEmptyBody says "The agent reads and edits this project on this machine, with your models. Ask it to build, fix or explain something."
+// in the language the app shows.
+func ChatEmptyBody() string { return In(i18n.Locale()).ChatEmptyBody() }
+
+// ChatEmptyBody says "The agent reads and edits this project on this machine, with your models. Ask it to build, fix or explain something."
+// in the language of msgs.
+func (msgs Messages) ChatEmptyBody() string {
+	return Catalog.Format(msgs.locale, "chatEmptyBody", nil)
+}
+
+// ChatThinking says "Working…"
+// in the language the app shows.
+func ChatThinking() string { return In(i18n.Locale()).ChatThinking() }
+
+// ChatThinking says "Working…"
+// in the language of msgs.
+func (msgs Messages) ChatThinking() string {
+	return Catalog.Format(msgs.locale, "chatThinking", nil)
+}
+
+// ChatFromUser says "YOU"
+// in the language the app shows.
+func ChatFromUser() string { return In(i18n.Locale()).ChatFromUser() }
+
+// ChatFromUser says "YOU"
+// in the language of msgs.
+func (msgs Messages) ChatFromUser() string {
+	return Catalog.Format(msgs.locale, "chatFromUser", nil)
+}
+
+// ChatFromAgent says "OPENCODE"
+// in the language the app shows.
+func ChatFromAgent() string { return In(i18n.Locale()).ChatFromAgent() }
+
+// ChatFromAgent says "OPENCODE"
+// in the language of msgs.
+func (msgs Messages) ChatFromAgent() string {
+	return Catalog.Format(msgs.locale, "chatFromAgent", nil)
+}
+
+// ChatModelsLoading says "Loading models…"
+// in the language the app shows.
+func ChatModelsLoading() string { return In(i18n.Locale()).ChatModelsLoading() }
+
+// ChatModelsLoading says "Loading models…"
+// in the language of msgs.
+func (msgs Messages) ChatModelsLoading() string {
+	return Catalog.Format(msgs.locale, "chatModelsLoading", nil)
+}
+
+// ChatModelsError says "The local server did not answer"
+// in the language the app shows.
+func ChatModelsError() string { return In(i18n.Locale()).ChatModelsError() }
+
+// ChatModelsError says "The local server did not answer"
+// in the language of msgs.
+func (msgs Messages) ChatModelsError() string {
+	return Catalog.Format(msgs.locale, "chatModelsError", nil)
+}
+
+// ChatPickModel says "Pick a model"
+// in the language the app shows.
+func ChatPickModel() string { return In(i18n.Locale()).ChatPickModel() }
+
+// ChatPickModel says "Pick a model"
+// in the language of msgs.
+func (msgs Messages) ChatPickModel() string {
+	return Catalog.Format(msgs.locale, "chatPickModel", nil)
+}
+
+// ChatApprovalTitle says "OPENCODE NEEDS YOU"
+// in the language the app shows.
+func ChatApprovalTitle() string { return In(i18n.Locale()).ChatApprovalTitle() }
+
+// ChatApprovalTitle says "OPENCODE NEEDS YOU"
+// in the language of msgs.
+func (msgs Messages) ChatApprovalTitle() string {
+	return Catalog.Format(msgs.locale, "chatApprovalTitle", nil)
+}
+
+// ChatApproveOnce says "Approve once"
+// in the language the app shows.
+func ChatApproveOnce() string { return In(i18n.Locale()).ChatApproveOnce() }
+
+// ChatApproveOnce says "Approve once"
+// in the language of msgs.
+func (msgs Messages) ChatApproveOnce() string {
+	return Catalog.Format(msgs.locale, "chatApproveOnce", nil)
+}
+
+// ChatApproveAlways says "Always allow"
+// in the language the app shows.
+func ChatApproveAlways() string { return In(i18n.Locale()).ChatApproveAlways() }
+
+// ChatApproveAlways says "Always allow"
+// in the language of msgs.
+func (msgs Messages) ChatApproveAlways() string {
+	return Catalog.Format(msgs.locale, "chatApproveAlways", nil)
+}
+
+// ChatReject says "Reject"
+// in the language the app shows.
+func ChatReject() string { return In(i18n.Locale()).ChatReject() }
+
+// ChatReject says "Reject"
+// in the language of msgs.
+func (msgs Messages) ChatReject() string {
+	return Catalog.Format(msgs.locale, "chatReject", nil)
+}
+
+// ChatApprovedOnce says "Approved once"
+// in the language the app shows.
+func ChatApprovedOnce() string { return In(i18n.Locale()).ChatApprovedOnce() }
+
+// ChatApprovedOnce says "Approved once"
+// in the language of msgs.
+func (msgs Messages) ChatApprovedOnce() string {
+	return Catalog.Format(msgs.locale, "chatApprovedOnce", nil)
+}
+
+// ChatApprovedAlways says "Always allowed"
+// in the language the app shows.
+func ChatApprovedAlways() string { return In(i18n.Locale()).ChatApprovedAlways() }
+
+// ChatApprovedAlways says "Always allowed"
+// in the language of msgs.
+func (msgs Messages) ChatApprovedAlways() string {
+	return Catalog.Format(msgs.locale, "chatApprovedAlways", nil)
+}
+
+// ChatRejected says "Rejected"
+// in the language the app shows.
+func ChatRejected() string { return In(i18n.Locale()).ChatRejected() }
+
+// ChatRejected says "Rejected"
+// in the language of msgs.
+func (msgs Messages) ChatRejected() string {
+	return Catalog.Format(msgs.locale, "chatRejected", nil)
 }

@@ -21,11 +21,12 @@ import (
 type Harness string
 
 const (
-	Claude Harness = "claude"
-	Qoder  Harness = "qoder"
-	Codex  Harness = "codex"
-	Grok   Harness = "grok"
-	Pi     Harness = "pi"
+	Claude   Harness = "claude"
+	Qoder    Harness = "qoder"
+	Codex    Harness = "codex"
+	Grok     Harness = "grok"
+	Pi       Harness = "pi"
+	Opencode Harness = "opencode"
 )
 
 // Agent is what is known of an agent: its id, its names, its mark, how
@@ -146,6 +147,16 @@ var Known = []Agent{
 		Resume: ResumeTemplate("pi --session {id}"),
 		Files:  func(e *Env) []File { return files(piSessions(filepath.Join(e.Home, ".pi", "agent", "sessions"))) },
 		Read:   readPi,
+	},
+	{
+		ID: Opencode, Name: "OpenCode", App: "opencode",
+		// A prompt in a rounded terminal box.
+		Icon:   `<rect x="3" y="4.5" width="18" height="15" rx="2.5"/><path d="m7 10.5 3 3 4.5-4.5"/>`,
+		Tint:   [2]string{"#f97316", "#fb923c"},
+		Resume: func(_ *Env, s Session) string { return "opencode -s " + quote(s.ID) },
+		// OpenCode keeps its sessions in SQLite, so they come off the
+		// server it runs rather than out of files.
+		List: opencodeSessions,
 	},
 }
 
