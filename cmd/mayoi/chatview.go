@@ -94,6 +94,10 @@ type chatState struct {
 	// cancel stops the events pump of the turn running, if any.
 	cancel    context.CancelFunc
 	busySince time.Time
+	// filter narrows the model menu to a typed query; filterRef is the
+	// filter's input.
+	filter    string
+	filterRef ui.Handle
 
 	// snapshot is what the workspace looked like before this turn ran;
 	// taken right before the agent is sent the prompt. changed is
@@ -425,14 +429,26 @@ func (a *app) loadChatModelsOnce() {
 			} else {
 				st.models, st.modelsErr = ms, ""
 				if !st.hasModel {
-					for _, m := range ms {
-						if m.Free {
-							st.model, st.hasModel = m, true
-							break
+					// A remembered choice wins; else the first free
+					// model, else whatever the server listed.
+					if choice := strings.TrimSpace(a.window.Layout.OpencodeModel); choice != "" {
+						for _, m := range ms {
+							if m.ProviderID+"/"+m.ID == choice {
+								st.model, st.hasModel = m, true
+								break
+							}
 						}
 					}
-					if !st.hasModel && len(ms) > 0 {
-						st.model, st.hasModel = ms[0], true
+					if !st.hasModel {
+						for _, m := range ms {
+							if m.Free {
+								st.model, st.hasModel = m, true
+								break
+							}
+						}
+						if !st.hasModel && len(ms) > 0 {
+							st.model, st.hasModel = ms[0], true
+						}
 					}
 				}
 			}
@@ -878,42 +894,50 @@ func (a *app) chatApproval(c *ui.Context, ask *chatAsk) {
 }
 
 // chatModelMenu lists the models of the connected providers, the free
-// ones first, twenty rows at most.
+// ones first, with a filter box to narrow them.
 func (a *app) chatModelMenu(c *ui.Context) {
 	p, st := a.pal, &a.chat
 	ui.Column(c).BorderWidth(0, 0, 1, 0).BorderColor(p.border).Padding(3, 6, 6, 6).Children(func() {
-		scroll := ui.Scroll(c.Key("chat-models")).MaxHeight(252).Children(func() {
+		f := a.searchField(c, "chat-model-filter", &st.filter, locales.ChatModelFilter(), &st.filterRef, nil)
+		_ = f
+		filter := strings.ToLower(strings.TrimSpace(st.filter))
+		matches := func(m opencode.Model) bool {
+			if filter == "" {
+				return true
+			}
+			h := strings.ToLower(m.Name) + " " + strings.ToLower(m.ProviderID) + " " + strings.ToLower(m.ID)
+			return strings.Contains(h, filter)
+		}
+		scroll := ui.Scroll(c.Key("chat-models")).MaxHeight(196).Children(func() {
 			ui.Column(c).Gap(1).Children(func() {
-				const limit = 20
-				count := 0
 				for _, m := range st.models {
-					if count >= limit {
-						break
+					if !matches(m) {
+						continue
 					}
-					count++
 					m := m
-					name := m.Name
+					label := m.Name
 					if m.Free {
-						name += "  · free"
+						label += "  · free"
 					}
 					checked := st.hasModel && st.model.ProviderID == m.ProviderID && st.model.ID == m.ID
-					key := "chat-model-" + m.ProviderID + "-" + m.ID
-					b := ui.ButtonBase(c.Key(key)).Height(24).Padding(0, 6).Gap(6).Radius(5).
-						Justify(ui.Start).AlignItems(ui.Center).Label(name)
+					b := ui.ButtonBase(c.Key("chat-model-"+m.ProviderID+"-"+m.ID)).Height(24).
+						Padding(0, 6).Gap(6).Radius(5).
+						Justify(ui.Start).AlignItems(ui.Center).Label(label)
 					if checked {
 						b.Background(p.hover)
-					}
-					if b.Hovered() {
+					} else if b.Hovered() {
 						b.Background(p.hover)
 					}
 					b.Children(func() {
 						if checked {
 							ui.Text(c, "✓").FontSize(11).TextColor(p.accent).Padding(0, 2)
 						}
-						ui.Text(c, clip(name, 48)).FontSize(11).TextColor(p.text).SingleLine().Grow(1)
+						ui.Text(c, clip(label, 48)).FontSize(11).TextColor(p.text).SingleLine().Grow(1)
 					})
 					if b.Clicked() {
 						st.model, st.hasModel, st.showMenu = m, true, false
+						a.window.Layout.OpencodeModel = m.ProviderID + "/" + m.ID
+						a.settings.Changed()
 						a.invalidate()
 					}
 				}

@@ -2207,5 +2207,6 @@
   "chatKept": "Changes kept",
   "chatAdded": "added",
   "chatModified": "modified",
-  "chatDeleted": "deleted"
+  "chatDeleted": "deleted",
+  "chatModelFilter": "Filter models…"
 }

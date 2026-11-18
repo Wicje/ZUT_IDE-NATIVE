@@ -1979,5 +1979,6 @@
   "chatKept": "変更を残しました",
   "chatAdded": "追加",
   "chatModified": "変更",
-  "chatDeleted": "削除"
+  "chatDeleted": "削除",
+  "chatModelFilter": "モデルを絞り込む…"
 }

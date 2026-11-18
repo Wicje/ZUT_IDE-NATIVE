@@ -20009,3 +20009,13 @@ func ChatDeleted() string { return In(i18n.Locale()).ChatDeleted() }
 func (msgs Messages) ChatDeleted() string {
 	return Catalog.Format(msgs.locale, "chatDeleted", nil)
 }
+
+// ChatModelFilter says "Filter models…"
+// in the language the app shows.
+func ChatModelFilter() string { return In(i18n.Locale()).ChatModelFilter() }
+
+// ChatModelFilter says "Filter models…"
+// in the language of msgs.
+func (msgs Messages) ChatModelFilter() string {
+	return Catalog.Format(msgs.locale, "chatModelFilter", nil)
+}

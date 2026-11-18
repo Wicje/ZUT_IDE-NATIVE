@@ -423,6 +423,9 @@ type Layout struct {
 	// ScmChangesRatio is the share of the multi-repository view for changes.
 	// Zero fits the changes to their content, up to half the view.
 	ScmChangesRatio float32 `json:"scmChangesRatio,omitempty"`
+	// OpencodeModel is the model the OpenCode pane sends prompts to, as
+	// "provider/model"; "" for no choice made yet.
+	OpencodeModel string `json:"opencodeModel,omitempty"`
 }
 
 // DefaultLayout is the layout of a first launch.

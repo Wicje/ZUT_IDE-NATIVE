@@ -1979,5 +1979,6 @@
   "chatKept": "已保留更改",
   "chatAdded": "新增",
   "chatModified": "修改",
-  "chatDeleted": "删除"
+  "chatDeleted": "删除",
+  "chatModelFilter": "筛选模型…"
 }
