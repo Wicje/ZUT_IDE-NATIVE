@@ -2199,5 +2199,13 @@
   "chatAttach": "Attach file",
   "chatRemove": "Remove attachment",
   "chatTooBig": "File too big (4 MB max): {name}",
-  "chatPreview": "Open Preview"
+  "chatPreview": "Open Preview",
+  "chatKeep": "Keep",
+  "chatRevert": "Revert",
+  "chatFilesChanged": "Files changed by the agent",
+  "chatReverted": "Reverted %d files",
+  "chatKept": "Changes kept",
+  "chatAdded": "added",
+  "chatModified": "modified",
+  "chatDeleted": "deleted"
 }

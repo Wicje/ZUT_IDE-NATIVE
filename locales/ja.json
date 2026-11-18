@@ -1971,5 +1971,13 @@
   "chatAttach": "ファイルを添付",
   "chatRemove": "添付を削除",
   "chatTooBig": "ファイルが大きすぎます（4 MB まで）：{name}",
-  "chatPreview": "プレビューを開く"
+  "chatPreview": "プレビューを開く",
+  "chatKeep": "残す",
+  "chatRevert": "戻す",
+  "chatFilesChanged": "エージェントが変更したファイル",
+  "chatReverted": "%d ファイルを元に戻しました",
+  "chatKept": "変更を残しました",
+  "chatAdded": "追加",
+  "chatModified": "変更",
+  "chatDeleted": "削除"
 }

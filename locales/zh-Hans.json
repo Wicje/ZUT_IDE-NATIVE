@@ -1971,5 +1971,13 @@
   "chatAttach": "附加文件",
   "chatRemove": "移除附件",
   "chatTooBig": "文件过大（4 MB 上限）：{name}",
-  "chatPreview": "打开预览"
+  "chatPreview": "打开预览",
+  "chatKeep": "保留",
+  "chatRevert": "撤销",
+  "chatFilesChanged": "代理更改的文件",
+  "chatReverted": "已撤销 %d 个文件",
+  "chatKept": "已保留更改",
+  "chatAdded": "新增",
+  "chatModified": "修改",
+  "chatDeleted": "删除"
 }

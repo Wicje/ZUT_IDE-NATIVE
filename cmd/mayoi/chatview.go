@@ -94,11 +94,18 @@ type chatState struct {
 	// cancel stops the events pump of the turn running, if any.
 	cancel    context.CancelFunc
 	busySince time.Time
+
+	// snapshot is what the workspace looked like before this turn ran;
+	// taken right before the agent is sent the prompt. changed is
+	// filled when the turn ends, for the Keep/Revert banner.
+	snapshot *wsSnapshot
+	changed  []wsChange
 }
 
 func (st *chatState) reset(a *app) {
 	st.sessionID, st.rows, st.ask = "", nil, nil
 	st.attachments = nil
+	st.snapshot, st.changed = nil, nil
 	st.busy = false
 	st.busySince = time.Time{}
 	if st.cancel != nil {
@@ -122,6 +129,8 @@ func (st *chatState) send(a *app) {
 		return
 	}
 	dir := a.folder()
+	snap := newSnapshot(dir)
+	st.snapshot, st.changed = snap, nil
 	attachments := st.attachments
 	st.attachments = nil
 	system := chatSystemHint
@@ -136,6 +145,10 @@ func (st *chatState) send(a *app) {
 	a.invalidate()
 
 	go func() {
+		if err := ensureOpencodeServer(ctx); err != nil {
+			a.post(func() { st.fail(a, err) })
+			return
+		}
 		cl := opencode.New()
 		if sid == "" {
 			newSID, err := cl.NewSession(ctx, dir)
@@ -370,6 +383,9 @@ func (st *chatState) finishTurn(a *app) {
 		st.cancel()
 		st.cancel = nil
 	}
+	if dir := a.folder(); dir != "" && st.snapshot != nil {
+		st.changed = st.snapshot.changed(dir)
+	}
 	a.invalidate()
 }
 
@@ -431,6 +447,56 @@ func clip(s string, max int) string {
 		return s
 	}
 	return string(r[:max]) + "…"
+}
+
+// chatRevertBanner shows after an agent turn: the files it changed, with
+// Keep or Revert actions. Revert writes back what the turn started with.
+func (a *app) chatRevertBanner(c *ui.Context) {
+	p, st := a.pal, &a.chat
+	rows := st.changed
+	ui.Column(c).Gap(6).Padding(6, 8).Radius(8).
+		Border(1, p.accentDim).Background(p.editor).Children(func() {
+		ui.Row(c).Gap(8).AlignItems(ui.Center).Children(func() {
+			ui.Text(c, locales.ChatFilesChanged()).FontSize(10).FontWeight(600).LetterSpacing(0.5).TextColor(p.muted).Grow(1).SingleLine()
+			keep := ui.ButtonBase(c.Key("chat-keep")).Height(20).Padding(0, 12).Radius(5).Label(locales.ChatKeep()).
+				Justify(ui.Center).AlignItems(ui.Center).Background(p.accentDim.Alpha(0.5))
+			if keep.Clicked() {
+				st.snapshot, st.changed = nil, nil
+				a.tell(note{message: locales.ChatKept()})
+				a.invalidate()
+			}
+			revert := ui.ButtonBase(c.Key("chat-revert")).Height(20).Padding(0, 12).Radius(5).Label(locales.ChatRevert()).
+				Justify(ui.Center).AlignItems(ui.Center).Border(1, p.border)
+			if revert.Clicked() {
+				if dir := a.folder(); dir != "" && st.snapshot != nil {
+					n := len(rows)
+					if err := st.snapshot.restore(dir); err != nil {
+						a.fail("%v", err)
+					} else {
+						a.tell(note{message: fmt.Sprintf(locales.ChatReverted(), n)})
+					}
+				}
+				st.snapshot, st.changed = nil, nil
+				a.invalidate()
+			}
+		})
+		for _, row := range rows {
+			ui.Row(c).Gap(6).AlignItems(ui.Center).MinHeight(16).Children(func() {
+				badge := row.Status
+				col := p.muted
+				switch row.Status {
+				case "added":
+					badge, col = "A", p.added
+				case "modified":
+					badge, col = "M", p.accent
+				case "deleted":
+					badge, col = "D", p.dangerFg
+				}
+				ui.Text(c, badge).FontSize(9).FontWeight(700).TextColor(col).Padding(0, 2)
+				ui.Text(c, clip(row.Path, 48)).FontSize(10.5).TextColor(p.text).SingleLine().Grow(1)
+			})
+		}
+	})
 }
 
 // chatAttachmentChips renders the staged files above the composer, one
@@ -639,6 +705,9 @@ func (a *app) chatView(c *ui.Context) {
 			ui.Column(c).Gap(6).Children(func() {
 				if len(st.attachments) > 0 {
 					a.chatAttachmentChips(c)
+				}
+				if len(st.changed) > 0 && !st.busy {
+					a.chatRevertBanner(c)
 				}
 				field := ui.Row(c).MinHeight(54).Radius(8).
 					Background(p.editor).Border(1, p.border).Padding(4, 6).AlignItems(ui.Center).Gap(4)

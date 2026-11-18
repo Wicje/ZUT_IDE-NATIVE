@@ -19929,3 +19929,83 @@ func ChatPreview() string { return In(i18n.Locale()).ChatPreview() }
 func (msgs Messages) ChatPreview() string {
 	return Catalog.Format(msgs.locale, "chatPreview", nil)
 }
+
+// ChatKeep says "Keep"
+// in the language the app shows.
+func ChatKeep() string { return In(i18n.Locale()).ChatKeep() }
+
+// ChatKeep says "Keep"
+// in the language of msgs.
+func (msgs Messages) ChatKeep() string {
+	return Catalog.Format(msgs.locale, "chatKeep", nil)
+}
+
+// ChatRevert says "Revert"
+// in the language the app shows.
+func ChatRevert() string { return In(i18n.Locale()).ChatRevert() }
+
+// ChatRevert says "Revert"
+// in the language of msgs.
+func (msgs Messages) ChatRevert() string {
+	return Catalog.Format(msgs.locale, "chatRevert", nil)
+}
+
+// ChatFilesChanged says "Files changed by the agent"
+// in the language the app shows.
+func ChatFilesChanged() string { return In(i18n.Locale()).ChatFilesChanged() }
+
+// ChatFilesChanged says "Files changed by the agent"
+// in the language of msgs.
+func (msgs Messages) ChatFilesChanged() string {
+	return Catalog.Format(msgs.locale, "chatFilesChanged", nil)
+}
+
+// ChatReverted says "Reverted %d files"
+// in the language the app shows.
+func ChatReverted() string { return In(i18n.Locale()).ChatReverted() }
+
+// ChatReverted says "Reverted %d files"
+// in the language of msgs.
+func (msgs Messages) ChatReverted() string {
+	return Catalog.Format(msgs.locale, "chatReverted", nil)
+}
+
+// ChatKept says "Changes kept"
+// in the language the app shows.
+func ChatKept() string { return In(i18n.Locale()).ChatKept() }
+
+// ChatKept says "Changes kept"
+// in the language of msgs.
+func (msgs Messages) ChatKept() string {
+	return Catalog.Format(msgs.locale, "chatKept", nil)
+}
+
+// ChatAdded says "added"
+// in the language the app shows.
+func ChatAdded() string { return In(i18n.Locale()).ChatAdded() }
+
+// ChatAdded says "added"
+// in the language of msgs.
+func (msgs Messages) ChatAdded() string {
+	return Catalog.Format(msgs.locale, "chatAdded", nil)
+}
+
+// ChatModified says "modified"
+// in the language the app shows.
+func ChatModified() string { return In(i18n.Locale()).ChatModified() }
+
+// ChatModified says "modified"
+// in the language of msgs.
+func (msgs Messages) ChatModified() string {
+	return Catalog.Format(msgs.locale, "chatModified", nil)
+}
+
+// ChatDeleted says "deleted"
+// in the language the app shows.
+func ChatDeleted() string { return In(i18n.Locale()).ChatDeleted() }
+
+// ChatDeleted says "deleted"
+// in the language of msgs.
+func (msgs Messages) ChatDeleted() string {
+	return Catalog.Format(msgs.locale, "chatDeleted", nil)
+}
