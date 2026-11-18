@@ -1984,5 +1984,8 @@
   "chatFreeOnly": "仅免费",
   "chatHistory": "会话历史",
   "chatHistoryRecent": "最近的会话",
-  "chatNoSessions": "还没有会话"
+  "chatNoSessions": "还没有会话",
+  "chatMention": "引用当前文件",
+  "chatMentionSelection": "引用所选内容",
+  "chatMentionChanges": "引用最近的更改"
 }

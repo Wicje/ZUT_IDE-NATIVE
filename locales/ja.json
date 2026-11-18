@@ -1984,5 +1984,8 @@
   "chatFreeOnly": "無料のみ",
   "chatHistory": "セッション履歴",
   "chatHistoryRecent": "最近のセッション",
-  "chatNoSessions": "まだセッションはありません"
+  "chatNoSessions": "まだセッションはありません",
+  "chatMention": "現在のファイルを参照",
+  "chatMentionSelection": "選択範囲を参照",
+  "chatMentionChanges": "最近の変更を参照"
 }

@@ -2212,5 +2212,8 @@
   "chatFreeOnly": "Free only",
   "chatHistory": "Session history",
   "chatHistoryRecent": "Recent sessions",
-  "chatNoSessions": "No sessions yet"
+  "chatNoSessions": "No sessions yet",
+  "chatMention": "Mention current file",
+  "chatMentionSelection": "Mention selection",
+  "chatMentionChanges": "Mention agent's recent changes"
 }

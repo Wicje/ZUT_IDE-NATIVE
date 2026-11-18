@@ -20059,3 +20059,33 @@ func ChatNoSessions() string { return In(i18n.Locale()).ChatNoSessions() }
 func (msgs Messages) ChatNoSessions() string {
 	return Catalog.Format(msgs.locale, "chatNoSessions", nil)
 }
+
+// ChatMention says "Mention current file"
+// in the language the app shows.
+func ChatMention() string { return In(i18n.Locale()).ChatMention() }
+
+// ChatMention says "Mention current file"
+// in the language of msgs.
+func (msgs Messages) ChatMention() string {
+	return Catalog.Format(msgs.locale, "chatMention", nil)
+}
+
+// ChatMentionSelection says "Mention selection"
+// in the language the app shows.
+func ChatMentionSelection() string { return In(i18n.Locale()).ChatMentionSelection() }
+
+// ChatMentionSelection says "Mention selection"
+// in the language of msgs.
+func (msgs Messages) ChatMentionSelection() string {
+	return Catalog.Format(msgs.locale, "chatMentionSelection", nil)
+}
+
+// ChatMentionChanges says "Mention agent's recent changes"
+// in the language the app shows.
+func ChatMentionChanges() string { return In(i18n.Locale()).ChatMentionChanges() }
+
+// ChatMentionChanges says "Mention agent's recent changes"
+// in the language of msgs.
+func (msgs Messages) ChatMentionChanges() string {
+	return Catalog.Format(msgs.locale, "chatMentionChanges", nil)
+}
