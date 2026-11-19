@@ -534,7 +534,7 @@ type Part struct {
 
 	// image reports whether the part is an inline image we can render,
 	// for the chat pane's image rows and seeds.
-	State     *struct {
+	State *struct {
 		Status string          `json:"status"`
 		Title  string          `json:"title"`
 		Input  json.RawMessage `json:"input"`
@@ -614,7 +614,7 @@ type MessagePart struct {
 func (c *Client) PromptWith(ctx context.Context, sessionID string, parts []MessagePart, system, providerID, modelID string) error {
 	type payload struct {
 		Parts  []MessagePart `json:"parts"`
-		System string         `json:"system,omitempty"`
+		System string        `json:"system,omitempty"`
 		Model  *struct {
 			ProviderID string `json:"providerID"`
 			ModelID    string `json:"modelID"`
@@ -691,4 +691,152 @@ func (c *Client) PendingPermissions(ctx context.Context) ([]Permission, error) {
 		return nil, err
 	}
 	return raw, nil
+}
+
+// AuthMethod is one way to authenticate to a provider, as the server
+// lists them: "api" for a key, "oauth" for the browser dance.
+type AuthMethod struct {
+	Type    string `json:"type"`
+	Label   string `json:"label"`
+	Prompts []struct {
+		Type    string `json:"type"`
+		Key     string `json:"key"`
+		Message string `json:"message"`
+	} `json:"prompts"`
+}
+
+// ProviderAuth returns the auth methods of every provider the server
+// knows about, keyed by provider id.
+func (c *Client) ProviderAuth(ctx context.Context) (map[string][]AuthMethod, error) {
+	req, err := http.NewRequestWithContext(ctx, "GET", c.base+"/provider/auth", nil)
+	if err != nil {
+		return nil, err
+	}
+	resp, err := c.hc.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	if !ok2xx(resp.StatusCode) {
+		return nil, fmt.Errorf("opencode server answered %d", resp.StatusCode)
+	}
+	var out map[string][]AuthMethod
+	if err := json.NewDecoder(resp.Body).Decode(&out); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// SaveAPIKey writes providerID's API key for the "api" method; returns
+// true on success.
+func (c *Client) SaveAPIKey(ctx context.Context, providerID, key string) (bool, error) {
+	b, err := json.Marshal(map[string]string{"type": "api", "key": key})
+	if err != nil {
+		return false, err
+	}
+	req, err := http.NewRequestWithContext(ctx, "PUT", c.base+"/auth/"+providerID, bytes.NewReader(b))
+	if err != nil {
+		return false, err
+	}
+	req.Header.Set("Content-Type", "application/json")
+	resp, err := c.hc.Do(req)
+	if err != nil {
+		return false, err
+	}
+	var ok bool
+	if err := json.NewDecoder(resp.Body).Decode(&ok); err != nil {
+		resp.Body.Close()
+		return false, err
+	}
+	resp.Body.Close()
+	return ok, nil
+}
+
+// DeleteAuth clears providerID's stored credential, whatever kind it
+// was; returns true on success.
+func (c *Client) DeleteAuth(ctx context.Context, providerID string) (bool, error) {
+	req, err := http.NewRequestWithContext(ctx, "DELETE", c.base+"/auth/"+providerID, nil)
+	if err != nil {
+		return false, err
+	}
+	resp, err := c.hc.Do(req)
+	if err != nil {
+		return false, err
+	}
+	var ok bool
+	if err := json.NewDecoder(resp.Body).Decode(&ok); err != nil {
+		resp.Body.Close()
+		return false, err
+	}
+	resp.Body.Close()
+	return ok, nil
+}
+
+// ProviderInfo is one provider as the wizard shows it: its id, its
+// name, and how it authenticates.
+type ProviderInfo struct {
+	ID          string
+	Name        string
+	AuthMethods []AuthMethod
+	Connected   bool
+}
+
+// Providers lists every provider the server knows about with their auth
+// methods, plus which the server is currently connected to.
+func (c *Client) Providers(ctx context.Context) ([]ProviderInfo, error) {
+	// Auth methods.
+	authReq, err := http.NewRequestWithContext(ctx, "GET", c.base+"/provider/auth", nil)
+	if err != nil {
+		return nil, err
+	}
+	authResp, err := c.hc.Do(authReq)
+	if err != nil {
+		return nil, err
+	}
+	var methods map[string][]AuthMethod
+	if err := json.NewDecoder(authResp.Body).Decode(&methods); err != nil {
+		authResp.Body.Close()
+		return nil, err
+	}
+	authResp.Body.Close()
+	// Connected providers and names.
+	provReq, err := http.NewRequestWithContext(ctx, "GET", c.base+"/provider", nil)
+	if err != nil {
+		return nil, err
+	}
+	provResp, err := c.hc.Do(provReq)
+	if err != nil {
+		return nil, err
+	}
+	var prov struct {
+		All []struct {
+			ID   string `json:"id"`
+			Name string `json:"name"`
+		} `json:"all"`
+		Connected []string `json:"connected"`
+	}
+	if err := json.NewDecoder(provResp.Body).Decode(&prov); err != nil {
+		provResp.Body.Close()
+		return nil, err
+	}
+	provResp.Body.Close()
+	connected := map[string]bool{}
+	for _, id := range prov.Connected {
+		connected[id] = true
+	}
+	name := map[string]string{}
+	for _, p := range prov.All {
+		name[p.ID] = p.Name
+	}
+	out := make([]ProviderInfo, 0, len(methods))
+	for id, ms := range methods {
+		out = append(out, ProviderInfo{
+			ID:          id,
+			Name:        name[id],
+			AuthMethods: ms,
+			Connected:   connected[id],
+		})
+	}
+	sort.Slice(out, func(i, j int) bool { return out[i].ID < out[j].ID })
+	return out, nil
 }

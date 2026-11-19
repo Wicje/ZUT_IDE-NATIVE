@@ -111,6 +111,20 @@ type chatState struct {
 	pickSession bool
 	sessions    []opencode.Session
 
+	// auth is the Connect-a-provider wizard; showAuth shows the panel
+	// instead of the model list. authProviders comes from the server,
+	// refreshed on open; authSelected is the provider the user clicked;
+	// keyInput is the typed key; notice is the Save/Disconnect reply.
+	showAuth      bool
+	authProviders []opencode.ProviderInfo
+	authSelected  string
+	keyInput      string
+	keyRef        ui.Handle
+	authErr       string
+	authNotice    string
+	authQuery     string
+	authQueryRef  ui.Handle
+
 	// snapshot is what the workspace looked like before this turn ran;
 	// taken right before the agent is sent the prompt. changed is
 	// filled when the turn ends, for the Keep/Revert banner.
@@ -882,7 +896,9 @@ func (a *app) chatView(c *ui.Context) {
 		})
 
 		// The model menu, right under the header, until the user picks.
-		if st.showMenu {
+		if st.showAuth {
+			a.chatAuthPanel(c)
+		} else if st.showMenu {
 			a.chatModelMenu(c)
 		}
 		if st.pickSession {
@@ -1099,6 +1115,193 @@ func (a *app) chatApproval(c *ui.Context, ask *chatAsk) {
 	})
 }
 
+// chatAuthPanel is the "Connect a provider" wizard: a searchable list of
+// every provider the server knows about, and when one is picked, a masked
+// key entry with Save or Disconnect. The key goes to opencode's API —
+// Zut never stores it.
+func (a *app) chatAuthPanel(c *ui.Context) {
+	p, st := a.pal, &a.chat
+	ui.Column(c).BorderWidth(0, 0, 1, 0).BorderColor(p.border).Padding(4, 6, 6, 6).Children(func() {
+		ui.Row(c).Gap(6).AlignItems(ui.Center).Children(func() {
+			ui.Text(c, locales.ChatAuthTitle()).FontSize(10).FontWeight(700).LetterSpacing(0.7).TextColor(p.muted).Grow(1).SingleLine()
+			back := ui.ButtonBase(c.Key("chat-auth-back")).Height(18).Label(locales.ChatAuthBack()).Radius(3).
+				Border(1, p.border).Justify(ui.Center).AlignItems(ui.Center).Padding(0, 6)
+			if back.Clicked() {
+				st.showAuth = false
+				st.authSelected = ""
+				st.authErr = ""
+				st.authNotice = ""
+				st.keyInput = ""
+				a.invalidate()
+			}
+		})
+		// Provider list
+		if st.authSelected == "" {
+			f := a.searchField(c, "chat-auth-search", &st.authQuery, locales.ChatAuthSearch(), &st.authQueryRef, nil)
+			_ = f
+			q := strings.ToLower(strings.TrimSpace(st.authQuery))
+			matches := func(p opencode.ProviderInfo) bool {
+				if q == "" {
+					return true
+				}
+				return strings.Contains(strings.ToLower(p.ID), q) || strings.Contains(strings.ToLower(p.Name), q)
+			}
+			ui.Scroll(c.Key("chat-auth-list")).MaxHeight(176).Children(func() {
+				ui.Column(c).Gap(1).Children(func() {
+					if st.authErr != "" {
+						ui.Text(c, st.authErr).FontSize(10.5).TextColor(p.dangerFg).Padding(4, 4).SingleLine()
+						return
+					}
+					shown := 0
+					for _, pi := range st.authProviders {
+						if !matches(pi) {
+							continue
+						}
+						pi := pi
+						shown++
+						label := pi.Name
+						if label == "" {
+							label = pi.ID
+						}
+						b := ui.ButtonBase(c.Key("chat-auth-"+pi.ID)).Height(28).Padding(0, 6).Gap(6).Radius(4).
+							Justify(ui.Start).AlignItems(ui.Center)
+						if b.Hovered() {
+							b.Background(p.hover)
+						}
+						b.Children(func() {
+							ui.Text(c, label).FontSize(11).TextColor(p.text).SingleLine().Grow(1)
+							dot := "○"
+							col := p.muted
+							if pi.Connected {
+								dot, col = "●", p.added
+							}
+							ui.Text(c, dot).FontSize(9).TextColor(col).Padding(0, 4)
+							api := false
+							oauth := false
+							for _, m := range pi.AuthMethods {
+								if m.Type == "api" {
+									api = true
+								}
+								if m.Type == "oauth" {
+									oauth = true
+								}
+							}
+							src := "api key"
+							if !api && oauth {
+								src = "sign-in"
+							}
+							ui.Text(c, src).FontSize(9).TextColor(p.muted).SingleLine()
+						})
+						if b.Clicked() {
+							st.authSelected = pi.ID
+							st.keyInput = ""
+							st.authErr = ""
+							st.authNotice = ""
+							a.invalidate()
+						}
+					}
+					if shown == 0 {
+						ui.Text(c, locales.ChatAuthEmpty()).FontSize(10.5).TextColor(p.muted).Padding(6, 4).SingleLine()
+					}
+				})
+			})
+			return
+		}
+		// Selected provider: masked key input + Save/Disconnect
+		sel := ""
+		selName := ""
+		connected := false
+		for _, pi := range st.authProviders {
+			if pi.ID == st.authSelected {
+				sel, selName, connected = pi.ID, pi.Name, pi.Connected
+				if selName == "" {
+					selName = sel
+				}
+				break
+			}
+		}
+		ui.Column(c).Gap(6).Children(func() {
+			ui.Row(c).Gap(6).AlignItems(ui.Center).Children(func() {
+				ui.Text(c, selName).FontSize(11).FontWeight(600).TextColor(p.text).SingleLine().Grow(1)
+				dot, col := "○", p.muted
+				if connected {
+					dot, col = "●", p.added
+				}
+				ui.Text(c, dot+" "+map[bool]string{true: locales.ChatAuthConnected(), false: locales.ChatAuthNotConnected()}[connected]).
+					FontSize(9.5).TextColor(col).SingleLine()
+			})
+			ui.Text(c, locales.ChatAuthHint()).FontSize(9.5).TextColor(p.muted).LineHeight(1.4)
+			in := ui.TextInputBase(c.Key("chat-auth-key"), &st.keyInput).
+				Grow(1).MinWidth(0).FontSize(12.5).Padding(4, 6).Radius(6).
+				Background(p.editor).Border(1, p.border).Placeholder(locales.ChatAuthKey()).Label(locales.ChatAuthKey()).Password()
+			in.Bind(&st.keyRef)
+			if msg := st.authErr; msg != "" {
+				ui.Text(c, msg).FontSize(9.5).TextColor(p.dangerFg).LineHeight(1.4)
+			}
+			if msg := st.authNotice; msg != "" {
+				ui.Text(c, msg).FontSize(9.5).TextColor(p.muted).LineHeight(1.4)
+			}
+			ui.Row(c).Gap(6).Justify(ui.Start).Children(func() {
+				save := ui.ButtonBase(c.Key("chat-auth-save")).Height(24).Padding(0, 14).Radius(5).
+					Label(locales.ChatAuthSave()).Background(p.accentDim.Alpha(0.6)).
+					Justify(ui.Center).AlignItems(ui.Center)
+				if save.Clicked() {
+					key := strings.TrimSpace(st.keyInput)
+					if key != "" {
+						a.post(func() {
+							ok, err := opencode.New().SaveAPIKey(context.Background(), sel, key)
+							a.post(func() {
+								if err != nil {
+									st.authErr = err.Error()
+								} else if !ok {
+									st.authErr = "server refused the key"
+								} else {
+									st.keyInput = ""
+									st.authNotice = locales.ChatAuthConnected()
+									st.authErr = ""
+									st.authNotice = "saved"
+									for i := range st.authProviders {
+										if st.authProviders[i].ID == sel {
+											st.authProviders[i].Connected = true
+										}
+									}
+								}
+								a.invalidate()
+							})
+						})
+					}
+				}
+				if connected {
+					disc := ui.ButtonBase(c.Key("chat-auth-disc")).Height(24).Padding(0, 14).Radius(5).
+						Label(locales.ChatAuthDisconnect()).Border(1, p.border).Justify(ui.Center).AlignItems(ui.Center)
+					if disc.Clicked() {
+						a.post(func() {
+							ok, err := opencode.New().DeleteAuth(context.Background(), sel)
+							a.post(func() {
+								if err != nil {
+									st.authErr = err.Error()
+								} else if !ok {
+									st.authErr = "server refused to remove"
+								} else {
+									st.keyInput = ""
+									st.authNotice = "disconnected"
+									st.authErr = ""
+									for i := range st.authProviders {
+										if st.authProviders[i].ID == sel {
+											st.authProviders[i].Connected = false
+										}
+									}
+								}
+								a.invalidate()
+							})
+						})
+					}
+				}
+			})
+		})
+	})
+}
+
 // chatSessionMenu shows the folder's recent sessions; picking one seeds
 // the transcript with the messages of that session.
 func (a *app) chatSessionMenu(c *ui.Context) {
@@ -1252,5 +1455,30 @@ func (a *app) chatModelMenu(c *ui.Context) {
 			})
 		})
 		_ = scroll
+		ui.Row(c).Height(26).Justify(ui.Center).AlignItems(ui.Center).Padding(4, 1).Children(func() {
+			connect := ui.ButtonBase(c.Key("chat-connect")).Height(20).Padding(0, 10).Radius(4).
+				Label(locales.ChatConnectProvider()).Justify(ui.Center).AlignItems(ui.Center).Border(1, p.border)
+			connect.Children(func() { ui.Text(c, "+ "+locales.ChatConnectProvider()).FontSize(10).TextColor(p.text) })
+			if connect.Clicked() {
+				st.showAuth = true
+				go func() {
+					ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+					provs, err := opencode.New().Providers(ctx)
+					cancel()
+					a.post(func() {
+						if err != nil {
+							st.authErr = err.Error()
+						} else {
+							st.authProviders = provs
+							st.authErr = ""
+						}
+						st.authSelected = ""
+						st.keyInput = ""
+						st.authNotice = ""
+						a.invalidate()
+					})
+				}()
+			}
+		})
 	})
 }

@@ -1987,5 +1987,16 @@
   "chatNoSessions": "まだセッションはありません",
   "chatMention": "現在のファイルを参照",
   "chatMentionSelection": "選択範囲を参照",
-  "chatMentionChanges": "最近の変更を参照"
+  "chatMentionChanges": "最近の変更を参照",
+  "chatConnectProvider": "プロバイダーを接続…",
+  "chatAuthTitle": "プロバイダーを接続",
+  "chatAuthHint": "API キーを貼り付けます。opencode が保存し、Zut は保存しません。",
+  "chatAuthKey": "API キー",
+  "chatAuthSave": "保存",
+  "chatAuthDisconnect": "接続を解除",
+  "chatAuthConnected": "接続済み",
+  "chatAuthNotConnected": "未接続",
+  "chatAuthEmpty": "プロバイダーが応答しませんでした。",
+  "chatAuthSearch": "プロバイダーを絞り込む…",
+  "chatAuthBack": "モデル一覧へ戻る"
 }

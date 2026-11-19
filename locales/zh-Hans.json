@@ -1987,5 +1987,16 @@
   "chatNoSessions": "还没有会话",
   "chatMention": "引用当前文件",
   "chatMentionSelection": "引用所选内容",
-  "chatMentionChanges": "引用最近的更改"
+  "chatMentionChanges": "引用最近的更改",
+  "chatConnectProvider": "连接供应商…",
+  "chatAuthTitle": "连接供应商",
+  "chatAuthHint": "粘贴 API key — 由 opencode 保存，Zut 不保存。",
+  "chatAuthKey": "API key",
+  "chatAuthSave": "保存",
+  "chatAuthDisconnect": "断开",
+  "chatAuthConnected": "已连接",
+  "chatAuthNotConnected": "未连接",
+  "chatAuthEmpty": "没有供应商响应。",
+  "chatAuthSearch": "筛选供应商…",
+  "chatAuthBack": "返回模型列表"
 }

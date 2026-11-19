@@ -20089,3 +20089,113 @@ func ChatMentionChanges() string { return In(i18n.Locale()).ChatMentionChanges()
 func (msgs Messages) ChatMentionChanges() string {
 	return Catalog.Format(msgs.locale, "chatMentionChanges", nil)
 }
+
+// ChatConnectProvider says "Connect a provider…"
+// in the language the app shows.
+func ChatConnectProvider() string { return In(i18n.Locale()).ChatConnectProvider() }
+
+// ChatConnectProvider says "Connect a provider…"
+// in the language of msgs.
+func (msgs Messages) ChatConnectProvider() string {
+	return Catalog.Format(msgs.locale, "chatConnectProvider", nil)
+}
+
+// ChatAuthTitle says "Connect a provider"
+// in the language the app shows.
+func ChatAuthTitle() string { return In(i18n.Locale()).ChatAuthTitle() }
+
+// ChatAuthTitle says "Connect a provider"
+// in the language of msgs.
+func (msgs Messages) ChatAuthTitle() string {
+	return Catalog.Format(msgs.locale, "chatAuthTitle", nil)
+}
+
+// ChatAuthHint says "Paste the API key — opencode stores it, Zut never sees it."
+// in the language the app shows.
+func ChatAuthHint() string { return In(i18n.Locale()).ChatAuthHint() }
+
+// ChatAuthHint says "Paste the API key — opencode stores it, Zut never sees it."
+// in the language of msgs.
+func (msgs Messages) ChatAuthHint() string {
+	return Catalog.Format(msgs.locale, "chatAuthHint", nil)
+}
+
+// ChatAuthKey says "API key"
+// in the language the app shows.
+func ChatAuthKey() string { return In(i18n.Locale()).ChatAuthKey() }
+
+// ChatAuthKey says "API key"
+// in the language of msgs.
+func (msgs Messages) ChatAuthKey() string {
+	return Catalog.Format(msgs.locale, "chatAuthKey", nil)
+}
+
+// ChatAuthSave says "Save"
+// in the language the app shows.
+func ChatAuthSave() string { return In(i18n.Locale()).ChatAuthSave() }
+
+// ChatAuthSave says "Save"
+// in the language of msgs.
+func (msgs Messages) ChatAuthSave() string {
+	return Catalog.Format(msgs.locale, "chatAuthSave", nil)
+}
+
+// ChatAuthDisconnect says "Disconnect"
+// in the language the app shows.
+func ChatAuthDisconnect() string { return In(i18n.Locale()).ChatAuthDisconnect() }
+
+// ChatAuthDisconnect says "Disconnect"
+// in the language of msgs.
+func (msgs Messages) ChatAuthDisconnect() string {
+	return Catalog.Format(msgs.locale, "chatAuthDisconnect", nil)
+}
+
+// ChatAuthConnected says "Connected"
+// in the language the app shows.
+func ChatAuthConnected() string { return In(i18n.Locale()).ChatAuthConnected() }
+
+// ChatAuthConnected says "Connected"
+// in the language of msgs.
+func (msgs Messages) ChatAuthConnected() string {
+	return Catalog.Format(msgs.locale, "chatAuthConnected", nil)
+}
+
+// ChatAuthNotConnected says "Not connected"
+// in the language the app shows.
+func ChatAuthNotConnected() string { return In(i18n.Locale()).ChatAuthNotConnected() }
+
+// ChatAuthNotConnected says "Not connected"
+// in the language of msgs.
+func (msgs Messages) ChatAuthNotConnected() string {
+	return Catalog.Format(msgs.locale, "chatAuthNotConnected", nil)
+}
+
+// ChatAuthEmpty says "No providers answered."
+// in the language the app shows.
+func ChatAuthEmpty() string { return In(i18n.Locale()).ChatAuthEmpty() }
+
+// ChatAuthEmpty says "No providers answered."
+// in the language of msgs.
+func (msgs Messages) ChatAuthEmpty() string {
+	return Catalog.Format(msgs.locale, "chatAuthEmpty", nil)
+}
+
+// ChatAuthSearch says "Search providers…"
+// in the language the app shows.
+func ChatAuthSearch() string { return In(i18n.Locale()).ChatAuthSearch() }
+
+// ChatAuthSearch says "Search providers…"
+// in the language of msgs.
+func (msgs Messages) ChatAuthSearch() string {
+	return Catalog.Format(msgs.locale, "chatAuthSearch", nil)
+}
+
+// ChatAuthBack says "Back to model list"
+// in the language the app shows.
+func ChatAuthBack() string { return In(i18n.Locale()).ChatAuthBack() }
+
+// ChatAuthBack says "Back to model list"
+// in the language of msgs.
+func (msgs Messages) ChatAuthBack() string {
+	return Catalog.Format(msgs.locale, "chatAuthBack", nil)
+}
