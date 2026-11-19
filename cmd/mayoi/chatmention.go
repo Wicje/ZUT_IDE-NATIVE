@@ -24,6 +24,9 @@ type mentionComplete struct {
 func (a *app) updateMention(c *ui.Context) {
 	st := &a.chat
 	if a.index == nil || len(a.index) == 0 {
+		// The chat pane never opens Quick Open or search itself; ask for the
+		// folder snapshot so @-completion works from the cold state.
+		a.refreshIndex()
 		st.mention = nil
 		return
 	}
