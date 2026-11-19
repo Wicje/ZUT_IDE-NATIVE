@@ -2226,5 +2226,6 @@
   "chatAuthNotConnected": "Not connected",
   "chatAuthEmpty": "No providers answered.",
   "chatAuthSearch": "Search providers…",
-  "chatAuthBack": "Back to model list"
+  "chatAuthBack": "Back to model list",
+  "chatDiag": "Chat: Dump index and mention state"
 }

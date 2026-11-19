@@ -1998,5 +1998,6 @@
   "chatAuthNotConnected": "未连接",
   "chatAuthEmpty": "没有供应商响应。",
   "chatAuthSearch": "筛选供应商…",
-  "chatAuthBack": "返回模型列表"
+  "chatAuthBack": "返回模型列表",
+  "chatDiag": "Chat: Dump index and mention state"
 }

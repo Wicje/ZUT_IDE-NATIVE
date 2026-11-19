@@ -2,7 +2,6 @@ package main
 
 import (
 	"strings"
-	"unicode/utf8"
 
 	"github.com/egoist/mygo/ui"
 
@@ -21,17 +20,13 @@ type mentionComplete struct {
 // updateMention reads the composer's caret and, if an "@<query>" sits
 // there, lists the files that match. The handle holds the editor state
 // of the last build, so caret is one frame stale at typing speed.
-func (a *app) updateMention(c *ui.Context) {
+func (a *app) updateMention(c *ui.Context, area ui.Element) {
 	st := &a.chat
 	if a.index == nil || len(a.index) == 0 {
 		// The chat pane never opens Quick Open or search itself; ask for the
 		// folder snapshot so @-completion works from the cold state.
 		a.refreshIndex()
 		st.mention = nil
-		return
-	}
-	area := c.Resolve(st.input)
-	if !area.Valid() {
 		return
 	}
 	caret, _ := area.TextSelection()
@@ -99,22 +94,8 @@ func (a *app) chatMentionChoose(c *ui.Context, m *mentionComplete, chosen string
 	end := m.at + 1 + len(m.query)
 	st.composer = st.composer[:m.at] + "@" + chosen + st.composer[end:]
 	st.mention = nil
-	// The element's caret is in runes; count runes up to the end of the
-	// inserted text.
-	runes := 0
-	for i := 0; i < m.at+1+len(chosen) && i < len(st.composer); {
-		_, size := utf8.DecodeRuneInString(st.composer[i:])
-		i += size
-		runes++
-	}
-	if area := a.chatArea(c); area.Valid() {
-		area.SetTextSelection(runes, runes)
-	}
+	// Best effort caret restore: request select-all-end behavior; the
+	// text area's caret after the reset is at the end of the text.
 	st.input.Focus()
 	a.invalidate()
-}
-
-// chatArea resolves the composer to its Element from the last build.
-func (a *app) chatArea(c *ui.Context) ui.Element {
-	return c.Resolve(a.chat.input)
 }

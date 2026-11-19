@@ -20199,3 +20199,13 @@ func ChatAuthBack() string { return In(i18n.Locale()).ChatAuthBack() }
 func (msgs Messages) ChatAuthBack() string {
 	return Catalog.Format(msgs.locale, "chatAuthBack", nil)
 }
+
+// ChatDiag says "Chat: Dump index and mention state"
+// in the language the app shows.
+func ChatDiag() string { return In(i18n.Locale()).ChatDiag() }
+
+// ChatDiag says "Chat: Dump index and mention state"
+// in the language of msgs.
+func (msgs Messages) ChatDiag() string {
+	return Catalog.Format(msgs.locale, "chatDiag", nil)
+}

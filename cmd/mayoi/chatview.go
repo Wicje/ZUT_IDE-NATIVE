@@ -849,11 +849,8 @@ func (a *app) chatView(c *ui.Context) {
 			})
 		})
 
-		// The @-completion, when it is open, is computed before the
-		// composer is built, so the chips row below can render it.
-		a.updateMention(c)
-		// The composer, with the staged files above it when there are
-		// any.
+		// Composer: its chips row swaps to the @-completion when the
+		// user types @<query>.
 		ui.Box(c).Shrink(0).BorderWidth(1, 0, 0, 0).BorderColor(p.border).
 			Padding(6, 8, 10, 8).Background(p.chrome).Children(func() {
 			ui.Column(c).Gap(6).Children(func() {
@@ -907,6 +904,7 @@ func (a *app) chatView(c *ui.Context) {
 						Grow(1).Lines(2, 8).MinWidth(0).FontSize(12.5).Padding(2).
 						Placeholder(locales.ChatPlaceholder()).Label(locales.ChatPlaceholder())
 					area.Bind(&st.input)
+					a.updateMention(c, area)
 					if st.mention != nil {
 						m := st.mention
 						if area.Shortcut(0, ui.KeyDown) {

@@ -1998,5 +1998,6 @@
   "chatAuthNotConnected": "未接続",
   "chatAuthEmpty": "プロバイダーが応答しませんでした。",
   "chatAuthSearch": "プロバイダーを絞り込む…",
-  "chatAuthBack": "モデル一覧へ戻る"
+  "chatAuthBack": "モデル一覧へ戻る",
+  "chatDiag": "Chat: Dump index and mention state"
 }
