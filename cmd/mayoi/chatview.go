@@ -97,6 +97,10 @@ type chatState struct {
 	// the next prompt.
 	attachments []chatAttachment
 
+	// mention is the @-completion dropdown while it is open, nil when
+	// not; bound to the composer's caret and query.
+	mention *mentionComplete
+
 	// cancel stops the events pump of the turn running, if any.
 	cancel    context.CancelFunc
 	busySince time.Time
@@ -923,6 +927,9 @@ func (a *app) chatView(c *ui.Context) {
 			})
 		})
 
+		// The @-completion, when it is open, is computed before the
+		// composer is built, so the chips row below can render it.
+		a.updateMention(c)
 		// The composer, with the staged files above it when there are
 		// any.
 		ui.Box(c).Shrink(0).BorderWidth(1, 0, 0, 0).BorderColor(p.border).
@@ -931,26 +938,55 @@ func (a *app) chatView(c *ui.Context) {
 				if len(st.attachments) > 0 {
 					a.chatAttachmentChips(c)
 				}
-				// A row of mention buttons for the three file references
-				// the agent most often wants: the tab shown, the selection,
-				// and the last set of changes.
-				ui.Row(c).Gap(4).AlignItems(ui.Center).Children(func() {
-					mention := func(label string, run func()) {
-						b := ui.ButtonBase(c.Key("chat-mention-"+label)).Height(18).Padding(0, 8).Radius(9).
-							Justify(ui.Center).AlignItems(ui.Center).Border(1, p.border).Label(label)
-						b.Children(func() {
-							ui.Text(c, label).FontSize(9.5).TextColor(p.muted).FontWeight(600).SingleLine()
-						})
-						if b.Clicked() {
-							run()
+				// When the user types @<query> in the composer, the chips
+				// row becomes the completion list; otherwise the three
+				// shortcuts stay.
+				if st.mention != nil {
+					m := st.mention
+					ui.Column(c).Gap(2).Children(func() {
+						for i, cand := range m.cands {
+							cand := cand
+							sel := i == m.sel
+							name, dir := cand, ""
+							if slash := strings.LastIndex(cand, "/"); slash >= 0 {
+								name, dir = cand[slash+1:], cand[:slash]
+							}
+							row := ui.ButtonBase(c.Key("mention-c-"+cand)).
+								Height(22).Padding(0, 8).Gap(6).Radius(4).
+								Justify(ui.Start).AlignItems(ui.Center).Label(cand)
+							if sel {
+								row.Background(p.hover)
+							}
+							row.Children(func() {
+								ui.Text(c, name).FontSize(11).FontWeight(600).TextColor(p.text).SingleLine().Grow(1)
+								if dir != "" {
+									ui.Text(c, clip(dir, 40)).FontSize(9.5).TextColor(p.muted).SingleLine()
+								}
+							})
+							if row.Clicked() {
+								a.chatMentionChoose(c, m, cand)
+							}
 						}
-					}
-					mention("@ file", a.chatMentionFile)
-					mention("@ selection", a.chatMentionSelection)
-					if len(st.changed) > 0 {
-						mention("@ changes", a.chatMentionChanges)
-					}
-				})
+					})
+				} else {
+					ui.Row(c).Gap(4).AlignItems(ui.Center).Children(func() {
+						mention := func(label string, run func()) {
+							b := ui.ButtonBase(c.Key("chat-mention-"+label)).Height(18).Padding(0, 8).Radius(9).
+								Justify(ui.Center).AlignItems(ui.Center).Border(1, p.border).Label(label)
+							b.Children(func() {
+								ui.Text(c, label).FontSize(9.5).TextColor(p.muted).FontWeight(600).SingleLine()
+							})
+							if b.Clicked() {
+								run()
+							}
+						}
+						mention("@ file", a.chatMentionFile)
+						mention("@ selection", a.chatMentionSelection)
+						if len(st.changed) > 0 {
+							mention("@ changes", a.chatMentionChanges)
+						}
+					})
+				}
 				if len(st.changed) > 0 && !st.busy {
 					a.chatRevertBanner(c)
 				}
@@ -967,6 +1003,28 @@ func (a *app) chatView(c *ui.Context) {
 						Grow(1).Lines(2, 8).MinWidth(0).FontSize(12.5).Padding(2).
 						Placeholder(locales.ChatPlaceholder()).Label(locales.ChatPlaceholder())
 					area.Bind(&st.input)
+					if st.mention != nil {
+						m := st.mention
+						if area.Shortcut(0, ui.KeyDown) {
+							m.sel = (m.sel + 1) % len(m.cands)
+							a.invalidate()
+							return
+						}
+						if area.Shortcut(0, ui.KeyUp) {
+							m.sel = (m.sel + len(m.cands) - 1) % len(m.cands)
+							a.invalidate()
+							return
+						}
+						if area.Shortcut(0, ui.KeyEnter) || area.Shortcut(0, ui.KeyTab) {
+							a.chatMentionChoose(c, m, m.cands[m.sel])
+							return
+						}
+						if area.Shortcut(0, ui.KeyEscape) {
+							st.mention = nil
+							a.invalidate()
+							return
+						}
+					}
 					if area.Shortcut(ui.Ctrl, ui.KeyEnter) || area.Shortcut(ui.Cmd, ui.KeyEnter) {
 						st.send(a)
 						return
