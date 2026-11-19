@@ -20209,3 +20209,13 @@ func CmdPreviewCapture() string { return In(i18n.Locale()).CmdPreviewCapture() }
 func (msgs Messages) CmdPreviewCapture() string {
 	return Catalog.Format(msgs.locale, "cmdPreviewCapture", nil)
 }
+
+// ChatAutoPreview says "Auto"
+// in the language the app shows.
+func ChatAutoPreview() string { return In(i18n.Locale()).ChatAutoPreview() }
+
+// ChatAutoPreview says "Auto"
+// in the language of msgs.
+func (msgs Messages) ChatAutoPreview() string {
+	return Catalog.Format(msgs.locale, "chatAutoPreview", nil)
+}

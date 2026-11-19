@@ -119,6 +119,13 @@ func (a *app) previewViewUI(c *ui.Context, v *previewView, name string) {
 // previewCapture snaps the active preview tab to a PNG and appends it to
 // the chat transcript as an image row the user can see inline.
 func (a *app) previewCapture() {
+	if !a.previewCaptureRow() {
+		a.tell(note{message: "No preview tab open"})
+	}
+}
+
+// previewCaptureRow does the work; true when it captured.
+func (a *app) previewCaptureRow() bool {
 	var wv *mygo.WebView
 	for _, col := range a.cols {
 		for _, t := range col.tabs {
@@ -128,23 +135,43 @@ func (a *app) previewCapture() {
 		}
 	}
 	if wv == nil {
-		a.tell(note{message: "No preview tab open"})
-		return
+		return false
 	}
 	png, err := wv.CapturePage()
 	if err != nil {
 		a.fail("%v", err)
-		return
+		return false
 	}
 	st := &a.chat
-	text := "Preview of the app"
+	text := fmt.Sprintf("Preview of the app (%s)", time.Now().Format("15:04:05"))
 	row := chatRow{
 		role:   "assistant",
 		status: "done",
 		parts:  []chatPart{{id: "peek-" + time.Now().Format("150405.000"), typ: "text", text: text}},
 		images: []chatImage{{mime: "image/png", data: png}},
 	}
-	_ = time.Now
 	st.rows = append(st.rows, row)
 	a.invalidate()
+	return true
+}
+
+// autoPreviewLoop fires whenever the agent turn is running AND the user
+// opted in: capture the preview tab every 3s and append it as an image
+// row in the transcript. Stops when the turn ends.
+func (a *app) autoPreviewLoop() {
+	for {
+		time.Sleep(3 * time.Second)
+		if !a.chat.busy {
+			return
+		}
+		if !a.chat.autoPreview {
+			continue
+		}
+		a.post(func() {
+			if !a.chat.autoPreview || !a.chat.busy {
+				return
+			}
+			a.previewCaptureRow()
+		})
+	}
 }

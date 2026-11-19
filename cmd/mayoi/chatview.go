@@ -101,6 +101,10 @@ type chatState struct {
 	// not; bound to the composer's caret and query.
 	mention *mentionComplete
 
+	// autoPreview asks the preview tab to snap the app into the
+	// transcript every 3s while a turn runs.
+	autoPreview bool
+
 	// cancel stops the events pump of the turn running, if any.
 	cancel    context.CancelFunc
 	busySince time.Time
@@ -179,6 +183,9 @@ func (st *chatState) send(a *app) {
 	a.invalidate()
 
 	go func() {
+		// While the turn runs, if the user asked for it, snap the
+		// preview into the transcript every few seconds.
+		go a.autoPreviewLoop()
 		if err := ensureOpencodeServer(ctx); err != nil {
 			a.post(func() { st.fail(a, err) })
 			return
@@ -797,6 +804,20 @@ func (a *app) chatView(c *ui.Context) {
 			cam := a.iconButton(c, iconCamera, locales.CmdPreviewCapture(), false)
 			if cam.Clicked() {
 				a.previewCapture()
+			}
+			auto := ui.ButtonBase(c.Key("chat-auto-preview")).Height(22).Padding(0, 8).Radius(5).
+				Label(locales.ChatAutoPreview()).Justify(ui.Center).AlignItems(ui.Center)
+			if st.autoPreview {
+				auto.Background(p.accentDim.Alpha(0.55))
+			} else {
+				auto.Border(1, p.border)
+			}
+			auto.Children(func() {
+				ui.Text(c, locales.ChatAutoPreview()).FontSize(10).FontWeight(600).TextColor(p.text).SingleLine()
+			})
+			if auto.Clicked() {
+				st.autoPreview = !st.autoPreview
+				a.invalidate()
 			}
 			if st.busy {
 				a.chatSpinner(c)

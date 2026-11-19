@@ -1999,5 +1999,6 @@
   "chatAuthEmpty": "プロバイダーが応答しませんでした。",
   "chatAuthSearch": "プロバイダーを絞り込む…",
   "chatAuthBack": "モデル一覧へ戻る",
-  "cmdPreviewCapture": "Preview: Send a screenshot to chat"
+  "cmdPreviewCapture": "Preview: Send a screenshot to chat",
+  "chatAutoPreview": "Auto"
 }

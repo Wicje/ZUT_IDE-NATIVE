@@ -2227,5 +2227,6 @@
   "chatAuthEmpty": "No providers answered.",
   "chatAuthSearch": "Search providers…",
   "chatAuthBack": "Back to model list",
-  "cmdPreviewCapture": "Preview: Send a screenshot to chat"
+  "cmdPreviewCapture": "Preview: Send a screenshot to chat",
+  "chatAutoPreview": "Auto"
 }
