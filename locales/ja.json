@@ -2000,5 +2000,6 @@
   "chatAuthSearch": "プロバイダーを絞り込む…",
   "chatAuthBack": "モデル一覧へ戻る",
   "cmdPreviewCapture": "Preview: Send a screenshot to chat",
-  "chatAutoPreview": "Auto"
+  "chatAutoPreview": "Auto",
+  "cmdChatMore": "その他の操作…"
 }

@@ -2228,5 +2228,6 @@
   "chatAuthSearch": "Search providers…",
   "chatAuthBack": "Back to model list",
   "cmdPreviewCapture": "Preview: Send a screenshot to chat",
-  "chatAutoPreview": "Auto"
+  "chatAutoPreview": "Auto",
+  "cmdChatMore": "More actions…"
 }

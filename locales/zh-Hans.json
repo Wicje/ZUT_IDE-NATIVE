@@ -2000,5 +2000,6 @@
   "chatAuthSearch": "筛选供应商…",
   "chatAuthBack": "返回模型列表",
   "cmdPreviewCapture": "Preview: Send a screenshot to chat",
-  "chatAutoPreview": "Auto"
+  "chatAutoPreview": "Auto",
+  "cmdChatMore": "更多…"
 }

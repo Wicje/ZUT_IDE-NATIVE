@@ -797,58 +797,11 @@ func (a *app) chatView(c *ui.Context) {
 					st.showMenu = !st.showMenu
 				}
 			}
-			pv := a.iconButton(c, iconEye, locales.ChatPreview(), false)
-			if pv.Clicked() {
-				a.openPreview()
-			}
-			cam := a.iconButton(c, iconCamera, locales.CmdPreviewCapture(), false)
-			if cam.Clicked() {
-				a.previewCapture()
-			}
-			auto := ui.ButtonBase(c.Key("chat-auto-preview")).Height(22).Padding(0, 8).Radius(5).
-				Label(locales.ChatAutoPreview()).Justify(ui.Center).AlignItems(ui.Center)
-			if st.autoPreview {
-				auto.Background(p.accentDim.Alpha(0.55))
-			} else {
-				auto.Border(1, p.border)
-			}
-			auto.Children(func() {
-				ui.Text(c, locales.ChatAutoPreview()).FontSize(10).FontWeight(600).TextColor(p.text).SingleLine()
-			})
-			if auto.Clicked() {
-				st.autoPreview = !st.autoPreview
-				a.invalidate()
-			}
 			if st.busy {
 				a.chatSpinner(c)
 			}
-			hist := a.iconButton(c, iconHistory, locales.ChatHistory(), st.pickSession)
-			if hist.Clicked() {
-				st.pickSession = !st.pickSession
-				if st.pickSession {
-					go func() {
-						ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-						defer cancel()
-						ss, err := opencode.New().Sessions(ctx, 200)
-						if err == nil {
-							folder := a.folder()
-							var keep []opencode.Session
-							for _, s := range ss {
-								if s.Dir == folder || s.Dir == "" {
-									keep = append(keep, s)
-									if len(keep) >= 12 {
-										break
-									}
-								}
-							}
-							a.post(func() {
-								st.sessions = keep
-								a.invalidate()
-							})
-						}
-					}()
-				}
-			}
+			more := a.iconButton(c, iconMore, locales.CmdChatMore(), false)
+			more.Menu(a.chatMoreMenu)
 			if b := a.iconButton(c, iconPlus, locales.ChatNewChat(), false); b.Clicked() {
 				st.reset(a)
 			}
@@ -1475,4 +1428,47 @@ func (a *app) chatModelMenu(c *ui.Context) {
 			}
 		})
 	})
+}
+
+// chatMoreMenu composes the overflow menu on the pane header: Open
+// Preview, Snapshot the preview into the transcript, Auto-snap while a
+// turn runs, and Recent sessions.
+func (a *app) chatMoreMenu(m *ui.Menu) {
+	st := &a.chat
+	if m.Item(locales.ChatPreview()).Chosen() {
+		a.openPreview()
+	}
+	if m.Item(locales.CmdPreviewCapture()).Chosen() {
+		a.previewCapture()
+	}
+	m.Separator()
+	if m.Item(locales.ChatAutoPreview()).Checked(st.autoPreview).Chosen() {
+		st.autoPreview = !st.autoPreview
+		a.invalidate()
+	}
+	m.Separator()
+	if m.Item(locales.ChatHistory()).Chosen() {
+		st.pickSession = true
+		go func() {
+			ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+			defer cancel()
+			ss, err := opencode.New().Sessions(ctx, 200)
+			if err == nil {
+				folder := a.folder()
+				var keep []opencode.Session
+				for _, s := range ss {
+					if s.Dir == folder || s.Dir == "" {
+						keep = append(keep, s)
+						if len(keep) >= 12 {
+							break
+						}
+					}
+				}
+				a.post(func() {
+					st.sessions = keep
+					a.invalidate()
+				})
+			}
+		}()
+	}
 }

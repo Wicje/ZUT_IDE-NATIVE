@@ -20219,3 +20219,13 @@ func ChatAutoPreview() string { return In(i18n.Locale()).ChatAutoPreview() }
 func (msgs Messages) ChatAutoPreview() string {
 	return Catalog.Format(msgs.locale, "chatAutoPreview", nil)
 }
+
+// CmdChatMore says "More actions…"
+// in the language the app shows.
+func CmdChatMore() string { return In(i18n.Locale()).CmdChatMore() }
+
+// CmdChatMore says "More actions…"
+// in the language of msgs.
+func (msgs Messages) CmdChatMore() string {
+	return Catalog.Format(msgs.locale, "cmdChatMore", nil)
+}
