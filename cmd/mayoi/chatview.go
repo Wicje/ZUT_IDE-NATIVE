@@ -724,84 +724,6 @@ func mimeType(path string, data []byte) string {
 	return http.DetectContentType(data)
 }
 
-// chatInsertAtCursor inserts text at the composer's end; the cursor
-// stays at the end so the next keystroke lands inside the inserted text.
-func (a *app) chatInsertAtComposer(text string) {
-	st := &a.chat
-	if st.composer == "" {
-		st.composer = text
-	} else {
-		sep := " "
-		if strings.HasSuffix(st.composer, " ") {
-			sep = ""
-		}
-		st.composer = st.composer + sep + text
-	}
-	st.input.Focus()
-	a.invalidate()
-}
-
-// chatRelPath returns the workspace-relative path for an absolute path, or
-// the absolute path if it escapes.
-func (a *app) chatRelPath(abs string) string {
-	if root := a.folder(); root != "" {
-		if rel, err := filepath.Rel(root, abs); err == nil {
-			rel = filepath.ToSlash(rel)
-			if !strings.HasPrefix(rel, "..") {
-				return rel
-			}
-		}
-	}
-	return abs
-}
-
-// chatMentionFile inserts @<path> of the tab shown; the agent reads the
-// file itself, so the prompt stays short.
-func (a *app) chatMentionFile() {
-	d := a.activeEditor()
-	if d == nil || d.path == "" {
-		return
-	}
-	a.chatInsertAtComposer("@" + a.chatRelPath(d.path))
-}
-
-// chatMentionSelection inserts @<path> followed by the selected lines
-// inline, for the agent to read those lines.
-func (a *app) chatMentionSelection() {
-	d := a.activeEditor()
-	if d == nil || d.path == "" || d.sel[0] == d.sel[1] {
-		return
-	}
-	snap := d.buf.Snapshot()
-	_, start := snap.LineRange(d.sel[0])
-	_, end := snap.LineRange(d.sel[1])
-	startLn := snap.LineAt(d.sel[0]) + 1
-	endLn := snap.LineAt(d.sel[1]) + 1
-	if startLn == endLn {
-		a.chatInsertAtComposer(fmt.Sprintf("@%s:%d", a.chatRelPath(d.path), startLn))
-		return
-	}
-	a.chatInsertAtComposer(fmt.Sprintf("@%s:%d-%d", a.chatRelPath(d.path), startLn, endLn))
-	_ = start
-	_ = end
-}
-
-// chatMentionChanges inserts @<path> for every file the last turn changed.
-func (a *app) chatMentionChanges() {
-	st := &a.chat
-	if len(st.changed) == 0 {
-		return
-	}
-	var b strings.Builder
-	for i, row := range st.changed {
-		if i > 0 {
-			b.WriteString(" ")
-		}
-		b.WriteString("@" + row.Path)
-	}
-	a.chatInsertAtComposer(b.String())
-}
-
 // chatSpinner shows something is happening while a turn runs: a glyph
 // walking through its steps and the seconds the turn has taken.
 func (a *app) chatSpinner(c *ui.Context) {
@@ -966,24 +888,6 @@ func (a *app) chatView(c *ui.Context) {
 							if row.Clicked() {
 								a.chatMentionChoose(c, m, cand)
 							}
-						}
-					})
-				} else {
-					ui.Row(c).Gap(4).AlignItems(ui.Center).Children(func() {
-						mention := func(label string, run func()) {
-							b := ui.ButtonBase(c.Key("chat-mention-"+label)).Height(18).Padding(0, 8).Radius(9).
-								Justify(ui.Center).AlignItems(ui.Center).Border(1, p.border).Label(label)
-							b.Children(func() {
-								ui.Text(c, label).FontSize(9.5).TextColor(p.muted).FontWeight(600).SingleLine()
-							})
-							if b.Clicked() {
-								run()
-							}
-						}
-						mention("@ file", a.chatMentionFile)
-						mention("@ selection", a.chatMentionSelection)
-						if len(st.changed) > 0 {
-							mention("@ changes", a.chatMentionChanges)
 						}
 					})
 				}
