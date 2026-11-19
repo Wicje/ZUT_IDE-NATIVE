@@ -14,13 +14,13 @@ import (
 // as an editor plugin's webview does, in the main area rather than the
 // sidebar. For the demo it loads the dev server of the web app.
 type previewView struct {
-	pane    ui.Handle
-	web     *mygo.WebView
-	url     string
+	pane      ui.Handle
+	web       *mygo.WebView
+	url       string
 	destroyed bool
 }
 
-func (v *previewView) name() string { return "Zut" }
+func (v *previewView) name() string        { return "Zut" }
 func (v *previewView) clone() *previewView { return &previewView{url: v.url} }
 
 func (v *previewView) reload() {
@@ -114,4 +114,37 @@ func (a *app) previewViewUI(c *ui.Context, v *previewView, name string) {
 		v.web = wv
 	}
 	ui.WebView(c.Key("preview-webview"), v.web).Fill()
+}
+
+// previewCapture snaps the active preview tab to a PNG and appends it to
+// the chat transcript as an image row the user can see inline.
+func (a *app) previewCapture() {
+	var wv *mygo.WebView
+	for _, col := range a.cols {
+		for _, t := range col.tabs {
+			if t.preview != nil && t.preview.web != nil && !t.preview.destroyed {
+				wv = t.preview.web
+			}
+		}
+	}
+	if wv == nil {
+		a.tell(note{message: "No preview tab open"})
+		return
+	}
+	png, err := wv.CapturePage()
+	if err != nil {
+		a.fail("%v", err)
+		return
+	}
+	st := &a.chat
+	text := "Preview of the app"
+	row := chatRow{
+		role:   "assistant",
+		status: "done",
+		parts:  []chatPart{{id: "peek-" + time.Now().Format("150405.000"), typ: "text", text: text}},
+		images: []chatImage{{mime: "image/png", data: png}},
+	}
+	_ = time.Now
+	st.rows = append(st.rows, row)
+	a.invalidate()
 }

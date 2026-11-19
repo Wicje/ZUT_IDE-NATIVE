@@ -20199,3 +20199,13 @@ func ChatAuthBack() string { return In(i18n.Locale()).ChatAuthBack() }
 func (msgs Messages) ChatAuthBack() string {
 	return Catalog.Format(msgs.locale, "chatAuthBack", nil)
 }
+
+// CmdPreviewCapture says "Preview: Send a screenshot to chat"
+// in the language the app shows.
+func CmdPreviewCapture() string { return In(i18n.Locale()).CmdPreviewCapture() }
+
+// CmdPreviewCapture says "Preview: Send a screenshot to chat"
+// in the language of msgs.
+func (msgs Messages) CmdPreviewCapture() string {
+	return Catalog.Format(msgs.locale, "cmdPreviewCapture", nil)
+}

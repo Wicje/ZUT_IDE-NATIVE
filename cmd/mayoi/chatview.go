@@ -332,11 +332,16 @@ func (a *app) applyTurnMessages(_ *app, turn *turnState, sid string, ms []openco
 		r := &st.rows[idx]
 		var text string
 		var tools []chatTool
+		var images []chatImage
 		for _, p := range m.Parts {
 			switch p.Type {
 			case "text":
 				if p.Text != "" {
 					text = p.Text
+				}
+			case "file":
+				if img, ok := p.Image(); ok {
+					images = append(images, chatImage{mime: img.Mime, data: img.Data})
 				}
 			case "tool":
 				name := p.Tool
@@ -373,6 +378,9 @@ func (a *app) applyTurnMessages(_ *app, turn *turnState, sid string, ms []openco
 			}
 		}
 		r.tools = tools
+		if len(images) > 0 {
+			r.images = images
+		}
 		if m.Info.Error != nil {
 			msg := m.Info.Error.Data.Message
 			if msg == "" {
@@ -785,6 +793,10 @@ func (a *app) chatView(c *ui.Context) {
 			pv := a.iconButton(c, iconEye, locales.ChatPreview(), false)
 			if pv.Clicked() {
 				a.openPreview()
+			}
+			cam := a.iconButton(c, iconCamera, locales.CmdPreviewCapture(), false)
+			if cam.Clicked() {
+				a.previewCapture()
 			}
 			if st.busy {
 				a.chatSpinner(c)

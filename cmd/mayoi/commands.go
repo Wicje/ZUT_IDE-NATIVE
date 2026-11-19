@@ -140,6 +140,7 @@ func (a *app) commandsIn(t locales.Messages) []command {
 		{"view.scm", t.CmdViewScm(), "Ctrl+Shift+G", a.showSourceControl},
 		{"view.sessions", t.CmdViewSessions(), "", a.showSessions},
 		{"view.chat", t.CmdViewChat(), "Ctrl+Shift+A", a.showChat},
+		{"preview.capture", "Preview: Send a screenshot to chat", "", a.previewCapture},
 		{"view.github", t.CmdViewGitHub(), "", a.showGitHub},
 		{"git.commit", t.CmdGitCommit(), "", func() { a.commit(false) }},
 		{"git.commitPush", t.CmdGitCommitPush(), "", func() { a.commit(true) }},
