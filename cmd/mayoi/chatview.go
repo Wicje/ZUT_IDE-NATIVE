@@ -936,16 +936,17 @@ func (a *app) chatView(c *ui.Context) {
 				// and the last set of changes.
 				ui.Row(c).Gap(4).AlignItems(ui.Center).Children(func() {
 					mention := func(label string, run func()) {
-						b := ui.ButtonBase(c.Key("chat-mention-"+label)).Height(18).Padding(0, 6).Radius(9).
-							Label(label).Justify(ui.Center).AlignItems(ui.Center).Border(1, p.border)
+						b := ui.ButtonBase(c.Key("chat-mention-"+label)).Height(18).Padding(0, 8).Radius(9).
+							Justify(ui.Center).AlignItems(ui.Center).Border(1, p.border).Label(label)
+						b.Children(func() {
+							ui.Text(c, label).FontSize(9.5).TextColor(p.muted).FontWeight(600).SingleLine()
+						})
 						if b.Clicked() {
 							run()
 						}
 					}
 					mention("@ file", a.chatMentionFile)
-					d := a.activeEditor()
 					mention("@ selection", a.chatMentionSelection)
-					_ = d
 					if len(st.changed) > 0 {
 						mention("@ changes", a.chatMentionChanges)
 					}
